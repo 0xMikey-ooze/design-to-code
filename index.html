@@ -970,21 +970,18 @@ ${generatedCode}
   }
 
   function buildReactPreview(code) {
-    // Strip TypeScript types, imports, and export — extract the JSX
+    // Strip imports and 'use client' — let Babel handle TypeScript
     let cleaned = code
       // Remove import lines
       .replace(/^import\s+.*$/gm, '')
-      // Remove export default/export
-      .replace(/^export\s+default\s+/gm, '')
-      .replace(/^export\s+/gm, '')
-      // Remove TypeScript type annotations from function params
-      .replace(/:\s*React\.\w+(<[^>]*>)?/g, '')
-      .replace(/:\s*\w+(\[\])?\s*(?=[,\)=\{])/g, '')
-      // Remove interface/type blocks
-      .replace(/^(interface|type)\s+\w+\s*\{[^}]*\}/gm, '')
-      .replace(/^(interface|type)\s+\w+\s*=[^;]+;/gm, '')
       // Remove 'use client' directive
       .replace(/^['"]use client['"];?\s*/gm, '')
+      // Remove export default at end
+      .replace(/^export\s+default\s+\w+\s*;?\s*$/gm, '')
+      // Change "export default function/const" to just "function/const"
+      .replace(/^export\s+default\s+(function|const|class)/gm, '$1')
+      // Change "export function/const" to just "function/const"
+      .replace(/^export\s+(function|const|class|interface|type)/gm, '$1')
       .trim();
 
     return `<!DOCTYPE html>
@@ -1009,23 +1006,53 @@ ${generatedCode}
 <\/script>
 </head><body>
 <div id="root"></div>
-<script type="text/babel" data-type="module">
+<script id="__app_code" type="text/plain">
 ${cleaned}
-
-// Find the component (last function declaration or arrow function assignment)
-const __components = {};
-${cleaned.match(/(?:function|const)\s+([A-Z]\w*)/g)?.map(m => {
-      const name = m.replace(/^(?:function|const)\s+/, '');
-      return `try { __components['${name}'] = ${name}; } catch(e) {}`;
-    }).join('\n') || ''}
-
-// Render the last defined component
-const __names = Object.keys(__components);
-const __App = __components[__names[__names.length - 1]];
-if (__App) {
-  ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(__App));
-} else {
-  document.getElementById('root').innerHTML = '<div style="padding:40px;color:#888;font-family:monospace;">Could not auto-detect component to render. Check the Code tab.</div>';
+<\/script>
+<script>
+try {
+  // Get the code
+  var __code = document.getElementById('__app_code').textContent;
+  
+  // Transform with Babel (TypeScript + React JSX)
+  var __result = Babel.transform(__code, {
+    presets: [
+      ['typescript', { isTSX: true, allExtensions: true }],
+      ['react', { runtime: 'classic' }]
+    ],
+    filename: 'component.tsx'
+  });
+  
+  // Execute the transformed code
+  var __fn = new Function('React', 'ReactDOM', 'useState', 'useEffect', 'useRef', 'useMemo', 'useCallback', 'Fragment', 'Image', 'Link', __result.code + ';\\nreturn typeof exports !== "undefined" ? exports : {};');
+  var __exports = __fn(React, ReactDOM, React.useState, React.useEffect, React.useRef, React.useMemo, React.useCallback, React.Fragment,
+    function Image(props) { return React.createElement('img', Object.assign({}, props, {src: props.src || ''})); },
+    function Link(props) { return React.createElement('a', Object.assign({}, props, {href: props.href || '#'}), props.children); }
+  );
+  
+  // Find the component to render — check exports.default or find last capitalized function
+  var __App = __exports.default || __exports[Object.keys(__exports).filter(function(k){return /^[A-Z]/.test(k)}).pop()];
+  
+  // If not found in exports, try to find it in the global scope via the code
+  if (!__App) {
+    var __matches = __code.match(/(?:function|const)\\s+([A-Z]\\w*)/g);
+    if (__matches) {
+      var __names = __matches.map(function(m){ return m.replace(/^(?:function|const)\\s+/, ''); });
+      // Try each name
+      for (var i = __names.length - 1; i >= 0; i--) {
+        try { __App = eval(__names[i]); if (__App) break; } catch(e) {}
+      }
+    }
+  }
+  
+  if (__App) {
+    ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(__App));
+  } else {
+    document.getElementById('root').innerHTML = '<div style="padding:40px;color:#f87171;font-family:monospace;">Could not find component to render. Check the Code tab.</div>';
+  }
+} catch(err) {
+  document.getElementById('root').innerHTML = '<div style="padding:40px;font-family:monospace;"><div style="color:#f87171;font-size:14px;font-weight:600;margin-bottom:8px;">Preview Error</div><pre style="color:#888;font-size:12px;white-space:pre-wrap;">' + err.message + '</pre></div>';
+  console.error('Preview render error:', err);
 }
 <\/script>
 </body></html>`;
