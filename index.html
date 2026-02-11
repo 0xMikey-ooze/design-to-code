@@ -969,6 +969,102 @@ ${generatedCode}
     setTimeout(() => toast.style.opacity = '0', 2000);
   }
 
+  function buildReactPreview(code) {
+    // Strip TypeScript types, imports, and export — extract the JSX
+    let cleaned = code
+      // Remove import lines
+      .replace(/^import\s+.*$/gm, '')
+      // Remove export default/export
+      .replace(/^export\s+default\s+/gm, '')
+      .replace(/^export\s+/gm, '')
+      // Remove TypeScript type annotations from function params
+      .replace(/:\s*React\.\w+(<[^>]*>)?/g, '')
+      .replace(/:\s*\w+(\[\])?\s*(?=[,\)=\{])/g, '')
+      // Remove interface/type blocks
+      .replace(/^(interface|type)\s+\w+\s*\{[^}]*\}/gm, '')
+      .replace(/^(interface|type)\s+\w+\s*=[^;]+;/gm, '')
+      // Remove 'use client' directive
+      .replace(/^['"]use client['"];?\s*/gm, '')
+      .trim();
+
+    return `<!DOCTYPE html>
+<html><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://unpkg.com/react@18/umd/react.production.min.js"><\/script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"><\/script>
+<script src="https://unpkg.com/@babel/standalone@7/babel.min.js"><\/script>
+<script src="https://cdn.tailwindcss.com"><\/script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  body { font-family: 'Inter', sans-serif; margin: 0; }
+  * { box-sizing: border-box; }
+</style>
+<script>
+  // Provide common React hooks globally
+  const { useState, useEffect, useRef, useMemo, useCallback, Fragment } = React;
+  // Stub next/image, next/link, lucide-react
+  const Image = (props) => React.createElement('img', {...props, src: props.src || ''});
+  const Link = (props) => React.createElement('a', {...props, href: props.href || '#'});
+<\/script>
+</head><body>
+<div id="root"></div>
+<script type="text/babel" data-type="module">
+${cleaned}
+
+// Find the component (last function declaration or arrow function assignment)
+const __components = {};
+${cleaned.match(/(?:function|const)\s+([A-Z]\w*)/g)?.map(m => {
+      const name = m.replace(/^(?:function|const)\s+/, '');
+      return `try { __components['${name}'] = ${name}; } catch(e) {}`;
+    }).join('\n') || ''}
+
+// Render the last defined component
+const __names = Object.keys(__components);
+const __App = __components[__names[__names.length - 1]];
+if (__App) {
+  ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(__App));
+} else {
+  document.getElementById('root').innerHTML = '<div style="padding:40px;color:#888;font-family:monospace;">Could not auto-detect component to render. Check the Code tab.</div>';
+}
+<\/script>
+</body></html>`;
+  }
+
+  function buildVuePreview(code) {
+    // Extract template, script, and style from SFC
+    const templateMatch = code.match(/<template>([\s\S]*?)<\/template>/);
+    const styleMatch = code.match(/<style[^>]*>([\s\S]*?)<\/style>/);
+    const scriptMatch = code.match(/<script[^>]*>([\s\S]*?)<\/script>/);
+
+    const template = templateMatch ? templateMatch[1] : '<div>Could not extract template</div>';
+    const style = styleMatch ? styleMatch[1] : '';
+    const script = scriptMatch ? scriptMatch[1]
+      .replace(/^import\s+.*$/gm, '')
+      .replace(/export\s+default\s*/, 'const __component = ')
+      : 'const __component = {}';
+
+    return `<!DOCTYPE html>
+<html><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"><\/script>
+<script src="https://cdn.tailwindcss.com"><\/script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  body { font-family: 'Inter', sans-serif; margin: 0; }
+  ${style}
+</style>
+</head><body>
+<div id="app">${template}</div>
+<script>
+  ${script}
+  const app = Vue.createApp(__component || {});
+  app.mount('#app');
+<\/script>
+</body></html>`;
+  }
+
   const loadingSteps = [
     'Extracting layout patterns',
     'Analyzing color palette',
@@ -1150,23 +1246,17 @@ Rules:
       emptyPreview.style.display = 'none';
       frame.style.display = 'block';
 
-      // For HTML output, render directly. For React/Vue/Next, wrap in HTML
-      let previewHtml = generatedCode;
-      if (outputFormat !== 'html') {
-        previewHtml = `<!DOCTYPE html>
-<html><head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<script src="https://cdn.tailwindcss.com"><\/script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<style>body{font-family:'Inter',sans-serif;margin:0;}</style>
-</head><body>
-<div style="padding:32px;background:#111;color:#eee;font-family:monospace;font-size:13px;line-height:1.6;white-space:pre-wrap;max-width:100%;overflow:auto;">${generatedCode.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div>
-<p style="padding:16px;color:#888;font-size:12px;">↑ ${outputFormat.toUpperCase()} component code — copy and use in your project</p>
-</body></html>`;
+      // Render preview based on output format
+      if (outputFormat === 'html') {
+        frame.srcdoc = generatedCode;
+      } else if (outputFormat === 'react' || outputFormat === 'nextjs') {
+        // Transform React/Next.js TSX → renderable HTML using Babel standalone + React CDN
+        const reactPreview = buildReactPreview(generatedCode);
+        frame.srcdoc = reactPreview;
+      } else if (outputFormat === 'vue') {
+        const vuePreview = buildVuePreview(generatedCode);
+        frame.srcdoc = vuePreview;
       }
-
-      frame.srcdoc = previewHtml;
 
       // Switch to preview tab
       document.querySelector('.output-tab[data-tab="preview"]').click();
