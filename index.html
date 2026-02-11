@@ -1013,6 +1013,8 @@ ${generatedCode}
       .replace(/^export\s+default\s+(class\s+(\w+))/gm, '$1')
       // Change "export function/const" to just "function/const"
       .replace(/^export\s+(function|const|class|interface|type)/gm, '$1')
+      // Remove redeclarations of injected globals (Link, Image, cn, clsx, etc.)
+      .replace(/^(?:const|let|var|function)\s+(?:Link|Image|cn|clsx)\b.*$/gm, '// (stubbed)')
       .trim();
 
     return `<!DOCTYPE html>
@@ -1031,9 +1033,11 @@ ${generatedCode}
 <script>
   // Provide common React hooks globally
   const { useState, useEffect, useRef, useMemo, useCallback, Fragment } = React;
-  // Stub next/image, next/link
+  // Stub next/image, next/link, cn utility
   const Image = (props) => React.createElement('img', {...props, src: props.src || ''});
   const Link = (props) => React.createElement('a', {...props, href: props.href || '#'});
+  const cn = (...args) => args.filter(Boolean).join(' ');
+  const clsx = cn;
 
   // Universal icon stub — renders a clean placeholder SVG for any icon library import
   const __iconProxy = new Proxy({}, {
@@ -1088,11 +1092,12 @@ try {
   var __autoExport = __componentNames.length > 0
     ? '\\nif (!exports.default) { try { exports.default = ' + __componentNames[__componentNames.length - 1] + '; } catch(e) {} }'
     : '';
-  var __fn = new Function('React', 'ReactDOM', 'useState', 'useEffect', 'useRef', 'useMemo', 'useCallback', 'Fragment', 'Image', 'Link', '__iconProxy', 'var exports = {};\\n' + __result.code + __autoExport + ';\\nreturn exports;');
+  var __fn = new Function('React', 'ReactDOM', 'useState', 'useEffect', 'useRef', 'useMemo', 'useCallback', 'Fragment', 'Image', 'Link', 'cn', 'clsx', '__iconProxy', 'var exports = {};\\n' + __result.code + __autoExport + ';\\nreturn exports;');
+  var __cn = function() { return Array.from(arguments).filter(Boolean).join(' '); };
   var __exports = __fn(React, ReactDOM, React.useState, React.useEffect, React.useRef, React.useMemo, React.useCallback, React.Fragment,
     function Image(props) { return React.createElement('img', Object.assign({}, props, {src: props.src || ''})); },
     function Link(props) { return React.createElement('a', Object.assign({}, props, {href: props.href || '#'}), props.children); },
-    __iconProxy
+    __cn, __cn, __iconProxy
   );
   
   // Find the component to render — check exports.default or find last capitalized function
