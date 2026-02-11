@@ -591,6 +591,7 @@
       <div class="setting-chip" data-enhance="darkmode" onclick="toggleEnhance(this)">🌙 Dark Mode</div>
       <div class="setting-chip" data-enhance="scroll" onclick="toggleEnhance(this)">📜 Scroll FX</div>
       <div class="setting-chip" data-enhance="microinteractions" onclick="toggleEnhance(this)">👆 Micro-interactions</div>
+      <div class="setting-chip" data-enhance="shaders" onclick="toggleEnhance(this)">🌊 Shaders</div>
     </div>
 
     <button class="generate-btn" id="generateBtn" onclick="generate()" disabled>
@@ -1145,7 +1146,8 @@ try {
       particles: 'Add a subtle animated particle/dot background using pure CSS or minimal JS canvas. Keep it performant — no heavy libraries. Stars, dots, or floating shapes.',
       darkmode: 'Design in dark mode with proper contrast. Rich dark backgrounds (#0a0a0b to #1a1a2e range), light text, accent colors that pop against dark. Include a dark/light toggle if appropriate.',
       scroll: 'Add scroll-driven animations using Intersection Observer — elements fade in, slide up, or scale as they enter viewport. Parallax on hero sections. Sticky headers with blur on scroll.',
-      microinteractions: 'Add detailed micro-interactions — button press animations (scale down then up), input focus glow effects, checkbox/toggle animations, ripple effects on click, loading skeleton states, tooltip animations, cursor effects.'
+      microinteractions: 'Add detailed micro-interactions — button press animations (scale down then up), input focus glow effects, checkbox/toggle animations, ripple effects on click, loading skeleton states, tooltip animations, cursor effects.',
+      shaders: 'Add WebGL/shader-inspired visual effects using pure CSS and canvas. Include: animated gradient mesh backgrounds (use CSS conic-gradient + hue-rotate animation), liquid/wave distortion effects on hero sections (CSS filter + SVG feTurbulence), aurora/northern lights glow effects (layered gradients with mix-blend-mode), iridescent/holographic shimmer on cards (background with moving linear-gradient), noise texture overlays (SVG feTurbulence filter), chromatic aberration on hover (offset text-shadow in RGB), frosted glass with animated color shifts. Make it feel like shaders.com — creative, premium, alive. Use CSS animations and SVG filters only (no WebGL libraries). These effects should enhance, not overwhelm.'
     };
 
     const activeEnhancements = [...enhancements].map(e => enhanceMap[e]).filter(Boolean);
