@@ -416,11 +416,16 @@
     font-family: 'JetBrains Mono', monospace;
   }
 
-  /* Copy button */
-  .copy-btn {
+  /* Action buttons */
+  .code-actions {
     position: absolute;
     top: 12px;
     right: 12px;
+    display: flex;
+    gap: 6px;
+    z-index: 5;
+  }
+  .action-btn {
     padding: 6px 12px;
     border-radius: 6px;
     border: 1px solid var(--border);
@@ -429,10 +434,45 @@
     font-size: 11px;
     font-family: 'Inter', sans-serif;
     cursor: pointer;
-    z-index: 5;
     transition: all 0.15s;
+    white-space: nowrap;
   }
-  .copy-btn:hover { color: var(--text); border-color: var(--accent); }
+  .action-btn:hover { color: var(--text); border-color: var(--accent); }
+  .action-btn.primary {
+    background: rgba(167, 139, 250, 0.1);
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .action-btn.primary:hover { background: rgba(167, 139, 250, 0.2); }
+
+  /* Export modal */
+  .export-menu {
+    position: absolute;
+    top: 42px;
+    right: 12px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 8px;
+    z-index: 20;
+    min-width: 260px;
+    display: none;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+  }
+  .export-menu.active { display: block; }
+  .export-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.1s;
+  }
+  .export-item:hover { background: var(--surface2); }
+  .export-item .icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+  .export-item .label { font-size: 12px; font-weight: 600; color: var(--text); }
+  .export-item .desc { font-size: 10px; color: var(--muted); margin-top: 2px; line-height: 1.4; }
 
   /* API Key Modal */
   .modal-overlay {
@@ -587,7 +627,40 @@
       </div>
 
       <div class="code-view" id="codeView">
-        <button class="copy-btn" onclick="copyCode()">Copy</button>
+        <div class="code-actions">
+          <button class="action-btn" onclick="copyCode()">📋 Copy Code</button>
+          <button class="action-btn primary" onclick="toggleExportMenu()">🚀 Export ▾</button>
+        </div>
+        <div class="export-menu" id="exportMenu">
+          <div class="export-item" onclick="exportCursorPrompt()">
+            <div class="icon">⚡</div>
+            <div>
+              <div class="label">Copy as Cursor Prompt</div>
+              <div class="desc">Copies the code + context as a prompt you can paste into Cursor's chat. Includes file path, instructions to integrate.</div>
+            </div>
+          </div>
+          <div class="export-item" onclick="exportClaudePrompt()">
+            <div class="icon">🤖</div>
+            <div>
+              <div class="label">Copy as Claude/ChatGPT Prompt</div>
+              <div class="desc">Full context prompt with design specs, audience, and code — paste into any LLM to iterate.</div>
+            </div>
+          </div>
+          <div class="export-item" onclick="downloadFile()">
+            <div class="icon">💾</div>
+            <div>
+              <div class="label">Download File</div>
+              <div class="desc">Save as .html, .tsx, .vue — ready to drop into your project.</div>
+            </div>
+          </div>
+          <div class="export-item" onclick="exportComponentSpec()">
+            <div class="icon">📐</div>
+            <div>
+              <div class="label">Copy Component Spec</div>
+              <div class="desc">Design tokens, spacing, colors, typography extracted as a spec doc for your team or AI agent.</div>
+            </div>
+          </div>
+        </div>
         <pre id="codeOutput"></pre>
       </div>
     </div>
@@ -742,11 +815,158 @@
     document.getElementById('generateBtn').disabled = images.length === 0 || !getApiKey();
   }
 
+  let lastAnalysis = null;
+
   function copyCode() {
     navigator.clipboard.writeText(generatedCode);
-    const btn = document.querySelector('.copy-btn');
-    btn.textContent = 'Copied!';
-    setTimeout(() => btn.textContent = 'Copy', 1500);
+    showToast('Code copied!');
+  }
+
+  function toggleExportMenu() {
+    document.getElementById('exportMenu').classList.toggle('active');
+  }
+  // Close export menu on outside click
+  document.addEventListener('click', e => {
+    const menu = document.getElementById('exportMenu');
+    if (menu.classList.contains('active') && !e.target.closest('.export-menu') && !e.target.closest('.action-btn.primary')) {
+      menu.classList.remove('active');
+    }
+  });
+
+  function exportCursorPrompt() {
+    const ext = { html: 'html', react: 'tsx', nextjs: 'tsx', vue: 'vue' }[outputFormat];
+    const filename = `component.${ext}`;
+    const audience = document.getElementById('audienceInput').value.trim();
+    const product = document.getElementById('promptInput').value.trim();
+
+    const prompt = `I have a design that was analyzed and converted to code. I need you to integrate it into my project.
+
+${audience ? `**Target Audience:** ${audience}` : ''}
+${product ? `**Product:** ${product}` : ''}
+${lastAnalysis ? `**Design Analysis:** ${lastAnalysis.quote}` : ''}
+${lastAnalysis?.palette ? `**Color Palette:** ${lastAnalysis.palette}` : ''}
+${lastAnalysis?.typography ? `**Typography:** ${lastAnalysis.typography}` : ''}
+
+**Generated Code (${outputFormat.toUpperCase()}):**
+Save this to \`${filename}\` and integrate it:
+
+\`\`\`${ext}
+${generatedCode}
+\`\`\`
+
+**Instructions:**
+1. Create the file at the appropriate location in my project
+2. Wire up any imports needed
+3. Replace placeholder content with real data from my app
+4. Connect any click handlers / navigation to my router
+5. Ensure it matches my existing design system (adjust tokens if needed)
+6. Add any missing TypeScript types
+7. Test responsiveness at 375px, 768px, 1440px`;
+
+    navigator.clipboard.writeText(prompt);
+    showToast('Cursor prompt copied! Paste into Cursor chat.');
+    toggleExportMenu();
+  }
+
+  function exportClaudePrompt() {
+    const audience = document.getElementById('audienceInput').value.trim();
+    const product = document.getElementById('promptInput').value.trim();
+    const activeEnhance = [...enhancements].join(', ');
+
+    const prompt = `I'm building a UI and need your help iterating on this design.
+
+## Context
+${audience ? `- **Who it's for:** ${audience}` : '- Audience: General'}
+${product ? `- **What I'm building:** ${product}` : ''}
+- **Output format:** ${outputFormat.toUpperCase()}
+- **Style:** ${styleMode}
+${activeEnhance ? `- **Enhancements:** ${activeEnhance}` : ''}
+
+## Design Analysis
+${lastAnalysis ? `"${lastAnalysis.quote}"` : 'See code below.'}
+${lastAnalysis?.palette ? `- **Palette:** ${lastAnalysis.palette}` : ''}
+${lastAnalysis?.typography ? `- **Typography:** ${lastAnalysis.typography}` : ''}
+
+## Current Code
+\`\`\`
+${generatedCode}
+\`\`\`
+
+## What I want to change
+[DESCRIBE YOUR CHANGES HERE]
+
+Keep the same visual language and quality level. Make it production-ready.`;
+
+    navigator.clipboard.writeText(prompt);
+    showToast('LLM prompt copied! Paste into Claude, ChatGPT, etc.');
+    toggleExportMenu();
+  }
+
+  function downloadFile() {
+    const ext = { html: 'html', react: 'tsx', nextjs: 'tsx', vue: 'vue' }[outputFormat];
+    const blob = new Blob([generatedCode], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `design-output.${ext}`;
+    a.click();
+    URL.revokeObjectURL(url);
+    showToast(`Downloaded design-output.${ext}`);
+    toggleExportMenu();
+  }
+
+  function exportComponentSpec() {
+    const audience = document.getElementById('audienceInput').value.trim();
+    const product = document.getElementById('promptInput').value.trim();
+
+    const spec = `# Component Design Spec
+Generated by Design → Code
+
+## Product
+${product || 'Not specified'}
+
+## Audience
+${audience || 'Not specified'}
+
+## Visual Design
+${lastAnalysis ? `### Designer Notes\n"${lastAnalysis.quote}"` : ''}
+${lastAnalysis?.palette ? `\n### Color Palette\n${lastAnalysis.palette}` : ''}
+${lastAnalysis?.typography ? `\n### Typography\n${lastAnalysis.typography}` : ''}
+
+### Tags
+${lastAnalysis?.tags?.map(t => `- [${t.type.toUpperCase()}] ${t.label}`).join('\n') || 'None'}
+
+## Style Mode
+${styleMode}
+
+## Enhancements
+${[...enhancements].join(', ') || 'None'}
+
+## Output Format
+${outputFormat.toUpperCase()}
+
+## Source Code
+\`\`\`
+${generatedCode}
+\`\`\`
+`;
+
+    navigator.clipboard.writeText(spec);
+    showToast('Component spec copied!');
+    toggleExportMenu();
+  }
+
+  function showToast(msg) {
+    let toast = document.getElementById('toast');
+    if (!toast) {
+      toast = document.createElement('div');
+      toast.id = 'toast';
+      toast.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);padding:10px 20px;background:var(--accent);color:white;border-radius:8px;font-size:13px;font-weight:500;z-index:200;opacity:0;transition:opacity 0.2s;pointer-events:none;';
+      document.body.appendChild(toast);
+    }
+    toast.textContent = msg;
+    toast.style.opacity = '1';
+    setTimeout(() => toast.style.opacity = '0', 2000);
   }
 
   const loadingSteps = [
@@ -905,6 +1125,9 @@ Rules:
           code: text
         };
       }
+
+      // Save analysis for exports
+      lastAnalysis = result.analysis;
 
       // Show analysis
       const quoteSection = document.getElementById('quoteSection');
