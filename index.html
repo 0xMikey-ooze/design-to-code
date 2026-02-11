@@ -1005,10 +1005,12 @@ ${generatedCode}
       .replace(/^import\s+.*$/gm, '')
       // Remove 'use client' directive
       .replace(/^['"]use client['"];?\s*/gm, '')
-      // Remove export default at end
-      .replace(/^export\s+default\s+\w+\s*;?\s*$/gm, '')
-      // Change "export default function/const" to just "function/const"
-      .replace(/^export\s+default\s+(function|const|class)/gm, '$1')
+      // Rewrite "export default ComponentName" at end to exports.default assignment
+      .replace(/^export\s+default\s+(\w+)\s*;?\s*$/gm, 'exports.default = $1;')
+      // Rewrite "export default function/const" to declaration + export
+      .replace(/^export\s+default\s+(function\s+(\w+))/gm, '$1')
+      .replace(/^export\s+default\s+(const\s+(\w+))/gm, '$1')
+      .replace(/^export\s+default\s+(class\s+(\w+))/gm, '$1')
       // Change "export function/const" to just "function/const"
       .replace(/^export\s+(function|const|class|interface|type)/gm, '$1')
       .trim();
@@ -1080,7 +1082,13 @@ try {
   });
   
   // Execute the transformed code
-  var __fn = new Function('React', 'ReactDOM', 'useState', 'useEffect', 'useRef', 'useMemo', 'useCallback', 'Fragment', 'Image', 'Link', '__iconProxy', __result.code + ';\\nreturn typeof exports !== "undefined" ? exports : {};');
+  // Find component names in the original code to build auto-export fallback
+  var __componentNames = (__code.match(/(?:^|\\n)(?:function|const|class)\\s+([A-Z][A-Za-z0-9]*)/g) || [])
+    .map(function(m) { return m.replace(/^[\\n]?(?:function|const|class)\\s+/, ''); });
+  var __autoExport = __componentNames.length > 0
+    ? '\\nif (!exports.default) { try { exports.default = ' + __componentNames[__componentNames.length - 1] + '; } catch(e) {} }'
+    : '';
+  var __fn = new Function('React', 'ReactDOM', 'useState', 'useEffect', 'useRef', 'useMemo', 'useCallback', 'Fragment', 'Image', 'Link', '__iconProxy', 'var exports = {};\\n' + __result.code + __autoExport + ';\\nreturn exports;');
   var __exports = __fn(React, ReactDOM, React.useState, React.useEffect, React.useRef, React.useMemo, React.useCallback, React.Fragment,
     function Image(props) { return React.createElement('img', Object.assign({}, props, {src: props.src || ''})); },
     function Link(props) { return React.createElement('a', Object.assign({}, props, {href: props.href || '#'}), props.children); },
