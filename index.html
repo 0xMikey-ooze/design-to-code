@@ -510,7 +510,7 @@
 <div class="app">
   <!-- Left: Input -->
   <div class="left-panel">
-    <div class="drop-zone" id="dropZone" onclick="document.getElementById('fileInput').click()">
+    <div class="drop-zone" id="dropZone" onclick="if(!this.classList.contains('has-images'))document.getElementById('fileInput').click()">
       <input type="file" id="fileInput" accept="image/*" multiple onchange="Array.from(this.files).forEach(handleFile)">
       <div class="drop-icon">🎨</div>
       <div class="drop-title">Drop your design inspiration</div>
@@ -639,31 +639,41 @@
   dropZone.addEventListener('drop', e => {
     e.preventDefault();
     dropZone.classList.remove('dragover');
-    for (const file of e.dataTransfer.files) {
-      if (file.type.startsWith('image/')) handleFile(file);
-    }
+    const files = [...e.dataTransfer.files].filter(f => f.type.startsWith('image/'));
+    handleFiles(files);
   });
 
   // Also handle paste
   document.addEventListener('paste', e => {
     const items = e.clipboardData?.items;
     if (!items) return;
+    const files = [];
     for (const item of items) {
-      if (item.type.startsWith('image/')) {
-        handleFile(item.getAsFile());
-      }
+      if (item.type.startsWith('image/')) files.push(item.getAsFile());
     }
+    if (files.length) handleFiles(files);
   });
 
+  function handleFiles(files) {
+    const toProcess = files.slice(0, 8 - images.length);
+    if (!toProcess.length) return;
+    let loaded = 0;
+    toProcess.forEach(file => {
+      const reader = new FileReader();
+      reader.onload = e => {
+        images.push({ data: e.target.result, name: file.name || `Image ${images.length + 1}` });
+        loaded++;
+        if (loaded === toProcess.length) {
+          renderImageGrid();
+          updateGenerateBtn();
+        }
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
   function handleFile(file) {
-    if (!file || images.length >= 8) return;
-    const reader = new FileReader();
-    reader.onload = e => {
-      images.push({ data: e.target.result, name: file.name || `Image ${images.length + 1}` });
-      renderImageGrid();
-      updateGenerateBtn();
-    };
-    reader.readAsDataURL(file);
+    if (file) handleFiles([file]);
   }
 
   function removeImage(idx) {
