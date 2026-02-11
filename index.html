@@ -1054,8 +1054,10 @@ ${generatedCode}
     cleaned = cleaned.replace(/^['"]use server['"];?\s*/gm, '');
 
     // 1.5. Collapse multi-line imports into single lines
-    cleaned = cleaned.replace(/^(import\s*\{[^}]*?)(\n[^}]*?)*(\}\s*from\s*['"][^'"]+['"];?\s*)$/gm, function(match) {
-      return match.replace(/\n\s*/g, ' ').trim();
+    // Matches: import {\n  Foo,\n  Bar\n} from 'pkg';
+    cleaned = cleaned.replace(/import\s*\{[\s\S]*?\}\s*from\s*['"][^'"]+['"]\s*;?/g, function(match) {
+      if (match.indexOf('\n') === -1) return match; // already single line
+      return match.replace(/\s*\n\s*/g, ' ').trim();
     });
 
     // 2. Process line by line to handle imports cleanly
