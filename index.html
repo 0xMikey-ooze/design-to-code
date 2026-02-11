@@ -581,6 +581,14 @@
       <div class="setting-chip" data-style="reimagined" onclick="setStyle(this)">Reimagined</div>
     </div>
 
+    <div class="settings" id="iconSettings">
+      <div class="prompt-label" style="width:100%;margin-bottom:4px">Icon Library</div>
+      <div class="setting-chip active" data-icons="lucide" onclick="setIcons(this)">Lucide</div>
+      <div class="setting-chip" data-icons="phosphor" onclick="setIcons(this)">Phosphor</div>
+      <div class="setting-chip" data-icons="hugeicons" onclick="setIcons(this)">Hugeicons</div>
+      <div class="setting-chip" data-icons="none" onclick="setIcons(this)">Inline SVG</div>
+    </div>
+
     <div class="settings" id="enhancementSettings">
       <div class="prompt-label" style="width:100%;margin-bottom:4px">Enhancements</div>
       <div class="setting-chip" data-enhance="motion" onclick="toggleEnhance(this)">🎬 Motion</div>
@@ -683,6 +691,7 @@
   let outputFormat = 'html';
   let styleMode = 'faithful';
   let enhancements = new Set();
+  let iconLibrary = 'lucide';
   let generatedCode = '';
 
   // Check for saved API key
@@ -802,6 +811,11 @@
     el.parentElement.querySelectorAll('.setting-chip[data-style]').forEach(c => c.classList.remove('active'));
     el.classList.add('active');
     styleMode = el.dataset.style;
+  }
+  function setIcons(el) {
+    el.parentElement.querySelectorAll('.setting-chip[data-icons]').forEach(c => c.classList.remove('active'));
+    el.classList.add('active');
+    iconLibrary = el.dataset.icons;
   }
 
   function switchTab(el) {
@@ -973,7 +987,9 @@ ${generatedCode}
   function buildReactPreview(code) {
     // Strip imports and 'use client' — let Babel handle TypeScript
     let cleaned = code
-      // Remove import lines
+      // Rewrite icon library imports to use __iconProxy (before stripping)
+      .replace(/import\s*\{([^}]+)\}\s*from\s*['"](?:lucide-react|lucide|@phosphor-icons\/react|phosphor-react|hugeicons-react|@hugeicons\/react)['"]\s*;?/g, 'const {$1} = __iconProxy;')
+      // Remove remaining import lines
       .replace(/^import\s+.*$/gm, '')
       // Remove 'use client' directive
       .replace(/^['"]use client['"];?\s*/gm, '')
@@ -1001,9 +1017,36 @@ ${generatedCode}
 <script>
   // Provide common React hooks globally
   const { useState, useEffect, useRef, useMemo, useCallback, Fragment } = React;
-  // Stub next/image, next/link, lucide-react
+  // Stub next/image, next/link
   const Image = (props) => React.createElement('img', {...props, src: props.src || ''});
   const Link = (props) => React.createElement('a', {...props, href: props.href || '#'});
+
+  // Universal icon stub — renders a clean placeholder SVG for any icon library import
+  const __iconProxy = new Proxy({}, {
+    get(_, name) {
+      if (name === '__esModule') return true;
+      if (name === 'default') return undefined;
+      // Return a React component that renders an SVG placeholder with the icon name
+      const IconComponent = (props) => {
+        const size = props.size || 24;
+        const color = props.color || 'currentColor';
+        const sw = props.strokeWidth || 1.5;
+        return React.createElement('svg', {
+          width: size, height: size, viewBox: '0 0 24 24',
+          fill: 'none', stroke: color, strokeWidth: sw,
+          strokeLinecap: 'round', strokeLinejoin: 'round',
+          style: props.style, className: props.className,
+          'aria-label': name
+        },
+          React.createElement('circle', {cx:12,cy:12,r:10,strokeDasharray:'2 3',opacity:0.3}),
+          React.createElement('text', {x:12,y:16,textAnchor:'middle',fontSize:8,fill:color,stroke:'none',opacity:0.6},
+            name.slice(0,2))
+        );
+      };
+      IconComponent.displayName = name;
+      return IconComponent;
+    }
+  });
 <\/script>
 </head><body>
 <div id="root"></div>
@@ -1014,7 +1057,7 @@ ${cleaned}
 try {
   // Get the code
   var __code = document.getElementById('__app_code').textContent;
-  
+
   // Transform with Babel (TypeScript + React JSX)
   var __result = Babel.transform(__code, {
     presets: [
@@ -1025,10 +1068,11 @@ try {
   });
   
   // Execute the transformed code
-  var __fn = new Function('React', 'ReactDOM', 'useState', 'useEffect', 'useRef', 'useMemo', 'useCallback', 'Fragment', 'Image', 'Link', __result.code + ';\\nreturn typeof exports !== "undefined" ? exports : {};');
+  var __fn = new Function('React', 'ReactDOM', 'useState', 'useEffect', 'useRef', 'useMemo', 'useCallback', 'Fragment', 'Image', 'Link', '__iconProxy', __result.code + ';\\nreturn typeof exports !== "undefined" ? exports : {};');
   var __exports = __fn(React, ReactDOM, React.useState, React.useEffect, React.useRef, React.useMemo, React.useCallback, React.Fragment,
     function Image(props) { return React.createElement('img', Object.assign({}, props, {src: props.src || ''})); },
-    function Link(props) { return React.createElement('a', Object.assign({}, props, {href: props.href || '#'}), props.children); }
+    function Link(props) { return React.createElement('a', Object.assign({}, props, {href: props.href || '#'}), props.children); },
+    __iconProxy
   );
   
   // Find the component to render — check exports.default or find last capitalized function
@@ -1135,6 +1179,13 @@ try {
       reimagined: 'Take the core concept and reimagine it with a fresh, modern aesthetic. Keep the same functionality but make it dramatically more beautiful and creative.'
     };
 
+    const iconInstructions = {
+      lucide: 'ICONS: Use Lucide icons via the lucide-react package. Import icons like: import { Search, ArrowRight, Check, X, Menu, Star, Heart, Settings, User, Plus, ChevronDown } from "lucide-react". Use them as React components: <Search size={20} strokeWidth={1.5} />. Lucide has 1400+ icons — pick semantically correct ones. Browse: https://lucide.dev/icons. NEVER use emoji, unicode symbols, or ASCII art as icons. Every icon must be a Lucide component.',
+      phosphor: 'ICONS: Use Phosphor icons via the @phosphor-icons/react package. Import icons like: import { MagnifyingGlass, ArrowRight, Check, X, List, Star, Heart, Gear, User, Plus, CaretDown } from "@phosphor-icons/react". Use them as React components: <MagnifyingGlass size={20} weight="regular" />. Phosphor supports 6 weights: thin, light, regular, bold, fill, duotone. Use weight="duotone" for rich two-tone icons. Browse: https://phosphoricons.com. NEVER use emoji or unicode as icons.',
+      hugeicons: 'ICONS: Use Hugeicons via the hugeicons-react package. Import icons like: import { Search01Icon, ArrowRight01Icon, Tick01Icon, Cancel01Icon, Menu01Icon, Star01Icon, FavouriteIcon, Settings01Icon, User01Icon, Add01Icon } from "hugeicons-react". Use them as React components: <Search01Icon size={20} />. Hugeicons has 4000+ icons with a premium, modern aesthetic. Browse: https://hugeicons.com. NEVER use emoji or unicode as icons.',
+      none: 'ICONS: Use inline SVG icons ONLY — draw clean, minimal SVG paths directly in the code. Do NOT use emoji, unicode symbols, or ASCII art as icons. Do NOT import from icon libraries since they wont load in preview. Every icon must be a proper <svg> element with viewBox, stroke/fill, and clean paths. Geometric, consistent stroke width (1.5-2px), rounded joins, 24x24 viewBox. Icons should feel intentional and premium, never generic.'
+    };
+
     const audienceContext = audience ? `\n\nTARGET AUDIENCE: ${audience}\nDesign decisions must be appropriate for this audience. Consider their tech literacy, aesthetic preferences, device usage patterns, and what builds trust with them.` : '';
     const productContext = prompt ? `\n\nPRODUCT CONTEXT: ${prompt}\nThis is what's being built. The design must serve this product's goals. Every UI decision should make this product more compelling and usable.` : '';
 
@@ -1184,7 +1235,7 @@ Rules:
 - Responsive by default — test at 375px, 768px, and 1440px mentally
 - Smooth micro-interactions: hover states, focus rings, transitions on state changes
 - Accessibility: proper contrast ratios, focus management, semantic HTML, aria labels
-- ICONS: Use inline SVG icons ONLY — draw clean, minimal SVG paths directly in the code. Do NOT use emoji, unicode symbols, or ASCII art as icons. Do NOT import from icon libraries (lucide-react, heroicons, etc.) since they won't load in preview. Every icon must be a proper <svg> element with viewBox, stroke/fill, and clean paths. Study how Linear, Vercel, and Stripe craft their icons — geometric, consistent stroke width (1.5-2px), rounded joins, 24x24 viewBox. Icons should feel intentional and premium, never generic.
+- ${iconInstructions[iconLibrary]}
 - If the audience is specified, tailor the visual language to what resonates with them
 - Make it feel like a REAL product, not a demo. This should impress investors.
 - IMPORTANT: Return ONLY valid JSON. No markdown, no code fences, no explanation outside the JSON.${enhanceInstructions}${multiImageContext}`;
