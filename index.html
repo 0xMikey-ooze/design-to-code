@@ -581,6 +581,12 @@
       <div class="setting-chip" data-style="reimagined" onclick="setStyle(this)">Reimagined</div>
     </div>
 
+    <div class="settings" id="uiFrameworkSettings">
+      <div class="prompt-label" style="width:100%;margin-bottom:4px">UI Framework</div>
+      <div class="setting-chip" data-uifw="none" onclick="setUiFramework(this)">None</div>
+      <div class="setting-chip active" data-uifw="shadcn" onclick="setUiFramework(this)">shadcn/ui</div>
+    </div>
+
     <div class="settings" id="iconSettings">
       <div class="prompt-label" style="width:100%;margin-bottom:4px">Icon Library</div>
       <div class="setting-chip active" data-icons="lucide" onclick="setIcons(this)">Lucide</div>
@@ -692,6 +698,7 @@
   let styleMode = 'faithful';
   let enhancements = new Set();
   let iconLibrary = 'lucide';
+  let uiFramework = 'shadcn';
   let generatedCode = '';
 
   // Check for saved API key
@@ -816,6 +823,11 @@
     el.parentElement.querySelectorAll('.setting-chip[data-icons]').forEach(c => c.classList.remove('active'));
     el.classList.add('active');
     iconLibrary = el.dataset.icons;
+  }
+  function setUiFramework(el) {
+    el.parentElement.querySelectorAll('.setting-chip[data-uifw]').forEach(c => c.classList.remove('active'));
+    el.classList.add('active');
+    uiFramework = el.dataset.uifw;
   }
 
   function switchTab(el) {
@@ -1186,6 +1198,23 @@ try {
       none: 'ICONS: Use inline SVG icons ONLY — draw clean, minimal SVG paths directly in the code. Do NOT use emoji, unicode symbols, or ASCII art as icons. Do NOT import from icon libraries since they wont load in preview. Every icon must be a proper <svg> element with viewBox, stroke/fill, and clean paths. Geometric, consistent stroke width (1.5-2px), rounded joins, 24x24 viewBox. Icons should feel intentional and premium, never generic.'
     };
 
+    const uiFrameworkInstructions = {
+      none: '',
+      shadcn: `\nUI FRAMEWORK: Use shadcn/ui component patterns and conventions. Build components following shadcn/ui's design system:
+- Use Tailwind CSS with shadcn's design tokens: bg-background, text-foreground, bg-card, bg-muted, text-muted-foreground, bg-primary, text-primary-foreground, bg-secondary, bg-accent, border, ring, bg-destructive
+- Use CSS variables for theming: --background, --foreground, --card, --primary, --secondary, --muted, --accent, --destructive, --border, --input, --ring with HSL values
+- Component patterns: Card (with CardHeader, CardTitle, CardDescription, CardContent, CardFooter), Button (variants: default, destructive, outline, secondary, ghost, link; sizes: default, sm, lg, icon), Badge, Input, Separator, Avatar, Dialog, Sheet, Dropdown, Tabs, Tooltip
+- Use cn() utility pattern for conditional classes: cn("base-classes", variant && "variant-classes")
+- Rounded corners: rounded-lg for cards, rounded-md for buttons/inputs
+- Shadows: shadow-sm for subtle depth
+- Focus rings: focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring
+- Animations: animate-in, fade-in, slide-in from Tailwind
+- Typography: tracking-tight for headings, text-sm text-muted-foreground for descriptions, leading-none for tight text
+- Spacing conventions: space-y-1.5 for form groups, p-6 for card padding, gap-4 for grid gaps
+- Build it as if you're composing real shadcn/ui primitives. The code should look like it belongs in a shadcn/ui project.
+Reference: https://ui.shadcn.com`
+    };
+
     const audienceContext = audience ? `\n\nTARGET AUDIENCE: ${audience}\nDesign decisions must be appropriate for this audience. Consider their tech literacy, aesthetic preferences, device usage patterns, and what builds trust with them.` : '';
     const productContext = prompt ? `\n\nPRODUCT CONTEXT: ${prompt}\nThis is what's being built. The design must serve this product's goals. Every UI decision should make this product more compelling and usable.` : '';
 
@@ -1238,7 +1267,7 @@ Rules:
 - ${iconInstructions[iconLibrary]}
 - If the audience is specified, tailor the visual language to what resonates with them
 - Make it feel like a REAL product, not a demo. This should impress investors.
-- IMPORTANT: Return ONLY valid JSON. No markdown, no code fences, no explanation outside the JSON.${enhanceInstructions}${multiImageContext}`;
+- IMPORTANT: Return ONLY valid JSON. No markdown, no code fences, no explanation outside the JSON.${uiFrameworkInstructions[uiFramework]}${enhanceInstructions}${multiImageContext}`;
 
     let userPrompt = 'Analyze this design and build it as a real product UI.';
     if (audience && prompt) {
