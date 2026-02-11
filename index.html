@@ -1184,6 +1184,7 @@ Rules:
 - Responsive by default — test at 375px, 768px, and 1440px mentally
 - Smooth micro-interactions: hover states, focus rings, transitions on state changes
 - Accessibility: proper contrast ratios, focus management, semantic HTML, aria labels
+- ICONS: Use inline SVG icons ONLY — draw clean, minimal SVG paths directly in the code. Do NOT use emoji, unicode symbols, or ASCII art as icons. Do NOT import from icon libraries (lucide-react, heroicons, etc.) since they won't load in preview. Every icon must be a proper <svg> element with viewBox, stroke/fill, and clean paths. Study how Linear, Vercel, and Stripe craft their icons — geometric, consistent stroke width (1.5-2px), rounded joins, 24x24 viewBox. Icons should feel intentional and premium, never generic.
 - If the audience is specified, tailor the visual language to what resonates with them
 - Make it feel like a REAL product, not a demo. This should impress investors.
 - IMPORTANT: Return ONLY valid JSON. No markdown, no code fences, no explanation outside the JSON.${enhanceInstructions}${multiImageContext}`;
