@@ -85,13 +85,81 @@
     border-color: var(--accent);
     background: rgba(167, 139, 250, 0.04);
   }
-  .drop-zone.has-image {
+  .drop-zone.has-images {
     padding: 8px;
     border-style: solid;
     border-color: var(--border);
+    min-height: auto;
   }
-  .drop-zone.has-image:hover {
+  .drop-zone.has-images:hover {
     border-color: var(--accent);
+  }
+  .image-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 6px;
+    width: 100%;
+  }
+  .image-thumb {
+    position: relative;
+    border-radius: 6px;
+    overflow: hidden;
+    aspect-ratio: 4/3;
+    cursor: pointer;
+  }
+  .image-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 6px;
+  }
+  .image-thumb .remove-img {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.7);
+    color: white;
+    border: none;
+    font-size: 11px;
+    cursor: pointer;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+  }
+  .image-thumb:hover .remove-img { display: flex; }
+  .image-thumb .img-label {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 2px 6px;
+    background: rgba(0,0,0,0.6);
+    font-size: 9px;
+    color: var(--muted);
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .add-more-btn {
+    border: 1px dashed var(--border);
+    border-radius: 6px;
+    aspect-ratio: 4/3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .add-more-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
   }
   .drop-icon {
     width: 48px;
@@ -113,12 +181,7 @@
     font-size: 12px;
     color: var(--muted);
   }
-  .drop-zone img {
-    max-width: 100%;
-    max-height: 320px;
-    border-radius: 8px;
-    object-fit: contain;
-  }
+  /* removed - using image grid now */
   .drop-zone input { display: none; }
 
   /* Prompt */
@@ -448,7 +511,7 @@
   <!-- Left: Input -->
   <div class="left-panel">
     <div class="drop-zone" id="dropZone" onclick="document.getElementById('fileInput').click()">
-      <input type="file" id="fileInput" accept="image/*" onchange="handleFile(this.files[0])">
+      <input type="file" id="fileInput" accept="image/*" multiple onchange="Array.from(this.files).forEach(handleFile)">
       <div class="drop-icon">🎨</div>
       <div class="drop-title">Drop your design inspiration</div>
       <div class="drop-sub">Screenshot, mockup, Dribbble shot, napkin sketch — anything</div>
@@ -476,6 +539,18 @@
       <div class="setting-chip active" data-style="faithful" onclick="setStyle(this)">Faithful</div>
       <div class="setting-chip" data-style="improved" onclick="setStyle(this)">Improved</div>
       <div class="setting-chip" data-style="reimagined" onclick="setStyle(this)">Reimagined</div>
+    </div>
+
+    <div class="settings" id="enhancementSettings">
+      <div class="prompt-label" style="width:100%;margin-bottom:4px">Enhancements</div>
+      <div class="setting-chip" data-enhance="motion" onclick="toggleEnhance(this)">🎬 Motion</div>
+      <div class="setting-chip" data-enhance="glassmorphism" onclick="toggleEnhance(this)">🪟 Glass</div>
+      <div class="setting-chip" data-enhance="gradients" onclick="toggleEnhance(this)">🌈 Gradients</div>
+      <div class="setting-chip" data-enhance="3d" onclick="toggleEnhance(this)">🧊 3D Depth</div>
+      <div class="setting-chip" data-enhance="particles" onclick="toggleEnhance(this)">✨ Particles</div>
+      <div class="setting-chip" data-enhance="darkmode" onclick="toggleEnhance(this)">🌙 Dark Mode</div>
+      <div class="setting-chip" data-enhance="scroll" onclick="toggleEnhance(this)">📜 Scroll FX</div>
+      <div class="setting-chip" data-enhance="microinteractions" onclick="toggleEnhance(this)">👆 Micro-interactions</div>
     </div>
 
     <button class="generate-btn" id="generateBtn" onclick="generate()" disabled>
@@ -530,9 +605,10 @@
 </div>
 
 <script>
-  let imageData = null;
+  let images = []; // {data, name}
   let outputFormat = 'html';
   let styleMode = 'faithful';
+  let enhancements = new Set();
   let generatedCode = '';
 
   // Check for saved API key
@@ -563,8 +639,9 @@
   dropZone.addEventListener('drop', e => {
     e.preventDefault();
     dropZone.classList.remove('dragover');
-    const file = e.dataTransfer.files[0];
-    if (file && file.type.startsWith('image/')) handleFile(file);
+    for (const file of e.dataTransfer.files) {
+      if (file.type.startsWith('image/')) handleFile(file);
+    }
   });
 
   // Also handle paste
@@ -574,21 +651,62 @@
     for (const item of items) {
       if (item.type.startsWith('image/')) {
         handleFile(item.getAsFile());
-        break;
       }
     }
   });
 
   function handleFile(file) {
-    if (!file) return;
+    if (!file || images.length >= 8) return;
     const reader = new FileReader();
     reader.onload = e => {
-      imageData = e.target.result;
-      dropZone.classList.add('has-image');
-      dropZone.innerHTML = `<input type="file" id="fileInput" accept="image/*" onchange="handleFile(this.files[0])"><img src="${imageData}" alt="Design">`;
+      images.push({ data: e.target.result, name: file.name || `Image ${images.length + 1}` });
+      renderImageGrid();
       updateGenerateBtn();
     };
     reader.readAsDataURL(file);
+  }
+
+  function removeImage(idx) {
+    images.splice(idx, 1);
+    renderImageGrid();
+    updateGenerateBtn();
+  }
+
+  function renderImageGrid() {
+    if (images.length === 0) {
+      dropZone.classList.remove('has-images');
+      dropZone.innerHTML = `<input type="file" id="fileInput" accept="image/*" multiple onchange="Array.from(this.files).forEach(handleFile)">
+        <div class="drop-icon">🎨</div>
+        <div class="drop-title">Drop your design inspiration</div>
+        <div class="drop-sub">Screenshots, mockups, Dribbble shots — drop multiple for a moodboard</div>`;
+      return;
+    }
+    dropZone.classList.add('has-images');
+    let html = `<input type="file" id="fileInput" accept="image/*" multiple onchange="Array.from(this.files).forEach(handleFile)">
+      <div class="image-grid">`;
+    images.forEach((img, i) => {
+      html += `<div class="image-thumb">
+        <img src="${img.data}" alt="${img.name}">
+        <button class="remove-img" onclick="event.stopPropagation();removeImage(${i})">✕</button>
+        <div class="img-label">${img.name.length > 15 ? img.name.slice(0,12)+'...' : img.name}</div>
+      </div>`;
+    });
+    if (images.length < 8) {
+      html += `<div class="add-more-btn" onclick="event.stopPropagation();document.getElementById('fileInput').click()">+</div>`;
+    }
+    html += `</div>`;
+    dropZone.innerHTML = html;
+  }
+
+  function toggleEnhance(el) {
+    const val = el.dataset.enhance;
+    if (enhancements.has(val)) {
+      enhancements.delete(val);
+      el.classList.remove('active');
+    } else {
+      enhancements.add(val);
+      el.classList.add('active');
+    }
   }
 
   function setOutput(el) {
@@ -611,7 +729,7 @@
   }
 
   function updateGenerateBtn() {
-    document.getElementById('generateBtn').disabled = !imageData || !getApiKey();
+    document.getElementById('generateBtn').disabled = images.length === 0 || !getApiKey();
   }
 
   function copyCode() {
@@ -632,7 +750,7 @@
   ];
 
   async function generate() {
-    if (!imageData || !getApiKey()) return;
+    if (images.length === 0 || !getApiKey()) return;
 
     const btn = document.getElementById('generateBtn');
     const loading = document.getElementById('loading');
@@ -666,6 +784,26 @@
     const audienceContext = audience ? `\n\nTARGET AUDIENCE: ${audience}\nDesign decisions must be appropriate for this audience. Consider their tech literacy, aesthetic preferences, device usage patterns, and what builds trust with them.` : '';
     const productContext = prompt ? `\n\nPRODUCT CONTEXT: ${prompt}\nThis is what's being built. The design must serve this product's goals. Every UI decision should make this product more compelling and usable.` : '';
 
+    const enhanceMap = {
+      motion: 'Add tasteful CSS animations and transitions — entrance animations (fade-in, slide-up), hover transforms, smooth state transitions. Use @keyframes for hero sections. Keep it elegant, not flashy.',
+      glassmorphism: 'Use glassmorphism effects — backdrop-filter: blur(), semi-transparent backgrounds with subtle borders, frosted glass cards. Layer depth with overlapping translucent panels.',
+      gradients: 'Use rich gradient backgrounds, gradient text (background-clip: text), gradient borders, and mesh-gradient-style sections. Make colors flow and feel alive.',
+      '3d': 'Add 3D depth with CSS transforms — perspective, rotateX/Y on cards, parallax-style layering, subtle translateZ for hover states, box-shadows that create depth illusion.',
+      particles: 'Add a subtle animated particle/dot background using pure CSS or minimal JS canvas. Keep it performant — no heavy libraries. Stars, dots, or floating shapes.',
+      darkmode: 'Design in dark mode with proper contrast. Rich dark backgrounds (#0a0a0b to #1a1a2e range), light text, accent colors that pop against dark. Include a dark/light toggle if appropriate.',
+      scroll: 'Add scroll-driven animations using Intersection Observer — elements fade in, slide up, or scale as they enter viewport. Parallax on hero sections. Sticky headers with blur on scroll.',
+      microinteractions: 'Add detailed micro-interactions — button press animations (scale down then up), input focus glow effects, checkbox/toggle animations, ripple effects on click, loading skeleton states, tooltip animations, cursor effects.'
+    };
+
+    const activeEnhancements = [...enhancements].map(e => enhanceMap[e]).filter(Boolean);
+    const enhanceInstructions = activeEnhancements.length > 0
+      ? `\n\nENHANCEMENTS TO APPLY:\n${activeEnhancements.map((e, i) => `${i+1}. ${e}`).join('\n')}\n\nThese are NOT optional — implement each one. They should feel cohesive together, not bolted on.`
+      : '';
+
+    const multiImageContext = images.length > 1
+      ? `\n\nMULTIPLE REFERENCE IMAGES: You're receiving ${images.length} design references. Treat them as a MOODBOARD — synthesize the best elements from each into one cohesive design. Extract the layout from one, the color palette from another, typography choices, component styles, etc. Call out which elements you pulled from which image in your analysis.`
+      : '';
+
     const systemPrompt = `You are an elite UI designer and frontend engineer with 15 years of experience shipping products at companies like Linear, Vercel, Stripe, and Apple. You analyze design screenshots and produce production-quality code that's better than what most agencies deliver.
 
 Your response MUST be in this exact JSON format:
@@ -693,7 +831,7 @@ Rules:
 - Accessibility: proper contrast ratios, focus management, semantic HTML, aria labels
 - If the audience is specified, tailor the visual language to what resonates with them
 - Make it feel like a REAL product, not a demo. This should impress investors.
-- IMPORTANT: Return ONLY valid JSON. No markdown, no code fences, no explanation outside the JSON.`;
+- IMPORTANT: Return ONLY valid JSON. No markdown, no code fences, no explanation outside the JSON.${enhanceInstructions}${multiImageContext}`;
 
     let userPrompt = 'Analyze this design and build it as a real product UI.';
     if (audience && prompt) {
@@ -705,9 +843,17 @@ Rules:
     }
 
     try {
-      // Extract base64 data and media type
-      const [header, base64] = imageData.split(',');
-      const mediaType = header.match(/:(.*?);/)[1];
+      // Build content array with all images
+      const content = [];
+      images.forEach((img, i) => {
+        const [header, base64] = img.data.split(',');
+        const mediaType = header.match(/:(.*?);/)[1];
+        if (images.length > 1) {
+          content.push({ type: 'text', text: `[Reference image ${i + 1}: ${img.name}]` });
+        }
+        content.push({ type: 'image', source: { type: 'base64', media_type: mediaType, data: base64 } });
+      });
+      content.push({ type: 'text', text: userPrompt });
 
       const response = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
@@ -723,10 +869,7 @@ Rules:
           system: systemPrompt,
           messages: [{
             role: 'user',
-            content: [
-              { type: 'image', source: { type: 'base64', media_type: mediaType, data: base64 } },
-              { type: 'text', text: userPrompt }
-            ]
+            content
           }]
         })
       });
