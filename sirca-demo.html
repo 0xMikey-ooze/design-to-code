@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sirca</title>
+<script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone@7/babel.min.js"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>body{font-family:'Inter',sans-serif;margin:0;}</style>
+<script>
+const {useState,useEffect,useRef}=React;
+const Image=(props)=>React.createElement('img',{...props,src:props.src||''});
+const Link=(props)=>React.createElement('a',{...props,href:props.href||'#'});
+</script>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel" data-presets="typescript,react">
+const useInView = (threshold = 0.1) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const [inView, setInView] = useState(false);
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) setInView(true); },
+      { threshold }
+    );
+    if (ref.current) observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, []);
+  return { ref, inView };
+};
+
+const SircaLanding: React.FC = () => {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [activeStep, setActiveStep] = useState(0);
+  const [buttonPressed, setButtonPressed] = useState<string | null>(null);
+
+  const hero = useInView();
+  const howItWorks = useInView();
+  const features = useInView();
+  const testimonials = useInView();
+  const cta = useInView();
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setActiveStep((prev) => (prev + 1) % 4);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const handleButtonPress = (id: string) => {
+    setButtonPressed(id);
+    setTimeout(() => setButtonPressed(null), 200);
+  };
+
+  const steps = [
+    { label: 'CONTACT', icon: '👤', title: 'New lead comes in', desc: 'Dr. Sarah Chen submitted a consultation request via your website at 2:34 PM.' },
+    { label: 'SIRCA', icon: '🤖', title: 'Sirca logs & qualifies', desc: 'Lead scored 87/100. Tagged as "High Intent — Patent Law." Added to priority pipeline.' },
+    { label: 'ACTION', icon: '📧', title: 'Follow-up sent automatically', desc: 'Personalized email sent within 3 minutes. Calendar link included for Thursday availability.' },
+    { label: 'RESULT', icon: '✅', title: 'Meeting booked, you\'re notified', desc: 'Dr. Chen confirmed Thursday 10 AM. Sirca prepped a briefing doc with her background.' },
+  ];
+
+  const featureItems = [
+    { title: 'Intelligent Follow-ups', desc: 'Sirca knows when to nudge and when to wait. Context-aware sequences that feel human, not robotic.', icon: '🔔' },
+    { title: 'Pipeline Autopilot', desc: 'Deals move through stages automatically. Sirca updates statuses, flags stalls, and suggests next actions.', icon: '📊' },
+    { title: 'Meeting Prep Briefs', desc: 'Before every call, get a one-page brief: contact history, recent interactions, and talking points.', icon: '📋' },
+    { title: 'Smart Reminders', desc: 'Never drop a ball. Sirca surfaces the right contact at the right time based on deal velocity.', icon: '⏰' },
+    { title: 'Email Drafting', desc: 'One-click drafts that match your tone. Review, tweak, send — or let Sirca handle it entirely.', icon: '✉️' },
+    { title: 'Revenue Insights', desc: 'See which activities drive closes. Sirca learns your patterns and amplifies what works.', icon: '💰' },
+  ];
+
+  const testimonialItems = [
+    { name: 'Dr. Michael Torres', role: 'Orthopedic Surgeon, Private Practice', text: 'I was losing patients to slow follow-up. Sirca cut my response time from 2 days to 3 minutes. My practice revenue is up 34%.', avatar: 'MT' },
+    { name: 'Rebecca Liu, Esq.', role: 'Partner, Liu & Associates', text: 'As a trial attorney, I don\'t have time for CRM admin. Sirca manages my entire client pipeline — I just show up prepared.', avatar: 'RL' },
+    { name: 'James Whitfield', role: 'VP Sales, MedTech Solutions', text: 'My team of 12 reps went from 40% follow-up rate to 97%. Sirca is like having a chief of staff for every rep.', avatar: 'JW' },
+  ];
+
+  return (
+    <div className="min-h-screen bg-white" style={{ fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif" }}>
+      <style>{`
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideInLeft { from { opacity: 0; transform: translateX(-40px); } to { opacity: 1; transform: translateX(0); } }
+        @keyframes slideInRight { from { opacity: 0; transform: translateX(40px); } to { opacity: 1; transform: translateX(0); } }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+        @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-8px); } }
+        @keyframes stepHighlight { 0% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.4); } 70% { box-shadow: 0 0 0 12px rgba(74, 222, 128, 0); } 100% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0); } }
+        .animate-fade-in-up { animation: fadeInUp 0.7s ease-out forwards; }
+        .animate-fade-in { animation: fadeIn 0.6s ease-out forwards; }
+        .animate-slide-left { animation: slideInLeft 0.7s ease-out forwards; }
+        .animate-slide-right { animation: slideInRight 0.7s ease-out forwards; }
+        .animate-float { animation: float 4s ease-in-out infinite; }
+        .animate-step-highlight { animation: stepHighlight 2s infinite; }
+        .delay-100 { animation-delay: 100ms; } .delay-200 { animation-delay: 200ms; } .delay-300 { animation-delay: 300ms; }
+        .btn-press { transform: scale(0.96); } .btn-release { transform: scale(1); transition: transform 0.15s ease-out; }
+        .mono { font-family: 'JetBrains Mono', 'SF Mono', monospace; }
+        .input-glow:focus { box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.3); }
+        .card-hover { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .card-hover:hover { transform: translateY(-4px); box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.1); }
+        .dashed-border { border: 2px dashed #C8F7E1; border-radius: 16px; }
+        .gradient-bg { background: linear-gradient(135deg, #E8FBF0 0%, #F0FDF4 50%, #FFFFFF 100%); }
+      `}</style>
+
+      {/* Navigation */}
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16">
+            <div className="flex items-center gap-8">
+              <a href="#" className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-lg bg-[#1A1A1A] flex items-center justify-center">
+                  <span className="text-white text-sm font-bold">S</span>
+                </div>
+                <span className="text-xl font-bold tracking-tight text-[#1A1A1A]">sirca</span>
+              </a>
+              <div className="hidden md:flex items-center gap-6">
+                <a href="#how-it-works" className="mono text-xs tracking-widest text-gray-500 hover:text-[#1A1A1A] transition-colors uppercase">How it works</a>
+                <a href="#features" className="mono text-xs tracking-widest text-gray-500 hover:text-[#1A1A1A] transition-colors uppercase">Features</a>
+                <a href="#testimonials" className="mono text-xs tracking-widest text-gray-500 hover:text-[#1A1A1A] transition-colors uppercase">Stories</a>
+              </div>
+            </div>
+            <div className="hidden md:flex items-center gap-4">
+              <a href="#" className="mono text-xs tracking-widest text-gray-500 hover:text-[#1A1A1A] transition-colors uppercase">Pricing</a>
+              <button className={`mono text-xs tracking-widest uppercase px-5 py-2.5 border-2 border-[#1A1A1A] rounded-full hover:bg-[#1A1A1A] hover:text-white transition-all ${buttonPressed === 'login' ? 'btn-press' : 'btn-release'}`} onMouseDown={() => handleButtonPress('login')}>Log in</button>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      {/* Hero */}
+      <section ref={hero.ref} className="gradient-bg pt-32 pb-20 lg:pt-40 lg:pb-32 overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+            <div className={hero.inView ? 'animate-slide-left' : 'opacity-0'}>
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-green-200 bg-white/80 mb-8">
+                <span className="text-sm">🚀</span>
+                <span className="mono text-xs tracking-wider text-green-700 uppercase">Now in Private Beta</span>
+              </div>
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-[#1A1A1A] leading-[1.1] tracking-tight mb-6">
+                Your AI chief of staff for client relationships
+              </h1>
+              <p className="text-lg sm:text-xl text-gray-500 leading-relaxed mb-10 max-w-lg">
+                Sirca is an agent-powered CRM that handles follow-ups, reminders, and pipeline management — so doctors, lawyers, and sales teams get their day back.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4">
+                <button className={`group inline-flex items-center gap-3 bg-[#1A1A1A] text-white px-8 py-4 rounded-full mono text-sm tracking-widest uppercase transition-all hover:bg-[#2A2A2A] hover:shadow-lg ${buttonPressed === 'hero-cta' ? 'btn-press' : 'btn-release'}`} onMouseDown={() => handleButtonPress('hero-cta')}>
+                  Get started free
+                  <span className="w-8 h-8 rounded-full bg-[#4ADE80] flex items-center justify-center group-hover:translate-x-1 transition-transform">
+                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#1A1A1A" strokeWidth="2" strokeLinecap="round"><path d="M1 7h12M8 2l5 5-5 5" /></svg>
+                  </span>
+                </button>
+                <button className={`inline-flex items-center gap-2 px-8 py-4 rounded-full border-2 border-gray-200 mono text-sm tracking-widest uppercase text-gray-600 hover:border-gray-400 transition-all ${buttonPressed === 'hero-demo' ? 'btn-press' : 'btn-release'}`} onMouseDown={() => handleButtonPress('hero-demo')}>
+                  Watch demo
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M6 3.5v9l7-4.5-7-4.5z" /></svg>
+                </button>
+              </div>
+              <div className="mt-10 flex items-center gap-6">
+                <div className="flex -space-x-3">
+                  {['bg-blue-400', 'bg-purple-400', 'bg-amber-400', 'bg-rose-400'].map((color, i) => (
+                    <div key={i} className={`w-10 h-10 rounded-full ${color} border-2 border-white flex items-center justify-center text-white text-xs font-bold`}>
+                      {['JW', 'RL', 'MT', 'SC'][i]}
+                    </div>
+                  ))}
+                </div>
+                <div>
+                  <div className="text-sm font-semibold text-[#1A1A1A]">Trusted by 2,400+ professionals</div>
+                  <div className="flex items-center gap-1 mt-0.5">
+                    {[...Array(5)].map((_, i) => (<svg key={i} width="14" height="14" viewBox="0 0 14 14" fill="#FBBF24"><path d="M7 1l1.8 3.6L13 5.3l-3 2.9.7 4.1L7 10.4 3.3 12.3l.7-4.1-3-2.9 4.2-.7L7 1z" /></svg>))}
+                    <span className="text-xs text-gray-400 ml-1">4.9/5</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Dashboard Preview */}
+            <div className={`relative ${hero.inView ? 'animate-slide-right' : 'opacity-0'}`}>
+              <div className="dashed-border p-1">
+                <div className="bg-white rounded-xl shadow-2xl overflow-hidden border border-gray-100">
+                  <div className="bg-[#1A1A1A] px-5 py-3 flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <div className="w-3 h-3 rounded-full bg-red-400"></div>
+                      <div className="w-3 h-3 rounded-full bg-yellow-400"></div>
+                      <div className="w-3 h-3 rounded-full bg-green-400"></div>
+                    </div>
+                    <span className="mono text-xs text-gray-400">sirca — dashboard</span>
+                    <div className="w-16"></div>
+                  </div>
+                  <div className="p-5 space-y-4">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <div className="text-sm font-semibold text-[#1A1A1A]">Good morning, Rebecca</div>
+                        <div className="text-xs text-gray-400 mt-0.5">3 follow-ups due · 2 meetings today</div>
+                      </div>
+                      <div className="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 text-xs font-bold">RL</div>
+                    </div>
+                    <div className="space-y-3">
+                      <div className="bg-green-50 border border-green-100 rounded-lg p-3 animate-float">
+                        <div className="flex items-center gap-2 mb-1">
+                          <div className="w-5 h-5 rounded bg-green-200 flex items-center justify-center text-xs">🤖</div>
+                          <span className="mono text-[10px] tracking-wider text-green-600 uppercase">Sirca Agent</span>
+                          <span className="text-[10px] text-gray-400 ml-auto">2 min ago</span>
+                        </div>
+                        <p className="text-xs text-gray-700">Sent follow-up to <span className="font-semibold">Dr. Michael Torres</span> re: patent filing consultation. He opened it 43 seconds later.</p>
+                      </div>
+                      <div className="bg-white border border-gray-100 rounded-lg p-3 card-hover">
+                        <div className="flex items-center gap-2 mb-1">
+                          <div className="w-5 h-5 rounded bg-blue-100 flex items-center justify-center text-xs">📅</div>
+                          <span className="mono text-[10px] tracking-wider text-blue-600 uppercase">Meeting Prep</span>
+                          <span className="text-[10px] text-gray-400 ml-auto">10:00 AM</span>
+                        </div>
+                        <p className="text-xs text-gray-700">Brief ready for <span className="font-semibold">James Whitfield</span> — MedTech contract renewal. 3 talking points prepared.</p>
+                      </div>
+                      <div className="bg-white border border-gray-100 rounded-lg p-3 card-hover">
+                        <div className="flex items-center gap-2 mb-1">
+                          <div className="w-5 h-5 rounded bg-amber-100 flex items-center justify-center text-xs">⚡</div>
+                          <span className="mono text-[10px] tracking-wider text-amber-600 uppercase">Pipeline Alert</span>
+                          <span className="text-[10px] text-gray-400 ml-auto">Suggested</span>
+                        </div>
+                        <p className="text-xs text-gray-700"><span className="font-semibold">Chen & Associates</span> deal stalled 5 days. Sirca recommends a check-in call today.</p>
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-3 gap-3 pt-2">
+                      {[{ label: 'Response Time', value: '3 min', delta: '-89%' }, { label: 'Follow-up Rate', value: '97%', delta: '+57%' }, { label: 'Deals Won', value: '24', delta: '+12' }].map((stat, i) => (
+                        <div key={i} className="bg-gray-50 rounded-lg p-3 text-center">
+                          <div className="text-lg font-bold text-[#1A1A1A]">{stat.value}</div>
+                          <div className="text-[10px] text-gray-400 mt-0.5">{stat.label}</div>
+                          <div className="text-[10px] text-green-500 font-medium mt-1">{stat.delta}</div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="absolute -top-4 -right-4 w-20 h-20 bg-[#C8F7E1] rounded-full opacity-40 blur-xl"></div>
+              <div className="absolute -bottom-6 -left-6 w-24 h-24 bg-[#C8F7E1] rounded-full opacity-30 blur-xl"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Logos */}
+      <section className="py-16 border-b border-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <p className="mono text-xs tracking-widest text-gray-400 text-center uppercase mb-8">Trusted by teams at</p>
+          <div className="flex flex-wrap items-center justify-center gap-x-12 gap-y-6 opacity-40">
+            {['Cleveland Clinic', 'Baker McKenzie', 'Salesforce', 'Mayo Clinic', 'Latham & Watkins', 'HubSpot'].map((name) => (
+              <span key={name} className="text-lg font-semibold text-gray-900 whitespace-nowrap">{name}</span>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* How It Works */}
+      <section ref={howItWorks.ref} id="how-it-works" className="py-24 lg:py-32">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className={`text-center mb-16 ${howItWorks.inView ? 'animate-fade-in-up' : 'opacity-0'}`}>
+            <span className="mono text-xs tracking-widest text-gray-400 uppercase">How it works</span>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#1A1A1A] mt-4 tracking-tight">The missing layer between<br className="hidden sm:block" /> you and your clients</h2>
+            <p className="text-lg text-gray-500 mt-4 max-w-2xl mx-auto">Sirca's agents work in the background — qualifying leads, drafting follow-ups, and keeping your pipeline moving while you focus on what matters.</p>
+          </div>
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-start">
+            <div className={`space-y-1 ${howItWorks.inView ? 'animate-slide-left' : 'opacity-0'}`}>
+              {steps.map((step, index) => (
+                <div key={index}>
+                  <button className={`w-full text-left p-5 rounded-2xl transition-all duration-500 cursor-pointer ${activeStep === index ? 'bg-white shadow-lg border-2 border-[#C8F7E1]' : 'bg-transparent border-2 border-transparent hover:bg-gray-50'}`} onClick={() => setActiveStep(index)}>
+                    <div className="flex items-start gap-4">
+                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-lg flex-shrink-0 transition-all ${activeStep === index ? 'bg-[#C8F7E1] animate-step-highlight' : 'bg-gray-100'}`}>{step.icon}</div>
+                      <div>
+                        <span className="mono text-[10px] tracking-widest text-gray-400 uppercase">{step.label}</span>
+                        <h3 className="text-base font-semibold text-[#1A1A1A] mt-1">{step.title}</h3>
+                        <p className={`text-sm text-gray-500 mt-1 transition-all duration-500 ${activeStep === index ? 'max-h-20 opacity-100' : 'max-h-0 opacity-0 overflow-hidden'}`}>{step.desc}</p>
+                      </div>
+                    </div>
+                  </button>
+                  {index < steps.length - 1 && (
+                    <div className="flex ml-9 pl-[2px]">
+                      <div className={`w-[2px] h-6 transition-colors ${activeStep > index ? 'bg-[#4ADE80]' : 'bg-gray-200'}`} style={{ marginLeft: '18px' }}></div>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+            <div className={howItWorks.inView ? 'animate-slide-right delay-300' : 'opacity-0'}>
+              <div className="relative">
+                <div className="grid grid-cols-3 gap-4">
+                  <div className="col-span-1 space-y-4">
+                    <div className="dashed-border bg-[#E8FBF0] p-4 rounded-2xl"><span className="mono text-[10px] tracking-wider text-gray-500 uppercase block">Your Clients</span><p className="text-sm font-medium text-[#1A1A1A] mt-2">Emails · Calls · Forms · Referrals</p></div>
+                    <div className="dashed-border bg-[#E8FBF0] p-4 rounded-2xl"><span className="mono text-[10px] tracking-wider text-gray-500 uppercase block">Your Calendar</span><p className="text-sm font-medium text-[#1A1A1A] mt-2">Google · Outlook · iCal</p></div>
+                  </div>
+                  <div className="col-span-1 flex items-center justify-center">
+                    <div className="bg-[#1A1A1A] text-white p-6 rounded-2xl shadow-xl w-full text-center">
+                      <div className="text-2xl mb-2">🤖</div>
+                      <span className="mono text-xs tracking-wider uppercase block">Sirca Agent</span>
+                      <p className="text-[11px] text-gray-400 mt-2">Orchestration · Memory · Actions</p>
+                    </div>
+                  </div>
+                  <div className="col-span-1 space-y-4">
+                    <div className="dashed-border bg-[#E8FBF0] p-4 rounded-2xl"><span className="mono text-[10px] tracking-wider text-gray-500 uppercase block">Actions</span><p className="text-sm font-medium text-[#1A1A1A] mt-2">Email · SMS · Tasks · Notes</p></div>
+                    <div className="dashed-border bg-[#E8FBF0] p-4 rounded-2xl"><span className="mono text-[10px] tracking-wider text-gray-500 uppercase block">Insights</span><p className="text-sm font-medium text-[#1A1A1A] mt-2">Revenue · Velocity · Health</p></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Features */}
+      <section ref={features.ref} id="features" className="py-24 lg:py-32 gradient-bg">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className={`text-center mb-16 ${features.inView ? 'animate-fade-in-up' : 'opacity-0'}`}>
+            <span className="mono text-xs tracking-widest text-gray-400 uppercase">Features</span>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#1A1A1A] mt-4 tracking-tight">Everything an agent needs<br className="hidden sm:block" /> to run your CRM</h2>
+          </div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {featureItems.map((feature, index) => (
+              <div key={index} className={`bg-white rounded-2xl p-7 border border-gray-100 card-hover ${features.inView ? 'animate-fade-in-up' : 'opacity-0'}`} style={{ animationDelay: `${index * 100}ms` }}>
+                <div className="w-12 h-12 rounded-xl bg-[#E8FBF0] flex items-center justify-center text-xl mb-5">{feature.icon}</div>
+                <h3 className="text-lg font-semibold text-[#1A1A1A] mb-2">{feature.title}</h3>
+                <p className="text-sm text-gray-500 leading-relaxed">{feature.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials */}
+      <section ref={testimonials.ref} id="testimonials" className="py-24 lg:py-32">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className={`text-center mb-16 ${testimonials.inView ? 'animate-fade-in-up' : 'opacity-0'}`}>
+            <span className="mono text-xs tracking-widest text-gray-400 uppercase">Success Stories</span>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#1A1A1A] mt-4 tracking-tight">Professionals who got<br className="hidden sm:block" /> their time back</h2>
+          </div>
+          <div className="grid md:grid-cols-3 gap-6">
+            {testimonialItems.map((item, index) => (
+              <div key={index} className={`bg-white rounded-2xl p-8 border border-gray-100 card-hover ${testimonials.inView ? 'animate-fade-in-up' : 'opacity-0'}`} style={{ animationDelay: `${index * 150}ms` }}>
+                <div className="flex items-center gap-1 mb-5">
+                  {[...Array(5)].map((_, i) => (<svg key={i} width="16" height="16" viewBox="0 0 16 16" fill="#FBBF24"><path d="M8 1.3l2 4.2 4.6.7-3.3 3.2.8 4.5L8 11.6l-4.1 2.3.8-4.5L1.4 6.2l4.6-.7L8 1.3z" /></svg>))}
+                </div>
+                <p className="text-gray-600 leading-relaxed mb-6 text-sm">"{item.text}"</p>
+                <div className="flex items-center gap-3 pt-4 border-t border-gray-50">
+                  <div className="w-10 h-10 rounded-full bg-[#1A1A1A] flex items-center justify-center text-white text-xs font-bold">{item.avatar}</div>
+                  <div>
+                    <div className="text-sm font-semibold text-[#1A1A1A]">{item.name}</div>
+                    <div className="text-xs text-gray-400">{item.role}</div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Stats */}
+      <section className="py-20 bg-[#1A1A1A]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 text-center">
+            {[{ value: '89%', label: 'Reduction in response time' }, { value: '2,400+', label: 'Professionals onboarded' }, { value: '97%', label: 'Follow-up completion rate' }, { value: '3.2x', label: 'More deals closed per rep' }].map((stat, i) => (
+              <div key={i} className="p-6">
+                <div className="text-4xl lg:text-5xl font-bold text-[#4ADE80] mb-2">{stat.value}</div>
+                <div className="mono text-xs tracking-wider text-gray-400 uppercase">{stat.label}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section ref={cta.ref} className="py-24 lg:py-32 gradient-bg">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div className={cta.inView ? 'animate-fade-in-up' : 'opacity-0'}>
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-green-200 bg-white/80 mb-8">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+              </span>
+              <span className="mono text-xs tracking-wider text-green-700 uppercase">Limited beta spots available</span>
+            </div>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#1A1A1A] tracking-tight mb-6">Stop managing your CRM.<br />Let Sirca manage it for you.</h2>
+            <p className="text-lg text-gray-500 mb-10 max-w-xl mx-auto">Join 2,400+ professionals who reclaimed an average of 8 hours per week. No credit card required.</p>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-md mx-auto">
+              <input type="email" placeholder="you@yourpractice.com" className="w-full sm:flex-1 px-5 py-4 rounded-full border-2 border-gray-200 text-sm focus:outline-none input-glow focus:border-[#4ADE80] transition-all" />
+              <button className={`w-full sm:w-auto whitespace-nowrap inline-flex items-center justify-center gap-2 bg-[#1A1A1A] text-white px-8 py-4 rounded-full mono text-sm tracking-widest uppercase transition-all hover:bg-[#2A2A2A] hover:shadow-lg ${buttonPressed === 'cta' ? 'btn-press' : 'btn-release'}`} onMouseDown={() => handleButtonPress('cta')}>
+                Get started
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M1 7h12M8 2l5 5-5 5" /></svg>
+              </button>
+            </div>
+            <p className="text-xs text-gray-400 mt-4">Free for 14 days · No credit card · Cancel anytime</p>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="bg-[#1A1A1A] text-gray-400 py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
+            <div>
+              <div className="flex items-center gap-2 mb-4">
+                <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center"><span className="text-white text-sm font-bold">S</span></div>
+                <span className="text-xl font-bold tracking-tight text-white">sirca</span>
+              </div>
+              <p className="text-sm text-gray-500 leading-relaxed">Agent-powered CRM for professionals who value their time.</p>
+            </div>
+            <div>
+              <h4 className="mono text-xs tracking-widest uppercase text-gray-300 mb-4">Product</h4>
+              <ul className="space-y-3">{['Features', 'Pricing', 'Integrations', 'Changelog'].map((item) => (<li key={item}><a href="#" className="text-sm text-gray-500 hover:text-white transition-colors">{item}</a></li>))}</ul>
+            </div>
+            <div>
+              <h4 className="mono text-xs tracking-widest uppercase text-gray-300 mb-4">Company</h4>
+              <ul className="space-y-3">{['About', 'Blog', 'Careers', 'Contact'].map((item) => (<li key={item}><a href="#" className="text-sm text-gray-500 hover:text-white transition-colors">{item}</a></li>))}</ul>
+            </div>
+            <div>
+              <h4 className="mono text-xs tracking-widest uppercase text-gray-300 mb-4">Legal</h4>
+              <ul className="space-y-3">{['Privacy Policy', 'Terms of Service', 'HIPAA Compliance', 'Security'].map((item) => (<li key={item}><a href="#" className="text-sm text-gray-500 hover:text-white transition-colors">{item}</a></li>))}</ul>
+            </div>
+          </div>
+          <div className="border-t border-gray-800 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <p className="text-xs text-gray-600">© 2025 Sirca, Inc. All rights reserved.</p>
+            <div className="flex items-center gap-4">
+              <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-green-900/30 border border-green-800/30">
+                <span className="relative flex h-2 w-2"><span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span><span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span></span>
+                <span className="mono text-[10px] tracking-wider text-green-400 uppercase">HIPAA Compliant</span>
+              </span>
+              <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-green-900/30 border border-green-800/30">
+                <span className="mono text-[10px] tracking-wider text-green-400 uppercase">SOC 2 Type II</span>
+              </span>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+};
+
+ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(SircaLanding));
+</script>
+</body>
+</html>
