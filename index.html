@@ -543,7 +543,54 @@
     <div class="header-sub">Drop inspiration. Get production code.</div>
   </div>
   <div style="display:flex;gap:8px;align-items:center;">
+    <button class="setting-chip" onclick="showHelpModal()">❓ How to Use</button>
     <button class="setting-chip" onclick="showApiModal()" id="apiStatus">⚙️ API Key</button>
+  </div>
+</div>
+
+<!-- Help Modal -->
+<div id="helpModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:100;display:none;align-items:center;justify-content:center;padding:20px" onclick="if(event.target===this)this.style.display='none'">
+  <div style="background:#1a1a2e;border:1px solid #333;border-radius:16px;max-width:640px;width:100%;max-height:85vh;overflow-y:auto;padding:32px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+      <h2 style="font-size:20px;font-weight:700">How to Use Design → Code</h2>
+      <button onclick="document.getElementById('helpModal').style.display='none'" style="background:none;border:none;color:#888;font-size:24px;cursor:pointer">&times;</button>
+    </div>
+
+    <div style="font-size:14px;line-height:1.7;color:#ccc">
+      <h3 style="color:#fff;font-size:15px;margin:16px 0 8px">📸 Step 1: Get Your Inspiration</h3>
+      <p>Screenshot any UI you like — a website, app, Dribbble shot, even a napkin sketch.</p>
+      <div style="background:#12121a;border:1px solid #333;border-radius:8px;padding:12px;margin:8px 0;font-size:13px">
+        <strong style="color:#00e87b">How to screenshot:</strong><br>
+        • <strong>Mac:</strong> Cmd + Shift + 4 → drag to select area<br>
+        • <strong>Windows:</strong> Win + Shift + S → drag to select area<br>
+        • <strong>Chrome:</strong> Right-click → Inspect → Cmd+Shift+P → "Capture screenshot"<br>
+        • <strong>iPhone:</strong> Side button + Volume up<br>
+        • <strong>Android:</strong> Power + Volume down<br>
+        • <strong>Full page:</strong> Use GoFullPage extension or Cmd+Shift+P → "Capture full size screenshot" in Chrome DevTools
+      </div>
+      <p style="font-size:12px;color:#888">💡 Tip: Drop multiple images as a moodboard — Claude will synthesize the best elements from each.</p>
+
+      <h3 style="color:#fff;font-size:15px;margin:16px 0 8px">✏️ Step 2: Describe What You're Building</h3>
+      <p>Fill in who it's for and what you're building. Be specific — "A CRM dashboard for legal assistants" beats "a dashboard".</p>
+
+      <h3 style="color:#fff;font-size:15px;margin:16px 0 8px">⚙️ Step 3: Pick Your Settings</h3>
+      <p><strong>Output:</strong> HTML (self-contained), React/Next.js (Tailwind + TypeScript), Vue<br>
+      <strong>Style:</strong> Faithful (exact match), Improved (polished), Reimagined (creative reinterpretation)<br>
+      <strong>UI Framework:</strong> shadcn/ui adds proper design tokens and component patterns<br>
+      <strong>Icons:</strong> Lucide, Phosphor, or Hugeicons — real icon libraries, not emoji<br>
+      <strong>Enhancements:</strong> Motion, glass effects, gradients, 3D depth, particles, dark mode, etc.</p>
+
+      <h3 style="color:#fff;font-size:15px;margin:16px 0 8px">🚀 Step 4: Generate & Export</h3>
+      <p>Hit Generate — Claude analyzes your design and writes production code. Preview it live, then export:</p>
+      <div style="background:#12121a;border:1px solid #333;border-radius:8px;padding:12px;margin:8px 0;font-size:13px">
+        • <strong>Preview tab:</strong> See it rendered live in the browser<br>
+        • <strong>Code tab:</strong> Copy/edit the raw code<br>
+        • <strong>Export ↗:</strong> Copy as Cursor prompt, Claude prompt, download file, or component spec
+      </div>
+
+      <h3 style="color:#fff;font-size:15px;margin:16px 0 8px">🔑 API Key</h3>
+      <p>You need a Claude API key from <a href="https://console.anthropic.com" target="_blank" style="color:#00e87b">console.anthropic.com</a>. It stays in your browser's localStorage — never sent anywhere except Anthropic's API.</p>
+    </div>
   </div>
 </div>
 
@@ -704,6 +751,9 @@
   // Check for saved API key
   function getApiKey() {
     return localStorage.getItem('anthropic_api_key') || '';
+  }
+  function showHelpModal() {
+    document.getElementById('helpModal').style.display = 'flex';
   }
   function showApiModal() {
     document.getElementById('apiModal').classList.add('active');
