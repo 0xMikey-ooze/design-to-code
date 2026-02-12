@@ -1418,7 +1418,7 @@ Rules:
           'anthropic-dangerous-direct-browser-access': 'true'
         },
         body: JSON.stringify({
-          model: 'claude-opus-4-6',
+          model: 'claude-sonnet-4-20250514',
           max_tokens: 16000,
           system: systemPrompt,
           messages: [{
@@ -1448,6 +1448,11 @@ Rules:
           analysis: { quote: "Couldn't parse structured response, but here's your code.", tags: [], palette: '', typography: '' },
           code: text
         };
+      }
+
+      // Strip markdown code fences from generated code if Claude wrapped it
+      if (result.code) {
+        result.code = result.code.replace(/^```(?:html|tsx|jsx|vue|typescript|javascript)?\s*\n?/i, '').replace(/\n?```\s*$/i, '');
       }
 
       // Save analysis for exports
