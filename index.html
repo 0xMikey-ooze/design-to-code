@@ -7,8 +7,6 @@
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"></noscript>
 <title>Design → Code</title>
 <style>
-  /* fonts loaded via <link> in <head> */
-
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
   :root {
@@ -22,6 +20,7 @@
     --accent2: #818cf8;
     --green: #34d399;
     --amber: #fbbf24;
+    --red: #f87171;
   }
 
   body {
@@ -32,7 +31,6 @@
     overflow-x: hidden;
   }
 
-  /* Header */
   .header {
     padding: 20px 32px;
     border-bottom: 1px solid var(--border);
@@ -40,25 +38,12 @@
     align-items: center;
     justify-content: space-between;
   }
-  .logo {
-    font-size: 18px;
-    font-weight: 700;
-    letter-spacing: -0.5px;
-  }
+  .logo { font-size: 18px; font-weight: 700; letter-spacing: -0.5px; }
   .logo span { color: var(--accent); }
-  .header-sub {
-    font-size: 12px;
-    color: var(--muted);
-    font-weight: 400;
-  }
+  .header-sub { font-size: 12px; color: var(--muted); font-weight: 400; }
 
-  /* Layout */
-  .app {
-    display: flex;
-    height: calc(100vh - 65px);
-  }
+  .app { display: flex; height: calc(100vh - 65px); }
 
-  /* Left Panel - Drop Zone */
   .left-panel {
     width: 420px;
     min-width: 420px;
@@ -93,9 +78,7 @@
     border-color: var(--border);
     min-height: auto;
   }
-  .drop-zone.has-images:hover {
-    border-color: var(--accent);
-  }
+  .drop-zone.has-images:hover { border-color: var(--accent); }
   .image-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
@@ -109,429 +92,332 @@
     aspect-ratio: 4/3;
     cursor: pointer;
   }
-  .image-thumb img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 6px;
-  }
+  .image-thumb img { width: 100%; height: 100%; object-fit: cover; border-radius: 6px; }
   .image-thumb .remove-img {
-    position: absolute;
-    top: 4px;
-    right: 4px;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    background: rgba(0,0,0,0.7);
-    color: white;
-    border: none;
-    font-size: 11px;
-    cursor: pointer;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    line-height: 1;
+    position: absolute; top: 4px; right: 4px; width: 20px; height: 20px;
+    border-radius: 50%; background: rgba(0,0,0,0.7); color: white; border: none;
+    font-size: 11px; cursor: pointer; display: none; align-items: center;
+    justify-content: center; line-height: 1;
   }
   .image-thumb:hover .remove-img { display: flex; }
   .image-thumb .img-label {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    padding: 2px 6px;
-    background: rgba(0,0,0,0.6);
-    font-size: 9px;
-    color: var(--muted);
-    text-align: center;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    position: absolute; bottom: 0; left: 0; right: 0; padding: 2px 6px;
+    background: rgba(0,0,0,0.6); font-size: 9px; color: var(--muted);
+    text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
   .add-more-btn {
-    border: 1px dashed var(--border);
-    border-radius: 6px;
-    aspect-ratio: 4/3;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 24px;
-    color: var(--muted);
-    cursor: pointer;
-    transition: all 0.15s;
+    border: 1px dashed var(--border); border-radius: 6px; aspect-ratio: 4/3;
+    display: flex; align-items: center; justify-content: center; font-size: 24px;
+    color: var(--muted); cursor: pointer; transition: all 0.15s;
+    background: none; padding: 0; font-family: inherit;
   }
-  .add-more-btn:hover {
-    border-color: var(--accent);
-    color: var(--accent);
-  }
+  .add-more-btn:hover { border-color: var(--accent); color: var(--accent); }
   .drop-icon {
-    width: 48px;
-    height: 48px;
-    border-radius: 12px;
-    background: var(--surface2);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 16px;
-    font-size: 24px;
+    width: 48px; height: 48px; border-radius: 12px; background: var(--surface2);
+    display: flex; align-items: center; justify-content: center; margin-bottom: 16px; font-size: 24px;
   }
-  .drop-title {
-    font-size: 14px;
-    font-weight: 600;
-    margin-bottom: 4px;
-  }
-  .drop-sub {
-    font-size: 12px;
-    color: var(--muted);
-  }
-  /* removed - using image grid now */
+  .drop-title { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+  .drop-sub { font-size: 12px; color: var(--muted); }
   .drop-zone input { display: none; }
 
-  /* Prompt */
-  .prompt-section {
-    padding: 0 16px 16px;
-  }
+  .prompt-section { padding: 0 16px 16px; }
   .prompt-label {
-    font-size: 11px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    color: var(--muted);
-    margin-bottom: 8px;
+    font-size: 11px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.5px; color: var(--muted); margin-bottom: 8px;
   }
   .prompt-input {
-    width: 100%;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 12px 14px;
-    color: var(--text);
-    font-family: 'Inter', sans-serif;
-    font-size: 13px;
-    resize: vertical;
-    min-height: 80px;
-    outline: none;
-    transition: border-color 0.2s;
+    width: 100%; background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; padding: 12px 14px; color: var(--text);
+    font-family: 'Inter', sans-serif; font-size: 13px; resize: vertical;
+    min-height: 80px; outline: none; transition: border-color 0.2s;
   }
   .prompt-input:focus { border-color: var(--accent); }
   .prompt-input::placeholder { color: var(--muted); }
 
-  /* Settings */
-  .settings {
-    padding: 0 16px 16px;
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-  }
+  .settings { padding: 0 16px 16px; display: flex; gap: 8px; flex-wrap: wrap; }
   .setting-chip {
-    font-size: 11px;
-    padding: 6px 12px;
-    border-radius: 20px;
-    border: 1px solid var(--border);
-    background: var(--surface);
-    color: var(--muted);
-    cursor: pointer;
-    transition: all 0.15s;
-    user-select: none;
+    font-size: 11px; padding: 6px 12px; border-radius: 20px;
+    border: 1px solid var(--border); background: var(--surface); color: var(--muted);
+    cursor: pointer; transition: all 0.15s; user-select: none;
+    font-family: 'Inter', sans-serif;
   }
-  .setting-chip { font-family: 'Inter', sans-serif; }
   .setting-chip:hover { border-color: var(--accent); color: var(--text); }
   .setting-chip.active {
-    border-color: var(--accent);
-    background: rgba(167, 139, 250, 0.1);
-    color: var(--accent);
+    border-color: var(--accent); background: rgba(167, 139, 250, 0.1); color: var(--accent);
   }
 
-  /* Generate Button */
-  .generate-btn {
+  /* Pipeline Steps */
+  .pipeline-section {
     margin: 0 16px 16px;
-    padding: 12px;
+    background: var(--surface);
     border-radius: 10px;
-    border: none;
+    padding: 14px;
+    border: 1px solid var(--border);
+  }
+  .pipeline-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 12px;
+  }
+  .pipeline-title {
+    font-size: 11px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.5px; color: var(--muted);
+  }
+  .pipeline-step {
+    display: flex; align-items: center; gap: 10px; padding: 8px 10px;
+    border-radius: 8px; margin-bottom: 4px; transition: all 0.3s;
+    font-size: 12px; color: var(--muted);
+  }
+  .pipeline-step .step-icon { font-size: 16px; width: 24px; text-align: center; flex-shrink: 0; }
+  .pipeline-step .step-label { flex: 1; }
+  .pipeline-step .step-status {
+    font-size: 10px; font-family: 'JetBrains Mono', monospace;
+    padding: 2px 8px; border-radius: 10px; background: var(--surface2);
+  }
+  .pipeline-step.pending { opacity: 0.5; }
+  .pipeline-step.active {
+    background: rgba(167, 139, 250, 0.08); color: var(--text);
+    opacity: 1;
+  }
+  .pipeline-step.active .step-status {
+    background: rgba(167, 139, 250, 0.15); color: var(--accent);
+    animation: pulse-status 1.5s ease-in-out infinite;
+  }
+  .pipeline-step.done { opacity: 1; color: var(--text); }
+  .pipeline-step.done .step-status {
+    background: rgba(52, 211, 153, 0.15); color: var(--green);
+  }
+  .pipeline-step.error .step-status {
+    background: rgba(248, 113, 113, 0.15); color: var(--red);
+  }
+  @keyframes pulse-status {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+
+  /* Design Tokens Panel */
+  .tokens-section {
+    margin: 0 16px 16px;
+    background: var(--surface);
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    overflow: hidden;
+  }
+  .tokens-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 14px; cursor: pointer; transition: background 0.15s;
+  }
+  .tokens-header:hover { background: var(--surface2); }
+  .tokens-header-left {
+    display: flex; align-items: center; gap: 8px;
+  }
+  .tokens-header .tokens-title {
+    font-size: 11px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.5px; color: var(--muted);
+  }
+  .tokens-header .tokens-chevron {
+    font-size: 12px; color: var(--muted); transition: transform 0.2s;
+  }
+  .tokens-header .tokens-chevron.open { transform: rotate(180deg); }
+  .tokens-body { padding: 0 14px 14px; display: none; }
+  .tokens-body.open { display: block; }
+
+  .token-group { margin-bottom: 14px; }
+  .token-group:last-child { margin-bottom: 0; }
+  .token-group-label {
+    font-size: 10px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.5px; color: var(--muted); margin-bottom: 8px;
+  }
+  .token-colors {
+    display: flex; flex-wrap: wrap; gap: 6px;
+  }
+  .token-color {
+    display: flex; align-items: center; gap: 6px; padding: 4px 8px;
+    background: var(--surface2); border-radius: 6px; border: 1px solid var(--border);
+    cursor: pointer; transition: border-color 0.15s;
+  }
+  .token-color:hover { border-color: var(--accent); }
+  .token-swatch {
+    width: 16px; height: 16px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.1);
+    flex-shrink: 0;
+  }
+  .token-color-info {
+    display: flex; flex-direction: column;
+  }
+  .token-color-name { font-size: 9px; color: var(--muted); }
+  .token-color-value {
+    font-size: 10px; font-family: 'JetBrains Mono', monospace; color: var(--text);
+    background: none; border: none; padding: 0; width: 70px; outline: none;
+  }
+  .token-color-value:focus { color: var(--accent); }
+
+  .token-list { display: flex; flex-direction: column; gap: 4px; }
+  .token-item {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 4px 8px; background: var(--surface2); border-radius: 6px;
+    font-size: 11px; border: 1px solid var(--border);
+  }
+  .token-item-name { color: var(--muted); font-size: 9px; }
+  .token-item-value {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--text);
+    background: none; border: none; text-align: right; width: 80px; outline: none; padding: 0;
+  }
+  .token-item-value:focus { color: var(--accent); }
+  .token-item-preview {
+    font-size: 10px; color: var(--muted); margin-left: 4px;
+  }
+
+  .generate-btn {
+    margin: 0 16px 16px; padding: 12px; border-radius: 10px; border: none;
     background: linear-gradient(135deg, var(--accent), var(--accent2));
-    color: white;
-    font-family: 'Inter', sans-serif;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: opacity 0.2s, transform 0.1s;
+    color: white; font-family: 'Inter', sans-serif; font-size: 14px;
+    font-weight: 600; cursor: pointer; transition: opacity 0.2s, transform 0.1s;
   }
   .generate-btn:hover { opacity: 0.9; }
   .generate-btn:active { transform: scale(0.98); }
-  .generate-btn:disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
-    transform: none;
-  }
+  .generate-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
 
-  /* Designer Quote */
+  /* Agent Analysis Quotes */
   .quote-section {
-    margin: 0 16px 16px;
-    padding: 16px;
-    background: var(--surface);
-    border-radius: 10px;
-    border-left: 3px solid var(--accent);
+    margin: 0 16px 16px; padding: 16px; background: var(--surface);
+    border-radius: 10px; border-left: 3px solid var(--accent);
   }
   .quote-label {
-    font-size: 10px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.8px;
-    color: var(--accent);
-    margin-bottom: 8px;
+    font-size: 10px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.8px; color: var(--accent); margin-bottom: 8px;
   }
-  .quote-text {
-    font-size: 13px;
-    line-height: 1.6;
-    color: var(--text);
-    font-style: italic;
-  }
-  .quote-meta {
-    margin-top: 10px;
-    font-size: 11px;
-    color: var(--muted);
-  }
+  .quote-text { font-size: 13px; line-height: 1.6; color: var(--text); font-style: italic; }
+  .quote-meta { margin-top: 10px; font-size: 11px; color: var(--muted); }
   .quote-meta strong { color: var(--text); font-weight: 500; }
 
-  /* Analysis Tags */
-  .analysis-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    margin-top: 12px;
+  .agent-summaries { margin-top: 12px; display: flex; flex-direction: column; gap: 8px; }
+  .agent-summary {
+    padding: 10px 12px; background: var(--surface2); border-radius: 8px;
+    border-left: 2px solid var(--border);
   }
+  .agent-summary-header {
+    font-size: 10px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.5px; color: var(--accent); margin-bottom: 4px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .agent-summary-text {
+    font-size: 11px; line-height: 1.5; color: var(--muted);
+  }
+
+  .analysis-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
   .tag {
-    font-size: 10px;
-    padding: 3px 8px;
-    border-radius: 4px;
-    font-weight: 500;
-    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; padding: 3px 8px; border-radius: 4px;
+    font-weight: 500; font-family: 'JetBrains Mono', monospace;
   }
   .tag.good { background: rgba(52, 211, 153, 0.1); color: var(--green); }
   .tag.warn { background: rgba(251, 191, 36, 0.1); color: var(--amber); }
   .tag.info { background: rgba(167, 139, 250, 0.1); color: var(--accent); }
 
-  /* Right Panel - Output */
-  .right-panel {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-  }
+  .right-panel { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
 
   .output-tabs {
-    display: flex;
-    border-bottom: 1px solid var(--border);
-    padding: 0 16px;
+    display: flex; border-bottom: 1px solid var(--border); padding: 0 16px;
   }
   .output-tab {
-    padding: 12px 16px;
-    font-size: 12px;
-    font-weight: 500;
-    color: var(--muted);
-    cursor: pointer;
-    border-bottom: 2px solid transparent;
-    transition: all 0.15s;
+    padding: 12px 16px; font-size: 12px; font-weight: 500; color: var(--muted);
+    cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.15s;
+    background: none; border-top: none; border-left: none; border-right: none;
+    font-family: 'Inter', sans-serif;
   }
   .output-tab:hover { color: var(--text); }
-  .output-tab.active {
-    color: var(--accent);
-    border-bottom-color: var(--accent);
-  }
+  .output-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
 
-  .output-content {
-    flex: 1;
-    overflow: hidden;
-    position: relative;
-  }
+  .output-content { flex: 1; overflow: hidden; position: relative; }
 
-  /* Code View */
-  .code-view {
-    height: 100%;
-    overflow: auto;
-    padding: 16px;
-    display: none;
-  }
+  .code-view { height: 100%; overflow: auto; padding: 16px; display: none; }
   .code-view.active { display: block; }
   .code-view pre {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 12px;
-    line-height: 1.7;
-    color: #c9d1d9;
-    white-space: pre-wrap;
-    word-break: break-word;
+    font-family: 'JetBrains Mono', monospace; font-size: 12px; line-height: 1.7;
+    color: #c9d1d9; white-space: pre-wrap; word-break: break-word;
   }
 
-  /* Preview */
-  .preview-view {
-    height: 100%;
-    display: none;
-    background: white;
-  }
+  .preview-view { height: 100%; display: none; background: white; }
   .preview-view.active { display: block; }
-  .preview-view iframe {
-    width: 100%;
-    height: 100%;
-    border: none;
-  }
+  .preview-view iframe { width: 100%; height: 100%; border: none; }
 
-  /* Empty State */
   .empty-state {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    color: var(--muted);
-    gap: 12px;
+    height: 100%; display: flex; flex-direction: column; align-items: center;
+    justify-content: center; color: var(--muted); gap: 12px;
   }
   .empty-state .icon { font-size: 40px; opacity: 0.3; }
   .empty-state p { font-size: 13px; }
 
-  /* Loading */
   .loading-overlay {
-    position: absolute;
-    inset: 0;
-    background: rgba(10, 10, 11, 0.85);
-    display: none;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 16px;
-    z-index: 10;
+    position: absolute; inset: 0; background: rgba(10, 10, 11, 0.85);
+    display: none; flex-direction: column; align-items: center;
+    justify-content: center; gap: 16px; z-index: 10;
   }
   .loading-overlay.active { display: flex; }
   .spinner {
-    width: 32px;
-    height: 32px;
-    border: 3px solid var(--border);
-    border-top-color: var(--accent);
-    border-radius: 50%;
+    width: 32px; height: 32px; border: 3px solid var(--border);
+    border-top-color: var(--accent); border-radius: 50%;
     animation: spin 0.8s linear infinite;
   }
   @keyframes spin { to { transform: rotate(360deg); } }
-  .loading-text {
-    font-size: 13px;
-    color: var(--muted);
-  }
+  .loading-text { font-size: 13px; color: var(--muted); }
   .loading-step {
-    font-size: 11px;
-    color: var(--accent);
-    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; color: var(--accent); font-family: 'JetBrains Mono', monospace;
   }
 
-  /* Action buttons */
   .code-actions {
-    position: absolute;
-    top: 12px;
-    right: 12px;
-    display: flex;
-    gap: 6px;
-    z-index: 5;
+    position: absolute; top: 12px; right: 12px; display: flex; gap: 6px; z-index: 5;
   }
   .action-btn {
-    padding: 6px 12px;
-    border-radius: 6px;
-    border: 1px solid var(--border);
-    background: var(--surface);
-    color: var(--muted);
-    font-size: 11px;
-    font-family: 'Inter', sans-serif;
-    cursor: pointer;
-    transition: all 0.15s;
+    padding: 6px 12px; border-radius: 6px; border: 1px solid var(--border);
+    background: var(--surface); color: var(--muted); font-size: 11px;
+    font-family: 'Inter', sans-serif; cursor: pointer; transition: all 0.15s;
     white-space: nowrap;
   }
   .action-btn:hover { color: var(--text); border-color: var(--accent); }
   .action-btn.primary {
-    background: rgba(167, 139, 250, 0.1);
-    border-color: var(--accent);
-    color: var(--accent);
+    background: rgba(167, 139, 250, 0.1); border-color: var(--accent); color: var(--accent);
   }
   .action-btn.primary:hover { background: rgba(167, 139, 250, 0.2); }
 
-  /* Export modal */
   .export-menu {
-    position: absolute;
-    top: 42px;
-    right: 12px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 8px;
-    z-index: 20;
-    min-width: 260px;
-    display: none;
+    position: absolute; top: 42px; right: 12px; background: var(--surface);
+    border: 1px solid var(--border); border-radius: 10px; padding: 8px;
+    z-index: 20; min-width: 260px; display: none;
     box-shadow: 0 8px 32px rgba(0,0,0,0.5);
   }
   .export-menu.active { display: block; }
   .export-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-    padding: 10px 12px;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background 0.1s;
+    display: flex; align-items: flex-start; gap: 10px; padding: 10px 12px;
+    border-radius: 6px; cursor: pointer; transition: background 0.1s;
+    border: none; background: none; width: 100%; text-align: left;
+    font-family: 'Inter', sans-serif;
   }
   .export-item:hover { background: var(--surface2); }
   .export-item .icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
   .export-item .label { font-size: 12px; font-weight: 600; color: var(--text); }
   .export-item .desc { font-size: 10px; color: var(--muted); margin-top: 2px; line-height: 1.4; }
 
-  /* API Key Modal */
   .modal-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.7);
-    display: none;
-    align-items: center;
-    justify-content: center;
-    z-index: 100;
+    position: fixed; inset: 0; background: rgba(0,0,0,0.7);
+    display: none; align-items: center; justify-content: center; z-index: 100;
   }
   .modal-overlay.active { display: flex; }
   .modal {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 32px;
-    width: 400px;
-    max-width: 90vw;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 16px; padding: 32px; width: 400px; max-width: 90vw;
   }
-  .modal h3 {
-    font-size: 16px;
-    font-weight: 600;
-    margin-bottom: 8px;
-  }
-  .modal p {
-    font-size: 12px;
-    color: var(--muted);
-    margin-bottom: 16px;
-    line-height: 1.5;
-  }
+  .modal h3 { font-size: 16px; font-weight: 600; margin-bottom: 8px; }
+  .modal p { font-size: 12px; color: var(--muted); margin-bottom: 16px; line-height: 1.5; }
   .modal input {
-    width: 100%;
-    padding: 10px 12px;
-    border-radius: 8px;
-    border: 1px solid var(--border);
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 12px;
-    margin-bottom: 12px;
-    outline: none;
+    width: 100%; padding: 10px 12px; border-radius: 8px; border: 1px solid var(--border);
+    background: var(--bg); color: var(--text); font-family: 'JetBrains Mono', monospace;
+    font-size: 12px; margin-bottom: 12px; outline: none;
   }
   .modal input:focus { border-color: var(--accent); }
   .modal button {
-    width: 100%;
-    padding: 10px;
-    border-radius: 8px;
-    border: none;
-    background: var(--accent);
-    color: white;
-    font-weight: 600;
-    cursor: pointer;
+    width: 100%; padding: 10px; border-radius: 8px; border: none;
+    background: var(--accent); color: white; font-weight: 600; cursor: pointer;
   }
 
-  /* Responsive */
   @media (max-width: 800px) {
     .app { flex-direction: column; }
     .left-panel { width: 100%; min-width: auto; border-right: none; border-bottom: 1px solid var(--border); max-height: 50vh; }
@@ -543,7 +429,7 @@
 <div class="header">
   <div>
     <div class="logo">Design <span>→</span> Code</div>
-    <div class="header-sub">Drop inspiration. Get production code.</div>
+    <div class="header-sub">Design Director — Multi-agent analysis pipeline</div>
   </div>
   <div style="display:flex;gap:8px;align-items:center;">
     <button class="setting-chip" onclick="showHelpModal()">❓ How to Use</button>
@@ -558,7 +444,6 @@
       <h2 style="font-size:20px;font-weight:700">How to Use Design → Code</h2>
       <button onclick="document.getElementById('helpModal').style.display='none'" style="background:none;border:none;color:#888;font-size:24px;cursor:pointer">&times;</button>
     </div>
-
     <div style="font-size:14px;line-height:1.7;color:#ccc">
       <h3 style="color:#fff;font-size:15px;margin:16px 0 8px">📸 Step 1: Get Your Inspiration</h3>
       <p>Screenshot any UI you like — a website, app, Dribbble shot, even a napkin sketch.</p>
@@ -568,37 +453,32 @@
         • <strong>Windows:</strong> Win + Shift + S → drag to select area<br>
         • <strong>Chrome:</strong> Right-click → Inspect → Cmd+Shift+P → "Capture screenshot"<br>
         • <strong>iPhone:</strong> Side button + Volume up<br>
-        • <strong>Android:</strong> Power + Volume down<br>
-        • <strong>Full page:</strong> Use GoFullPage extension or Cmd+Shift+P → "Capture full size screenshot" in Chrome DevTools
+        • <strong>Android:</strong> Power + Volume down
       </div>
-      <p style="font-size:12px;color:#888">💡 Tip: Drop multiple images as a moodboard — Claude will synthesize the best elements from each.</p>
+      <p style="font-size:12px;color:#888">💡 Tip: Drop multiple images as a moodboard — the agents will synthesize the best elements from each.</p>
 
-      <h3 style="color:#fff;font-size:15px;margin:16px 0 8px">✏️ Step 2: Describe What You're Building</h3>
-      <p>Fill in who it's for and what you're building. Be specific — "A CRM dashboard for legal assistants" beats "a dashboard".</p>
+      <h3 style="color:#fff;font-size:15px;margin:16px 0 8px">🤖 Step 2: Multi-Agent Pipeline</h3>
+      <p>When you hit Generate, 4 specialized agents analyze your design in sequence:</p>
+      <div style="background:#12121a;border:1px solid #333;border-radius:8px;padding:12px;margin:8px 0;font-size:13px">
+        • <strong>Layout Agent:</strong> Grid structure, spacing, alignment, responsive patterns<br>
+        • <strong>Typography Agent:</strong> Font families, sizes, weights, hierarchy<br>
+        • <strong>Color Agent:</strong> Full palette with semantic roles<br>
+        • <strong>Motion Agent:</strong> Animations, transitions, hover states
+      </div>
 
-      <h3 style="color:#fff;font-size:15px;margin:16px 0 8px">⚙️ Step 3: Pick Your Settings</h3>
-      <p><strong>Output:</strong> HTML (self-contained), React/Next.js (Tailwind + TypeScript), Vue<br>
-      <strong>Style:</strong> Faithful (exact match), Improved (polished), Reimagined (creative reinterpretation)<br>
-      <strong>UI Framework:</strong> shadcn/ui adds proper design tokens and component patterns<br>
-      <strong>Icons:</strong> Lucide, Phosphor, or Hugeicons — real icon libraries, not emoji<br>
-      <strong>Enhancements:</strong> Motion, glass effects, gradients, 3D depth, particles, dark mode, etc.</p>
+      <h3 style="color:#fff;font-size:15px;margin:16px 0 8px">🎨 Step 3: Design Tokens</h3>
+      <p>After analysis, extracted tokens appear in the sidebar. Edit colors, typography, spacing before generating code — the code will use your exact tokens as CSS variables.</p>
 
       <h3 style="color:#fff;font-size:15px;margin:16px 0 8px">🚀 Step 4: Generate & Export</h3>
-      <p>Hit Generate — Claude analyzes your design and writes production code. Preview it live, then export:</p>
-      <div style="background:#12121a;border:1px solid #333;border-radius:8px;padding:12px;margin:8px 0;font-size:13px">
-        • <strong>Preview tab:</strong> See it rendered live in the browser<br>
-        • <strong>Code tab:</strong> Copy/edit the raw code<br>
-        • <strong>Export ↗:</strong> Copy as Cursor prompt, Claude prompt, download file, or component spec
-      </div>
+      <p>All agent analyses + your tokens feed into the final code generation for dramatically better output.</p>
 
       <h3 style="color:#fff;font-size:15px;margin:16px 0 8px">🔑 API Key</h3>
-      <p>You need a Claude API key from <a href="https://console.anthropic.com" target="_blank" style="color:#00e87b">console.anthropic.com</a>. It stays in your browser's localStorage — never sent anywhere except Anthropic's API.</p>
+      <p>You need a Claude API key from <a href="https://console.anthropic.com" target="_blank" style="color:#00e87b">console.anthropic.com</a>. It stays in your browser's localStorage.</p>
     </div>
   </div>
 </div>
 
 <div class="app">
-  <!-- Left: Input -->
   <div class="left-panel">
     <div class="drop-zone" id="dropZone" aria-label="Drop zone for design images. Click or drag and drop images here." role="button" tabindex="0" onclick="if(!this.classList.contains('has-images'))document.getElementById('fileInput').click()">
       <input type="file" id="fileInput" accept="image/*" multiple onchange="Array.from(this.files).forEach(handleFile)">
@@ -609,12 +489,12 @@
 
     <div class="prompt-section">
       <div class="prompt-label">Who is this for?</div>
-      <textarea class="prompt-input" id="audienceInput" style="min-height:50px" placeholder="e.g. 'Law firm partners, 40-60 yrs old, not tech savvy' or 'Gen Z podcast creators' or 'Enterprise SaaS buyers'"></textarea>
+      <textarea class="prompt-input" id="audienceInput" style="min-height:50px" placeholder="e.g. 'Law firm partners, 40-60 yrs old, not tech savvy' or 'Gen Z podcast creators'"></textarea>
     </div>
 
     <div class="prompt-section">
       <div class="prompt-label">What are you building?</div>
-      <textarea class="prompt-input" id="promptInput" placeholder="e.g. 'A shoppable podcast page where viewers can buy everything mentioned in the episode' or 'A CRM dashboard for legal assistants' — be specific about the product"></textarea>
+      <textarea class="prompt-input" id="promptInput" placeholder="e.g. 'A shoppable podcast page' or 'A CRM dashboard for legal assistants' — be specific"></textarea>
     </div>
 
     <div class="settings">
@@ -658,32 +538,81 @@
       <button class="setting-chip" data-enhance="shaders" aria-label="Enhancement: Shaders" onclick="toggleEnhance(this)">🌊 Shaders</button>
     </div>
 
+    <!-- Pipeline Section -->
+    <div class="pipeline-section" id="pipelineSection">
+      <div class="pipeline-header">
+        <div class="pipeline-title">🤖 Analysis Pipeline</div>
+      </div>
+      <div id="pipelineSteps">
+        <div class="pipeline-step pending" id="step-layout">
+          <div class="step-icon">🔍</div>
+          <div class="step-label">Layout Agent</div>
+          <div class="step-status">waiting</div>
+        </div>
+        <div class="pipeline-step pending" id="step-typography">
+          <div class="step-icon">✏️</div>
+          <div class="step-label">Typography Agent</div>
+          <div class="step-status">waiting</div>
+        </div>
+        <div class="pipeline-step pending" id="step-color">
+          <div class="step-icon">🎨</div>
+          <div class="step-label">Color Agent</div>
+          <div class="step-status">waiting</div>
+        </div>
+        <div class="pipeline-step pending" id="step-motion">
+          <div class="step-icon">✨</div>
+          <div class="step-label">Motion Agent</div>
+          <div class="step-status">waiting</div>
+        </div>
+        <div class="pipeline-step pending" id="step-codegen">
+          <div class="step-icon">🏗️</div>
+          <div class="step-label">Code Generation</div>
+          <div class="step-status">waiting</div>
+        </div>
+      </div>
+    </div>
+
     <button class="generate-btn" id="generateBtn" onclick="generate()" disabled>
       ✨ Generate Code
     </button>
 
+    <!-- Agent Analysis Summaries -->
     <div class="quote-section" id="quoteSection" style="display:none">
-      <div class="quote-label">🎨 Design Analysis</div>
+      <div class="quote-label">🎨 Design Director Analysis</div>
       <div class="quote-text" id="quoteText"></div>
       <div class="quote-meta" id="quoteMeta"></div>
+      <div class="agent-summaries" id="agentSummaries"></div>
       <div class="analysis-tags" id="analysisTags"></div>
+    </div>
+
+    <!-- Design Tokens Panel -->
+    <div class="tokens-section" id="tokensSection" style="display:none">
+      <div class="tokens-header" role="button" tabindex="0" aria-label="Toggle design tokens panel" onclick="toggleTokens()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleTokens();}">
+        <div class="tokens-header-left">
+          <div class="tokens-title">🎯 Design Tokens</div>
+        </div>
+        <div class="tokens-chevron" id="tokensChevron">▼</div>
+      </div>
+      <div class="tokens-body open" id="tokensBody">
+        <div id="tokensContent"></div>
+      </div>
     </div>
   </div>
 
   <!-- Right: Output -->
   <div class="right-panel">
-    <div class="output-tabs" role="tablist">
-      <div class="output-tab active" data-tab="preview" role="tab" aria-selected="true" tabindex="0" onclick="switchTab(this)">Preview</div>
-      <div class="output-tab" data-tab="code" role="tab" aria-selected="false" tabindex="0" onclick="switchTab(this)">Code</div>
+    <div class="output-tabs" role="tablist" onkeydown="handleTabKeydown(event)">
+      <button class="output-tab active" id="tab-preview" data-tab="preview" role="tab" aria-selected="true" aria-controls="panel-preview" tabindex="0" onclick="switchTab(this)" type="button">Preview</button>
+      <button class="output-tab" id="tab-code" data-tab="code" role="tab" aria-selected="false" aria-controls="panel-code" tabindex="-1" onclick="switchTab(this)" type="button">Code</button>
     </div>
     <div class="output-content">
       <div class="loading-overlay" id="loading" aria-live="polite">
         <div class="spinner"></div>
-        <div class="loading-text">Analyzing your design...</div>
-        <div class="loading-step" id="loadingStep">Extracting layout patterns</div>
+        <div class="loading-text" id="loadingText">Analyzing your design...</div>
+        <div class="loading-step" id="loadingStep">Initializing pipeline</div>
       </div>
 
-      <div class="preview-view active" id="previewView">
+      <div class="preview-view active" id="previewView" role="tabpanel" aria-labelledby="tab-preview">
         <div class="empty-state" id="emptyPreview">
           <div class="icon">◇</div>
           <p>Drop a design and hit generate</p>
@@ -691,40 +620,40 @@
         <iframe id="previewFrame" sandbox="allow-scripts" style="display:none"></iframe>
       </div>
 
-      <div class="code-view" id="codeView">
+      <div class="code-view" id="codeView" role="tabpanel" aria-labelledby="tab-code">
         <div class="code-actions">
           <button class="action-btn" onclick="copyCode()">📋 Copy Code</button>
           <button class="action-btn primary" id="exportToggleBtn" aria-expanded="false" onclick="toggleExportMenu()">🚀 Export ▾</button>
         </div>
         <div class="export-menu" id="exportMenu">
-          <div class="export-item" onclick="exportCursorPrompt()">
+          <button class="export-item" type="button" onclick="exportCursorPrompt()">
             <div class="icon">⚡</div>
             <div>
               <div class="label">Copy as Cursor Prompt</div>
-              <div class="desc">Copies the code + context as a prompt you can paste into Cursor's chat. Includes file path, instructions to integrate.</div>
+              <div class="desc">Code + context as a prompt for Cursor's chat.</div>
             </div>
-          </div>
-          <div class="export-item" onclick="exportClaudePrompt()">
+          </button>
+          <button class="export-item" type="button" onclick="exportClaudePrompt()">
             <div class="icon">🤖</div>
             <div>
               <div class="label">Copy as Claude/ChatGPT Prompt</div>
-              <div class="desc">Full context prompt with design specs, audience, and code — paste into any LLM to iterate.</div>
+              <div class="desc">Full context prompt with design specs and code.</div>
             </div>
-          </div>
-          <div class="export-item" onclick="downloadFile()">
+          </button>
+          <button class="export-item" type="button" onclick="downloadFile()">
             <div class="icon">💾</div>
             <div>
               <div class="label">Download File</div>
-              <div class="desc">Save as .html, .tsx, .vue — ready to drop into your project.</div>
+              <div class="desc">Save as .html, .tsx, .vue — ready to use.</div>
             </div>
-          </div>
-          <div class="export-item" onclick="exportComponentSpec()">
+          </button>
+          <button class="export-item" type="button" onclick="exportComponentSpec()">
             <div class="icon">📐</div>
             <div>
               <div class="label">Copy Component Spec</div>
-              <div class="desc">Design tokens, spacing, colors, typography extracted as a spec doc for your team or AI agent.</div>
+              <div class="desc">Design tokens + spec doc for your team.</div>
             </div>
-          </div>
+          </button>
         </div>
         <pre id="codeOutput"></pre>
       </div>
@@ -743,28 +672,25 @@
 </div>
 
 <script>
-  // Utility: escape HTML to prevent XSS
   function escapeHtml(str) {
     const div = document.createElement('div');
     div.textContent = str;
     return div.innerHTML;
   }
 
-  let images = []; // {data, name}
+  let images = [];
   let outputFormat = 'html';
   let styleMode = 'faithful';
   let enhancements = new Set();
   let iconLibrary = 'lucide';
   let uiFramework = 'shadcn';
   let generatedCode = '';
+  let lastAnalysis = null;
+  let designTokens = null;
+  let agentResults = {};
 
-  // Check for saved API key
-  function getApiKey() {
-    return localStorage.getItem('anthropic_api_key') || '';
-  }
-  function showHelpModal() {
-    document.getElementById('helpModal').style.display = 'flex';
-  }
+  function getApiKey() { return localStorage.getItem('anthropic_api_key') || ''; }
+  function showHelpModal() { document.getElementById('helpModal').style.display = 'flex'; }
   function showApiModal() {
     document.getElementById('apiModal').classList.add('active');
     document.getElementById('apiKeyInput').value = getApiKey();
@@ -778,29 +704,22 @@
       updateGenerateBtn();
     }
   }
-  if (getApiKey()) {
-    document.getElementById('apiStatus').textContent = '✅ API Key';
-  }
+  if (getApiKey()) document.getElementById('apiStatus').textContent = '✅ API Key';
 
   // Drag & Drop
   const dropZone = document.getElementById('dropZone');
+  dropZone.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); document.getElementById('fileInput').click(); } });
   dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('dragover'); });
   dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
   dropZone.addEventListener('drop', e => {
-    e.preventDefault();
-    dropZone.classList.remove('dragover');
-    const files = [...e.dataTransfer.files].filter(f => f.type.startsWith('image/'));
-    handleFiles(files);
+    e.preventDefault(); dropZone.classList.remove('dragover');
+    handleFiles([...e.dataTransfer.files].filter(f => f.type.startsWith('image/')));
   });
-
-  // Also handle paste
   document.addEventListener('paste', e => {
     const items = e.clipboardData?.items;
     if (!items) return;
     const files = [];
-    for (const item of items) {
-      if (item.type.startsWith('image/')) files.push(item.getAsFile());
-    }
+    for (const item of items) { if (item.type.startsWith('image/')) files.push(item.getAsFile()); }
     if (files.length) handleFiles(files);
   });
 
@@ -813,24 +732,14 @@
       reader.onload = e => {
         images.push({ data: e.target.result, name: file.name || `Image ${images.length + 1}` });
         loaded++;
-        if (loaded === toProcess.length) {
-          renderImageGrid();
-          updateGenerateBtn();
-        }
+        if (loaded === toProcess.length) { renderImageGrid(); updateGenerateBtn(); }
       };
       reader.readAsDataURL(file);
     });
   }
+  function handleFile(file) { if (file) handleFiles([file]); }
 
-  function handleFile(file) {
-    if (file) handleFiles([file]);
-  }
-
-  function removeImage(idx) {
-    images.splice(idx, 1);
-    renderImageGrid();
-    updateGenerateBtn();
-  }
+  function removeImage(idx) { images.splice(idx, 1); renderImageGrid(); updateGenerateBtn(); }
 
   function renderImageGrid() {
     if (images.length === 0) {
@@ -842,88 +751,641 @@
       return;
     }
     dropZone.classList.add('has-images');
-    let html = `<input type="file" id="fileInput" accept="image/*" multiple onchange="Array.from(this.files).forEach(handleFile)">
-      <div class="image-grid">`;
+    let html = `<input type="file" id="fileInput" accept="image/*" multiple onchange="Array.from(this.files).forEach(handleFile)"><div class="image-grid">`;
     images.forEach((img, i) => {
       const safeName = escapeHtml(img.name);
       const safeData = escapeHtml(img.data);
       const truncName = img.name.length > 15 ? escapeHtml(img.name.slice(0,12)) + '...' : safeName;
-      html += `<div class="image-thumb">
-        <img src="${safeData}" alt="${safeName}">
-        <button class="remove-img" onclick="event.stopPropagation();removeImage(${i})">✕</button>
-        <div class="img-label">${truncName}</div>
-      </div>`;
+      html += `<div class="image-thumb"><img src="${safeData}" alt="${safeName}"><button class="remove-img" onclick="event.stopPropagation();removeImage(${i})">✕</button><div class="img-label">${truncName}</div></div>`;
     });
-    if (images.length < 8) {
-      html += `<div class="add-more-btn" onclick="event.stopPropagation();document.getElementById('fileInput').click()">+</div>`;
-    }
+    if (images.length < 8) html += `<button class="add-more-btn" type="button" aria-label="Add more images" onclick="event.stopPropagation();document.getElementById('fileInput').click()">+</button>`;
     html += `</div>`;
     dropZone.innerHTML = html;
   }
 
   function toggleEnhance(el) {
     const val = el.dataset.enhance;
-    if (enhancements.has(val)) {
-      enhancements.delete(val);
-      el.classList.remove('active');
-    } else {
-      enhancements.add(val);
-      el.classList.add('active');
-    }
+    if (enhancements.has(val)) { enhancements.delete(val); el.classList.remove('active'); }
+    else { enhancements.add(val); el.classList.add('active'); }
   }
-
   function setOutput(el) {
     el.parentElement.querySelectorAll('.setting-chip[data-output]').forEach(c => c.classList.remove('active'));
-    el.classList.add('active');
-    outputFormat = el.dataset.output;
+    el.classList.add('active'); outputFormat = el.dataset.output;
   }
   function setStyle(el) {
     el.parentElement.querySelectorAll('.setting-chip[data-style]').forEach(c => c.classList.remove('active'));
-    el.classList.add('active');
-    styleMode = el.dataset.style;
+    el.classList.add('active'); styleMode = el.dataset.style;
   }
   function setIcons(el) {
     el.parentElement.querySelectorAll('.setting-chip[data-icons]').forEach(c => c.classList.remove('active'));
-    el.classList.add('active');
-    iconLibrary = el.dataset.icons;
+    el.classList.add('active'); iconLibrary = el.dataset.icons;
   }
   function setUiFramework(el) {
     el.parentElement.querySelectorAll('.setting-chip[data-uifw]').forEach(c => c.classList.remove('active'));
-    el.classList.add('active');
-    uiFramework = el.dataset.uifw;
+    el.classList.add('active'); uiFramework = el.dataset.uifw;
   }
-
   function switchTab(el) {
-    document.querySelectorAll('.output-tab').forEach(t => { t.classList.remove('active'); t.setAttribute('aria-selected', 'false'); });
-    el.classList.add('active');
-    el.setAttribute('aria-selected', 'true');
+    document.querySelectorAll('.output-tab').forEach(t => { t.classList.remove('active'); t.setAttribute('aria-selected', 'false'); t.setAttribute('tabindex', '-1'); });
+    el.classList.add('active'); el.setAttribute('aria-selected', 'true'); el.setAttribute('tabindex', '0');
     const tab = el.dataset.tab;
     document.getElementById('previewView').classList.toggle('active', tab === 'preview');
     document.getElementById('codeView').classList.toggle('active', tab === 'code');
   }
-
+  function handleTabKeydown(e) {
+    const tabs = Array.from(document.querySelectorAll('.output-tab'));
+    const idx = tabs.indexOf(e.target);
+    if (idx === -1) return;
+    let next = -1;
+    if (e.key === 'ArrowRight') next = (idx + 1) % tabs.length;
+    else if (e.key === 'ArrowLeft') next = (idx - 1 + tabs.length) % tabs.length;
+    else if (e.key === 'Home') next = 0;
+    else if (e.key === 'End') next = tabs.length - 1;
+    if (next >= 0) { e.preventDefault(); switchTab(tabs[next]); tabs[next].focus(); }
+  }
   function updateGenerateBtn() {
     document.getElementById('generateBtn').disabled = images.length === 0 || !getApiKey();
   }
 
-  let lastAnalysis = null;
+  function toggleTokens() {
+    const body = document.getElementById('tokensBody');
+    const chevron = document.getElementById('tokensChevron');
+    body.classList.toggle('open');
+    chevron.classList.toggle('open');
+  }
 
-  function copyCode() {
-    navigator.clipboard.writeText(generatedCode).then(() => {
-      showToast('Code copied!');
-    }).catch(err => {
-      console.error('Clipboard write failed:', err);
-      showToast('Failed to copy — try manually.');
+  // Pipeline step management
+  function setPipelineStep(stepId, state, statusText) {
+    const el = document.getElementById('step-' + stepId);
+    if (!el) return;
+    el.className = 'pipeline-step ' + state;
+    el.querySelector('.step-status').textContent = statusText || state;
+  }
+  function resetPipeline() {
+    ['layout', 'typography', 'color', 'motion', 'codegen'].forEach(id => {
+      setPipelineStep(id, 'pending', 'waiting');
     });
   }
 
+  // ---- MULTI-AGENT PIPELINE ----
+
+  function buildImageContent() {
+    const content = [];
+    images.forEach((img, i) => {
+      const [header, base64] = img.data.split(',');
+      const mediaType = header.match(/:(.*?);/)[1];
+      if (images.length > 1) content.push({ type: 'text', text: `[Reference image ${i + 1}: ${img.name}]` });
+      content.push({ type: 'image', source: { type: 'base64', media_type: mediaType, data: base64 } });
+    });
+    return content;
+  }
+
+  async function callClaude(systemPrompt, userText, includeImages) {
+    const content = includeImages ? [...buildImageContent(), { type: 'text', text: userText }] : [{ type: 'text', text: userText }];
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': getApiKey(),
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 4096,
+        system: systemPrompt,
+        messages: [{ role: 'user', content }]
+      })
+    });
+    if (!response.ok) {
+      const err = await response.json();
+      throw new Error(err.error?.message || `API error: ${response.status}`);
+    }
+    const data = await response.json();
+    return data.content[0].text;
+  }
+
+  async function callClaudeCodegen(systemPrompt, userText) {
+    const content = [...buildImageContent(), { type: 'text', text: userText }];
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': getApiKey(),
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-opus-4-6',
+        max_tokens: 16000,
+        system: systemPrompt,
+        messages: [{ role: 'user', content }]
+      })
+    });
+    if (!response.ok) {
+      const err = await response.json();
+      throw new Error(err.error?.message || `API error: ${response.status}`);
+    }
+    const data = await response.json();
+    return data.content[0].text;
+  }
+
+  function parseJSON(text) {
+    // 1. Try direct parse
+    try { return JSON.parse(text); } catch (_) {}
+    // 2. Try extracting from markdown code blocks
+    const codeBlockMatch = text.match(/```(?:json)?\s*\n([\s\S]*?)\n```/);
+    if (codeBlockMatch) {
+      try { return JSON.parse(codeBlockMatch[1]); } catch (_) {}
+    }
+    // 3. Fall back to greedy regex for first { ... }
+    const braceMatch = text.match(/\{[\s\S]*\}/);
+    if (braceMatch) {
+      try { return JSON.parse(braceMatch[0]); } catch (_) {}
+    }
+    console.error('parseJSON: Could not extract valid JSON from response. Raw text:', text.slice(0, 500));
+    return null;
+  }
+
+  // Agent definitions
+  async function runLayoutAgent() {
+    const sys = `You are a Layout Analysis Agent. You analyze UI designs and extract structural information.
+Respond ONLY with valid JSON, no markdown fences:
+{
+  "summary": "2-3 sentence description of the layout approach",
+  "grid": "Description of grid system (columns, gaps, breakpoints)",
+  "sections": ["list of major sections identified"],
+  "spacing_pattern": "Spacing scale observed (e.g. 4px base, multiples of 4/8/16/24/32)",
+  "alignment": "Alignment patterns (center, left, mixed)",
+  "responsive_notes": "How this would adapt to mobile",
+  "container_max_width": "Estimated max container width"
+}`;
+    const text = await callClaude(sys, 'Analyze the layout structure of this design. Be specific about grid columns, spacing values, and section hierarchy.', true);
+    return parseJSON(text);
+  }
+
+  async function runTypographyAgent() {
+    const sys = `You are a Typography Analysis Agent. You analyze UI designs and extract typography information.
+Respond ONLY with valid JSON, no markdown fences:
+{
+  "summary": "2-3 sentence description of typography approach",
+  "font_families": {"heading": "font name", "body": "font name", "mono": "font name or null"},
+  "scale": [
+    {"name": "display", "size": "48px", "weight": "700", "line_height": "1.1"},
+    {"name": "h1", "size": "36px", "weight": "700", "line_height": "1.2"},
+    {"name": "h2", "size": "24px", "weight": "600", "line_height": "1.3"},
+    {"name": "h3", "size": "20px", "weight": "600", "line_height": "1.4"},
+    {"name": "body", "size": "16px", "weight": "400", "line_height": "1.6"},
+    {"name": "small", "size": "14px", "weight": "400", "line_height": "1.5"},
+    {"name": "caption", "size": "12px", "weight": "500", "line_height": "1.4"}
+  ],
+  "hierarchy_notes": "How typography establishes visual hierarchy"
+}`;
+    const text = await callClaude(sys, 'Analyze the typography in this design. Identify font families, sizes, weights, and the type scale.', true);
+    return parseJSON(text);
+  }
+
+  async function runColorAgent() {
+    const sys = `You are a Color Analysis Agent. You analyze UI designs and extract the full color palette with semantic roles.
+Respond ONLY with valid JSON, no markdown fences:
+{
+  "summary": "2-3 sentence description of color approach",
+  "palette": {
+    "primary": "#hex",
+    "secondary": "#hex",
+    "accent": "#hex",
+    "background": "#hex",
+    "surface": "#hex",
+    "text": "#hex",
+    "text_muted": "#hex",
+    "border": "#hex",
+    "success": "#hex",
+    "warning": "#hex",
+    "error": "#hex"
+  },
+  "gradients": ["gradient descriptions if any"],
+  "color_notes": "Overall color strategy and mood"
+}`;
+    const text = await callClaude(sys, 'Extract the complete color palette from this design. Identify semantic roles for each color. Use exact hex values.', true);
+    return parseJSON(text);
+  }
+
+  async function runMotionAgent() {
+    const sys = `You are a Motion & Interaction Analysis Agent. You analyze UI designs and infer what animations, transitions, and micro-interactions would be present.
+Respond ONLY with valid JSON, no markdown fences:
+{
+  "summary": "2-3 sentence description of motion/interaction approach",
+  "hover_states": ["descriptions of likely hover effects"],
+  "transitions": ["descriptions of state transitions"],
+  "entrance_animations": ["descriptions of entrance animations"],
+  "micro_interactions": ["button clicks, toggles, form interactions"],
+  "scroll_effects": ["parallax, sticky, reveal-on-scroll"],
+  "motion_notes": "Overall motion philosophy (subtle, playful, dramatic, etc.)"
+}`;
+    const text = await callClaude(sys, 'Analyze this design and infer what animations, transitions, hover states, and micro-interactions would make it feel alive. Be specific about timing and easing.', true);
+    return parseJSON(text);
+  }
+
+  // Design token rendering
+  function renderDesignTokens(colorData, typographyData) {
+    const container = document.getElementById('tokensContent');
+    let html = '';
+
+    // Colors
+    if (colorData?.palette) {
+      html += `<div class="token-group"><div class="token-group-label">Colors</div><div class="token-colors">`;
+      for (const [name, hex] of Object.entries(colorData.palette)) {
+        const displayName = name.replace(/_/g, ' ');
+        html += `<div class="token-color">
+          <div class="token-swatch" style="background:${escapeHtml(hex)}" data-token-color="${escapeHtml(name)}"></div>
+          <div class="token-color-info">
+            <div class="token-color-name">${escapeHtml(displayName)}</div>
+            <input class="token-color-value" value="${escapeHtml(hex)}" data-token="color.${escapeHtml(name)}" onchange="updateToken(this)" />
+          </div>
+        </div>`;
+      }
+      html += `</div></div>`;
+    }
+
+    // Typography
+    if (typographyData?.scale) {
+      html += `<div class="token-group"><div class="token-group-label">Typography Scale</div><div class="token-list">`;
+      typographyData.scale.forEach(item => {
+        html += `<div class="token-item">
+          <div><div class="token-item-name">${escapeHtml(item.name)}</div></div>
+          <div style="display:flex;align-items:center;gap:4px">
+            <input class="token-item-value" value="${escapeHtml(item.size)}" data-token="type.${escapeHtml(item.name)}.size" onchange="updateToken(this)" style="width:50px" />
+            <span class="token-item-preview" style="font-size:${escapeHtml(item.size)};line-height:1">Aa</span>
+          </div>
+        </div>`;
+      });
+      html += `</div></div>`;
+
+      if (typographyData.font_families) {
+        html += `<div class="token-group"><div class="token-group-label">Font Families</div><div class="token-list">`;
+        for (const [role, font] of Object.entries(typographyData.font_families)) {
+          if (!font) continue;
+          html += `<div class="token-item">
+            <div class="token-item-name">${escapeHtml(role)}</div>
+            <input class="token-item-value" value="${escapeHtml(font)}" data-token="font.${escapeHtml(role)}" onchange="updateToken(this)" style="width:120px" />
+          </div>`;
+        }
+        html += `</div></div>`;
+      }
+    }
+
+    // Spacing (derived from layout)
+    const spacingScale = ['4px', '8px', '12px', '16px', '24px', '32px', '48px', '64px'];
+    html += `<div class="token-group"><div class="token-group-label">Spacing Scale</div><div class="token-list">`;
+    spacingScale.forEach((val, i) => {
+      html += `<div class="token-item">
+        <div class="token-item-name">space-${i + 1}</div>
+        <input class="token-item-value" value="${val}" data-token="space.${i+1}" onchange="updateToken(this)" style="width:50px" />
+      </div>`;
+    });
+    html += `</div></div>`;
+
+    // Border Radii
+    html += `<div class="token-group"><div class="token-group-label">Border Radii</div><div class="token-list">`;
+    ['2px', '4px', '8px', '12px', '16px', '9999px'].forEach((val, i) => {
+      const names = ['sm', 'md', 'lg', 'xl', '2xl', 'full'];
+      html += `<div class="token-item">
+        <div class="token-item-name">radius-${names[i]}</div>
+        <input class="token-item-value" value="${val}" data-token="radius.${names[i]}" onchange="updateToken(this)" style="width:60px" />
+      </div>`;
+    });
+    html += `</div></div>`;
+
+    // Shadows
+    html += `<div class="token-group"><div class="token-group-label">Shadows</div><div class="token-list">`;
+    const shadows = {
+      sm: '0 1px 2px rgba(0,0,0,0.05)',
+      md: '0 4px 6px rgba(0,0,0,0.1)',
+      lg: '0 10px 15px rgba(0,0,0,0.15)',
+      xl: '0 20px 25px rgba(0,0,0,0.2)'
+    };
+    for (const [name, val] of Object.entries(shadows)) {
+      html += `<div class="token-item">
+        <div class="token-item-name">shadow-${name}</div>
+        <input class="token-item-value" value="${escapeHtml(val)}" data-token="shadow.${name}" onchange="updateToken(this)" style="width:180px" />
+      </div>`;
+    }
+    html += `</div></div>`;
+
+    container.innerHTML = html;
+  }
+
+  function updateToken(inputEl) {
+    const tokenPath = inputEl.dataset.token;
+    const value = inputEl.value;
+    // Update swatch if it's a color token
+    if (tokenPath.startsWith('color.')) {
+      const name = tokenPath.replace('color.', '');
+      const swatch = document.querySelector(`[data-token-color="${name}"]`);
+      if (swatch) swatch.style.background = value;
+    }
+    // Store in designTokens
+    if (!designTokens) designTokens = {};
+    designTokens[tokenPath] = value;
+  }
+
+  function getTokensForPrompt() {
+    // Collect current values from all token inputs
+    const tokens = {};
+    document.querySelectorAll('[data-token]').forEach(input => {
+      tokens[input.dataset.token] = input.value;
+    });
+    if (Object.keys(tokens).length === 0) return '';
+
+    let result = '\n\nDESIGN TOKENS (use these exact values as CSS custom properties or Tailwind config):\n';
+    const groups = {};
+    for (const [key, val] of Object.entries(tokens)) {
+      const [group] = key.split('.');
+      if (!groups[group]) groups[group] = [];
+      groups[group].push({ key, val });
+    }
+    for (const [group, items] of Object.entries(groups)) {
+      result += `\n${group.toUpperCase()}:\n`;
+      items.forEach(({ key, val }) => {
+        const varName = '--' + key.replace(/\./g, '-');
+        result += `  ${varName}: ${val}\n`;
+      });
+    }
+    result += '\nUse CSS variables matching these names. For Tailwind, extend the theme config. Every color/size/spacing in the output must reference these tokens.';
+    return result;
+  }
+
+  // Render agent summaries in quote section
+  function renderAgentSummaries() {
+    const container = document.getElementById('agentSummaries');
+    let html = '';
+    const agents = [
+      { key: 'layout', icon: '🔍', label: 'Layout' },
+      { key: 'typography', icon: '✏️', label: 'Typography' },
+      { key: 'color', icon: '🎨', label: 'Color' },
+      { key: 'motion', icon: '✨', label: 'Motion' }
+    ];
+    agents.forEach(({ key, icon, label }) => {
+      const result = agentResults[key];
+      if (result?.summary) {
+        html += `<div class="agent-summary">
+          <div class="agent-summary-header">${icon} ${escapeHtml(label)} Agent</div>
+          <div class="agent-summary-text">${escapeHtml(result.summary)}</div>
+        </div>`;
+      }
+    });
+    container.innerHTML = html;
+  }
+
+  // ---- MAIN GENERATE FUNCTION ----
+
+  let _generateRateLimited = false;
+  async function generate() {
+    if (images.length === 0 || !getApiKey()) return;
+    if (_generateRateLimited) return;
+    _generateRateLimited = true;
+    setTimeout(() => { _generateRateLimited = false; }, 3000);
+
+    const btn = document.getElementById('generateBtn');
+    const loading = document.getElementById('loading');
+    btn.disabled = true;
+    btn.textContent = '⏳ Running Pipeline...';
+    loading.classList.add('active');
+    resetPipeline();
+    agentResults = {};
+
+    const prompt = document.getElementById('promptInput').value.trim();
+    const audience = document.getElementById('audienceInput').value.trim();
+
+    try {
+      // ---- STEP 1: Layout Agent ----
+      setPipelineStep('layout', 'active', 'analyzing...');
+      document.getElementById('loadingText').textContent = '🔍 Layout Agent analyzing...';
+      document.getElementById('loadingStep').textContent = 'Extracting grid structure, spacing, alignment';
+      try {
+        agentResults.layout = await runLayoutAgent();
+        setPipelineStep('layout', 'done', 'done ✓');
+      } catch (e) {
+        console.error('Layout agent error:', e);
+        setPipelineStep('layout', 'error', 'error');
+        agentResults.layout = { summary: 'Analysis failed — will use visual inference' };
+      }
+
+      // ---- STEP 2: Typography Agent ----
+      setPipelineStep('typography', 'active', 'analyzing...');
+      document.getElementById('loadingText').textContent = '✏️ Typography Agent mapping hierarchy...';
+      document.getElementById('loadingStep').textContent = 'Identifying fonts, sizes, weights, scale';
+      try {
+        agentResults.typography = await runTypographyAgent();
+        setPipelineStep('typography', 'done', 'done ✓');
+      } catch (e) {
+        console.error('Typography agent error:', e);
+        setPipelineStep('typography', 'error', 'error');
+        agentResults.typography = { summary: 'Analysis failed — will use visual inference' };
+      }
+
+      // ---- STEP 3: Color Agent ----
+      setPipelineStep('color', 'active', 'extracting...');
+      document.getElementById('loadingText').textContent = '🎨 Color Agent extracting palette...';
+      document.getElementById('loadingStep').textContent = 'Mapping semantic color roles';
+      try {
+        agentResults.color = await runColorAgent();
+        setPipelineStep('color', 'done', 'done ✓');
+      } catch (e) {
+        console.error('Color agent error:', e);
+        setPipelineStep('color', 'error', 'error');
+        agentResults.color = { summary: 'Analysis failed — will use visual inference' };
+      }
+
+      // ---- STEP 4: Motion Agent ----
+      setPipelineStep('motion', 'active', 'detecting...');
+      document.getElementById('loadingText').textContent = '✨ Motion Agent detecting interactions...';
+      document.getElementById('loadingStep').textContent = 'Identifying animations, transitions, hover states';
+      try {
+        agentResults.motion = await runMotionAgent();
+        setPipelineStep('motion', 'done', 'done ✓');
+      } catch (e) {
+        console.error('Motion agent error:', e);
+        setPipelineStep('motion', 'error', 'error');
+        agentResults.motion = { summary: 'Analysis failed — will use visual inference' };
+      }
+
+      // ---- Show Design Tokens ----
+      renderDesignTokens(agentResults.color, agentResults.typography);
+      document.getElementById('tokensSection').style.display = 'block';
+
+      // ---- Render Agent Summaries ----
+      renderAgentSummaries();
+      document.getElementById('quoteSection').style.display = 'block';
+      document.getElementById('quoteText').textContent = '';
+      document.getElementById('quoteMeta').innerHTML = '';
+      document.getElementById('analysisTags').innerHTML = '';
+
+      // ---- STEP 5: Code Generation ----
+      setPipelineStep('codegen', 'active', 'generating...');
+      document.getElementById('loadingText').textContent = '🏗️ Generating production code...';
+      document.getElementById('loadingStep').textContent = 'Synthesizing all agent analyses into code';
+
+      const tokenPromptSection = getTokensForPrompt();
+
+      const formatInstructions = {
+        html: 'Output a single self-contained HTML file with embedded CSS and JS. Use modern CSS (grid, flexbox, custom properties). Include Google Fonts if appropriate.',
+        react: 'Output a single React component file using Tailwind CSS classes. Use TypeScript. Export default the component. Include all subcomponents in the same file.',
+        nextjs: 'Output a Next.js page component (App Router) using Tailwind CSS and TypeScript. Use server components where appropriate.',
+        vue: 'Output a single Vue 3 SFC (.vue file) with <script setup> and scoped styles.'
+      };
+      const styleInstructions = {
+        faithful: 'Recreate the design as faithfully as possible. Match colors, spacing, typography, and layout exactly.',
+        improved: 'Use the design as a starting point but improve it — better spacing, more consistent typography, smoother animations, accessibility improvements.',
+        reimagined: 'Take the core concept and reimagine it with a fresh, modern aesthetic. Keep the same functionality but make it dramatically more beautiful.'
+      };
+      const iconInstructions = {
+        lucide: 'Use Lucide icons via lucide-react. Import like: import { Search, ArrowRight, Check } from "lucide-react". NEVER use emoji as icons.',
+        phosphor: 'Use Phosphor icons via @phosphor-icons/react. Import like: import { MagnifyingGlass, ArrowRight } from "@phosphor-icons/react". NEVER use emoji as icons.',
+        hugeicons: 'Use Hugeicons via hugeicons-react. Import like: import { Search01Icon } from "hugeicons-react". NEVER use emoji as icons.',
+        none: 'Use inline SVG icons ONLY. Do NOT use emoji or unicode symbols. Every icon must be a proper <svg> element.'
+      };
+      const uiFrameworkInstructions = {
+        none: '',
+        shadcn: `\nUI FRAMEWORK: Use shadcn/ui patterns — bg-background, text-foreground, bg-card, bg-muted, etc. CSS variables for theming. cn() utility for conditional classes. Component patterns: Card, Button (variants), Badge, Input, etc.`
+      };
+
+      const enhanceMap = {
+        motion: 'Add tasteful CSS animations and transitions — entrance animations, hover transforms, smooth state transitions.',
+        glassmorphism: 'Use glassmorphism effects — backdrop-filter: blur(), semi-transparent backgrounds, frosted glass.',
+        gradients: 'Use rich gradients — gradient backgrounds, gradient text, gradient borders.',
+        '3d': 'Add 3D depth with CSS transforms — perspective, rotateX/Y, parallax layering.',
+        particles: 'Add subtle animated particle/dot background using pure CSS or minimal JS canvas.',
+        darkmode: 'Design in dark mode with proper contrast. Include dark/light toggle if appropriate.',
+        scroll: 'Add scroll-driven animations using Intersection Observer — fade in, slide up, parallax.',
+        microinteractions: 'Add micro-interactions — button press, input focus glow, toggle animations, ripple effects.',
+        shaders: 'Add shader-inspired effects using CSS — animated gradient mesh, liquid distortion, aurora glow, iridescent shimmer.'
+      };
+      const activeEnhancements = [...enhancements].map(e => enhanceMap[e]).filter(Boolean);
+      const enhanceInstructions = activeEnhancements.length > 0
+        ? `\n\nENHANCEMENTS:\n${activeEnhancements.map((e, i) => `${i+1}. ${e}`).join('\n')}`
+        : '';
+
+      const audienceContext = audience ? `\nTARGET AUDIENCE: ${audience}` : '';
+      const productContext = prompt ? `\nPRODUCT: ${prompt}` : '';
+
+      const agentContext = `
+AGENT ANALYSIS RESULTS:
+
+LAYOUT ANALYSIS:
+${JSON.stringify(agentResults.layout, null, 2)}
+
+TYPOGRAPHY ANALYSIS:
+${JSON.stringify(agentResults.typography, null, 2)}
+
+COLOR ANALYSIS:
+${JSON.stringify(agentResults.color, null, 2)}
+
+MOTION & INTERACTION ANALYSIS:
+${JSON.stringify(agentResults.motion, null, 2)}`;
+
+      const systemPrompt = `You are an elite UI designer and frontend engineer. You have received detailed analysis from 4 specialized agents (layout, typography, color, motion). Use ALL of their findings to produce the best possible code.
+
+Your response MUST be valid JSON (no markdown fences):
+{
+  "analysis": {
+    "quote": "A brief designer's take on this UI — 2-3 sentences.",
+    "tags": [{"label": "text", "type": "good|warn|info"}],
+    "palette": "Color palette summary with hex values",
+    "typography": "Typography summary"
+  },
+  "code": "The complete code as a string"
+}
+${audienceContext}${productContext}
+
+${agentContext}
+${tokenPromptSection}
+
+Rules:
+- Use the agent analysis data to make every design decision precise
+- The code must be COMPLETE and RUNNABLE
+- Use real, thoughtful placeholder content
+- ${formatInstructions[outputFormat]}
+- ${styleInstructions[styleMode]}
+- ${iconInstructions[iconLibrary]}
+- Responsive, accessible, production-quality
+- IMPORTANT: Return ONLY valid JSON${uiFrameworkInstructions[uiFramework]}${enhanceInstructions}`;
+
+      let userPrompt = 'Build this from the design using all agent analyses.';
+      if (audience && prompt) userPrompt = `Build this for: ${audience}. Product: ${prompt}. Use all agent analyses.`;
+      else if (prompt) userPrompt = `Build this. Product: ${prompt}. Use all agent analyses.`;
+      else if (audience) userPrompt = `Build this for: ${audience}. Use all agent analyses.`;
+
+      const codegenText = await callClaudeCodegen(systemPrompt, userPrompt);
+      let result;
+      try {
+        const jsonMatch = codegenText.match(/\{[\s\S]*\}/);
+        result = JSON.parse(jsonMatch ? jsonMatch[0] : codegenText);
+      } catch (parseErr) {
+        result = {
+          analysis: { quote: "Couldn't parse structured response, but here's your code.", tags: [], palette: '', typography: '' },
+          code: codegenText
+        };
+      }
+
+      if (result.code) {
+        result.code = result.code.replace(/^```(?:html|tsx|jsx|vue|typescript|javascript)?\s*\n?/i, '').replace(/\n?```\s*$/i, '');
+      }
+
+      lastAnalysis = result.analysis;
+      setPipelineStep('codegen', 'done', 'done ✓');
+
+      // Update quote section
+      document.getElementById('quoteText').textContent = `"${result.analysis.quote}"`;
+      document.getElementById('quoteMeta').innerHTML = `<strong>Palette:</strong> ${escapeHtml(result.analysis.palette || 'Analyzed')} · <strong>Type:</strong> ${escapeHtml(result.analysis.typography || 'Detected')}`;
+      const tagsEl = document.getElementById('analysisTags');
+      tagsEl.innerHTML = '';
+      (result.analysis.tags || []).forEach(t => {
+        const span = document.createElement('span');
+        span.className = `tag ${['good','warn','info'].includes(t.type) ? t.type : 'info'}`;
+        span.textContent = t.label;
+        tagsEl.appendChild(span);
+      });
+
+      // Show code
+      generatedCode = result.code;
+      document.getElementById('codeOutput').textContent = generatedCode;
+
+      // Show preview
+      const frame = document.getElementById('previewFrame');
+      document.getElementById('emptyPreview').style.display = 'none';
+      frame.style.display = 'block';
+      frame.setAttribute('sandbox', 'allow-scripts');
+      if (outputFormat === 'html') {
+        const errorHandler = '<script>window.onerror=function(msg,src,line,col,err){document.body.innerHTML=\'<div style="padding:40px;font-family:monospace;"><div style="color:#f87171;font-size:14px;font-weight:600;margin-bottom:8px;">Runtime Error (line \'+line+\', col \'+col+\')</div><pre style="color:#888;font-size:12px;white-space:pre-wrap;max-height:300px;overflow:auto;">\'+String(msg).replace(/</g,"&lt;")+\'</pre>\'+(err&&err.stack?\'<details style="margin-top:12px"><summary style="color:#666;cursor:pointer;font-size:11px">Stack trace</summary><pre style="color:#555;font-size:10px;white-space:pre-wrap;margin-top:4px">\'+err.stack.replace(/</g,"&lt;")+\'</pre></details>\':\'\')+\'</div>\';return true;};<\/script>';
+        const injected = generatedCode.replace(/<head([^>]*)>/i, '<head$1>' + errorHandler);
+        frame.srcdoc = injected !== generatedCode ? injected : errorHandler + generatedCode;
+      }
+      else if (outputFormat === 'react' || outputFormat === 'nextjs') frame.srcdoc = buildReactPreview(generatedCode);
+      else if (outputFormat === 'vue') frame.srcdoc = buildVuePreview(generatedCode);
+
+      document.querySelector('.output-tab[data-tab="preview"]').click();
+
+    } catch (err) {
+      alert(`Error: ${err.message}`);
+      console.error(err);
+    } finally {
+      loading.classList.remove('active');
+      btn.disabled = false;
+      btn.textContent = '✨ Generate Code';
+    }
+  }
+
+  // ---- COPY / EXPORT FUNCTIONS ----
+
+  function copyCode() {
+    navigator.clipboard.writeText(generatedCode).then(() => showToast('Code copied!'))
+      .catch(() => showToast('Failed to copy.'));
+  }
   function toggleExportMenu() {
     const menu = document.getElementById('exportMenu');
     menu.classList.toggle('active');
-    const isOpen = menu.classList.contains('active');
-    document.getElementById('exportToggleBtn').setAttribute('aria-expanded', isOpen);
+    document.getElementById('exportToggleBtn').setAttribute('aria-expanded', menu.classList.contains('active'));
   }
-  // Close export menu on outside click
   document.addEventListener('click', e => {
     const menu = document.getElementById('exportMenu');
     if (menu.classList.contains('active') && !e.target.closest('.export-menu') && !e.target.closest('.action-btn.primary')) {
@@ -931,7 +1393,6 @@
       document.getElementById('exportToggleBtn').setAttribute('aria-expanded', 'false');
     }
   });
-  // Escape to close export menu (#12)
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape') {
       const menu = document.getElementById('exportMenu');
@@ -944,58 +1405,54 @@
 
   function exportCursorPrompt() {
     const ext = { html: 'html', react: 'tsx', nextjs: 'tsx', vue: 'vue' }[outputFormat];
-    const filename = `component.${ext}`;
     const audience = document.getElementById('audienceInput').value.trim();
     const product = document.getElementById('promptInput').value.trim();
+    const tokenSection = getTokensForPrompt();
+    const agentSection = Object.entries(agentResults).map(([k,v]) => `**${k}:** ${v?.summary || 'N/A'}`).join('\n');
 
-    const prompt = `I have a design that was analyzed and converted to code. I need you to integrate it into my project.
+    const p = `I have a design analyzed by a multi-agent pipeline and converted to code.
 
 ${audience ? `**Target Audience:** ${audience}` : ''}
 ${product ? `**Product:** ${product}` : ''}
 ${lastAnalysis ? `**Design Analysis:** ${lastAnalysis.quote}` : ''}
-${lastAnalysis?.palette ? `**Color Palette:** ${lastAnalysis.palette}` : ''}
-${lastAnalysis?.typography ? `**Typography:** ${lastAnalysis.typography}` : ''}
+${agentSection}
+${tokenSection}
 
 **Generated Code (${outputFormat.toUpperCase()}):**
-Save this to \`${filename}\` and integrate it:
+Save to \`component.${ext}\`:
 
 \`\`\`${ext}
 ${generatedCode}
 \`\`\`
 
 **Instructions:**
-1. Create the file at the appropriate location in my project
-2. Wire up any imports needed
-3. Replace placeholder content with real data from my app
-4. Connect any click handlers / navigation to my router
-5. Ensure it matches my existing design system (adjust tokens if needed)
-6. Add any missing TypeScript types
-7. Test responsiveness at 375px, 768px, 1440px`;
+1. Create the file and wire up imports
+2. Replace placeholder content with real data
+3. Connect handlers/navigation
+4. Ensure design tokens match your system
+5. Test at 375px, 768px, 1440px`;
 
-    navigator.clipboard.writeText(prompt).then(() => {
-      showToast('Cursor prompt copied! Paste into Cursor chat.');
-    }).catch(err => { console.error('Clipboard write failed:', err); showToast('Failed to copy.'); });
+    navigator.clipboard.writeText(p).then(() => showToast('Cursor prompt copied!')).catch(() => showToast('Failed to copy.'));
     toggleExportMenu();
   }
 
   function exportClaudePrompt() {
     const audience = document.getElementById('audienceInput').value.trim();
     const product = document.getElementById('promptInput').value.trim();
-    const activeEnhance = [...enhancements].join(', ');
+    const tokenSection = getTokensForPrompt();
 
-    const prompt = `I'm building a UI and need your help iterating on this design.
+    const p = `I'm building a UI and need help iterating.
 
 ## Context
-${audience ? `- **Who it's for:** ${audience}` : '- Audience: General'}
-${product ? `- **What I'm building:** ${product}` : ''}
-- **Output format:** ${outputFormat.toUpperCase()}
+- **Audience:** ${audience || 'General'}
+${product ? `- **Product:** ${product}` : ''}
+- **Format:** ${outputFormat.toUpperCase()}
 - **Style:** ${styleMode}
-${activeEnhance ? `- **Enhancements:** ${activeEnhance}` : ''}
+${[...enhancements].length ? `- **Enhancements:** ${[...enhancements].join(', ')}` : ''}
 
-## Design Analysis
-${lastAnalysis ? `"${lastAnalysis.quote}"` : 'See code below.'}
-${lastAnalysis?.palette ? `- **Palette:** ${lastAnalysis.palette}` : ''}
-${lastAnalysis?.typography ? `- **Typography:** ${lastAnalysis.typography}` : ''}
+## Agent Analyses
+${Object.entries(agentResults).map(([k,v]) => `### ${k}\n${v?.summary || 'N/A'}`).join('\n\n')}
+${tokenSection}
 
 ## Current Code
 \`\`\`
@@ -1003,13 +1460,9 @@ ${generatedCode}
 \`\`\`
 
 ## What I want to change
-[DESCRIBE YOUR CHANGES HERE]
+[DESCRIBE YOUR CHANGES HERE]`;
 
-Keep the same visual language and quality level. Make it production-ready.`;
-
-    navigator.clipboard.writeText(prompt).then(() => {
-      showToast('LLM prompt copied! Paste into Claude, ChatGPT, etc.');
-    }).catch(err => { console.error('Clipboard write failed:', err); showToast('Failed to copy.'); });
+    navigator.clipboard.writeText(p).then(() => showToast('LLM prompt copied!')).catch(() => showToast('Failed to copy.'));
     toggleExportMenu();
   }
 
@@ -1017,10 +1470,7 @@ Keep the same visual language and quality level. Make it production-ready.`;
     const ext = { html: 'html', react: 'tsx', nextjs: 'tsx', vue: 'vue' }[outputFormat];
     const blob = new Blob([generatedCode], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `design-output.${ext}`;
-    a.click();
+    const a = document.createElement('a'); a.href = url; a.download = `design-output.${ext}`; a.click();
     setTimeout(() => URL.revokeObjectURL(url), 1000);
     showToast(`Downloaded design-output.${ext}`);
     toggleExportMenu();
@@ -1029,9 +1479,10 @@ Keep the same visual language and quality level. Make it production-ready.`;
   function exportComponentSpec() {
     const audience = document.getElementById('audienceInput').value.trim();
     const product = document.getElementById('promptInput').value.trim();
+    const tokenSection = getTokensForPrompt();
 
-    const spec = `# Component Design Spec
-Generated by Design → Code
+    const spec = `# Component Design Spec — Design Director
+Generated by Design → Code (Multi-Agent Pipeline)
 
 ## Product
 ${product || 'Not specified'}
@@ -1039,32 +1490,23 @@ ${product || 'Not specified'}
 ## Audience
 ${audience || 'Not specified'}
 
-## Visual Design
-${lastAnalysis ? `### Designer Notes\n"${lastAnalysis.quote}"` : ''}
-${lastAnalysis?.palette ? `\n### Color Palette\n${lastAnalysis.palette}` : ''}
-${lastAnalysis?.typography ? `\n### Typography\n${lastAnalysis.typography}` : ''}
+## Agent Analyses
+${Object.entries(agentResults).map(([k,v]) => `### ${k.charAt(0).toUpperCase() + k.slice(1)} Agent\n${v?.summary || 'N/A'}\n${JSON.stringify(v, null, 2)}`).join('\n\n')}
 
-### Tags
-${lastAnalysis?.tags?.map(t => `- [${t.type.toUpperCase()}] ${t.label}`).join('\n') || 'None'}
+${lastAnalysis ? `## Designer Notes\n"${lastAnalysis.quote}"` : ''}
+${tokenSection}
 
-## Style Mode
-${styleMode}
-
-## Enhancements
-${[...enhancements].join(', ') || 'None'}
-
-## Output Format
-${outputFormat.toUpperCase()}
+## Settings
+- Style: ${styleMode}
+- Enhancements: ${[...enhancements].join(', ') || 'None'}
+- Format: ${outputFormat.toUpperCase()}
 
 ## Source Code
 \`\`\`
 ${generatedCode}
-\`\`\`
-`;
+\`\`\``;
 
-    navigator.clipboard.writeText(spec).then(() => {
-      showToast('Component spec copied!');
-    }).catch(err => { console.error('Clipboard write failed:', err); showToast('Failed to copy.'); });
+    navigator.clipboard.writeText(spec).then(() => showToast('Component spec copied!')).catch(() => showToast('Failed to copy.'));
     toggleExportMenu();
   }
 
@@ -1081,54 +1523,30 @@ ${generatedCode}
     setTimeout(() => toast.style.opacity = '0', 2000);
   }
 
+  // ---- PREVIEW BUILDERS ----
+
   function buildReactPreview(code) {
     let cleaned = code;
-
-    // 1. Remove directives first (they're always at the top)
     cleaned = cleaned.replace(/^['"]use client['"];?\s*/gm, '');
     cleaned = cleaned.replace(/^['"]use server['"];?\s*/gm, '');
-
-    // 1.5. Collapse multi-line imports into single lines
-    // Matches: import {\n  Foo,\n  Bar\n} from 'pkg';
     cleaned = cleaned.replace(/import\s*\{[\s\S]*?\}\s*from\s*['"][^'"]+['"]\s*;?/g, function(match) {
-      if (match.indexOf('\n') === -1) return match; // already single line
+      if (match.indexOf('\n') === -1) return match;
       return match.replace(/\s*\n\s*/g, ' ').trim();
     });
-
-    // 2. Process line by line to handle imports cleanly
     cleaned = cleaned.split('\n').map(function(line) {
       var trimmed = line.trim();
-
-      // Icon library imports → __iconProxy destructure
       var iconMatch = trimmed.match(/^import\s*\{([^}]+)\}\s*from\s*['"](?:lucide-react|lucide|@phosphor-icons\/react|phosphor-react|hugeicons-react|@hugeicons\/react)['"]\s*;?\s*$/);
       if (iconMatch) return 'const {' + iconMatch[1] + '} = __iconProxy;';
-
-      // Framer-motion imports → motion stubs
       var motionMatch = trimmed.match(/^import\s*\{([^}]+)\}\s*from\s*['"]framer-motion['"]\s*;?\s*$/);
       if (motionMatch) return 'const {' + motionMatch[1] + '} = __motionProxy;';
-
-      // All other imports → remove
       if (/^import\s+/.test(trimmed)) return '';
-
       return line;
     }).join('\n');
-
-    // 5. Handle exports
-    // "export default ComponentName;" at end → exports.default = ComponentName
     cleaned = cleaned.replace(/^export\s+default\s+(\w+)\s*;?\s*$/gm, 'exports.default = $1;');
-    // "export default function X" → "function X" (component detected by name later)
     cleaned = cleaned.replace(/^export\s+default\s+(function|const|class)/gm, '$1');
-    // "export function/const/etc" → strip export keyword
     cleaned = cleaned.replace(/^export\s+(function|const|class|interface|type)/gm, '$1');
-
-    // 6. Babel handles interface/type declarations — no need to strip
-
-    // 7. Remove redeclarations of our injected globals
     cleaned = cleaned.replace(/^(?:const|let|var|function)\s+(?:Link|Image|cn|clsx)\s*[=(:].*/gm, '// (provided by preview)');
-
-    // 8. Remove require() calls
     cleaned = cleaned.replace(/(?:const|let|var)\s+.*=\s*require\s*\(.*\)\s*;?/g, '');
-
     cleaned = cleaned.trim();
 
     return `<!DOCTYPE html>
@@ -1140,68 +1558,28 @@ ${generatedCode}
 <script src="https://unpkg.com/@babel/standalone@7/babel.min.js"><\/script>
 <script src="https://cdn.tailwindcss.com"><\/script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<style>
-  body { font-family: 'Inter', sans-serif; margin: 0; }
-  * { box-sizing: border-box; }
-</style>
+<style>body { font-family: 'Inter', sans-serif; margin: 0; } * { box-sizing: border-box; }</style>
 <script>
-  // Provide common React hooks globally
   const { useState, useEffect, useRef, useMemo, useCallback, Fragment } = React;
-  // Stub next/image, next/link, cn utility
   const Image = (props) => React.createElement('img', {...props, src: props.src || ''});
   const Link = (props) => React.createElement('a', {...props, href: props.href || '#'});
   const cn = (...args) => args.filter(Boolean).join(' ');
   const clsx = cn;
-
-  // Framer-motion stub — motion.div etc. just render the HTML element with style/className
   const __motionProxy = {
-    motion: new Proxy({}, {
-      get(_, el) {
-        return function MotionElement(props) {
-          var p = Object.assign({}, props);
-          // Strip motion-specific props
-          delete p.initial; delete p.animate; delete p.exit; delete p.transition;
-          delete p.whileHover; delete p.whileInView; delete p.whileTap; delete p.whileFocus;
-          delete p.variants; delete p.viewport; delete p.layout; delete p.layoutId;
-          return React.createElement(el, p);
-        };
-      }
-    }),
+    motion: new Proxy({}, { get(_, el) { return function(props) { var p = Object.assign({}, props); delete p.initial; delete p.animate; delete p.exit; delete p.transition; delete p.whileHover; delete p.whileInView; delete p.whileTap; delete p.whileFocus; delete p.variants; delete p.viewport; delete p.layout; delete p.layoutId; return React.createElement(el, p); }; } }),
     AnimatePresence: (props) => React.createElement(React.Fragment, null, props.children),
-    useAnimation: () => ({}),
-    useInView: () => [null, true],
+    useAnimation: () => ({}), useInView: () => [null, true],
     useScroll: () => ({ scrollY: { get: () => 0 }, scrollYProgress: { get: () => 0 } }),
     useTransform: (v, i, o) => ({ get: () => (o && o[0]) || 0 }),
-    useMotionValue: (v) => ({ get: () => v, set: () => {} }),
-    useSpring: (v) => v,
+    useMotionValue: (v) => ({ get: () => v, set: () => {} }), useSpring: (v) => v,
   };
-
-  // Universal icon stub — renders a clean placeholder SVG for any icon library import
-  const __iconProxy = new Proxy({}, {
-    get(_, name) {
-      if (name === '__esModule') return true;
-      if (name === 'default') return undefined;
-      // Return a React component that renders an SVG placeholder with the icon name
-      const IconComponent = (props) => {
-        const size = props.size || 24;
-        const color = props.color || 'currentColor';
-        const sw = props.strokeWidth || 1.5;
-        return React.createElement('svg', {
-          width: size, height: size, viewBox: '0 0 24 24',
-          fill: 'none', stroke: color, strokeWidth: sw,
-          strokeLinecap: 'round', strokeLinejoin: 'round',
-          style: props.style, className: props.className,
-          'aria-label': name
-        },
-          React.createElement('circle', {cx:12,cy:12,r:10,strokeDasharray:'2 3',opacity:0.3}),
-          React.createElement('text', {x:12,y:16,textAnchor:'middle',fontSize:8,fill:color,stroke:'none',opacity:0.6},
-            name.slice(0,2))
-        );
-      };
-      IconComponent.displayName = name;
-      return IconComponent;
-    }
-  });
+  const __iconProxy = new Proxy({}, { get(_, name) {
+    if (name === '__esModule') return true; if (name === 'default') return undefined;
+    const C = (props) => { const s = props.size || 24; const c = props.color || 'currentColor';
+      return React.createElement('svg', { width: s, height: s, viewBox: '0 0 24 24', fill: 'none', stroke: c, strokeWidth: props.strokeWidth || 1.5, strokeLinecap: 'round', strokeLinejoin: 'round', style: props.style, className: props.className, 'aria-label': name },
+        React.createElement('circle', {cx:12,cy:12,r:10,strokeDasharray:'2 3',opacity:0.3}),
+        React.createElement('text', {x:12,y:16,textAnchor:'middle',fontSize:8,fill:c,stroke:'none',opacity:0.6}, name.slice(0,2))); };
+    C.displayName = name; return C; } });
 <\/script>
 </head><body>
 <div id="root"></div>
@@ -1210,344 +1588,58 @@ ${cleaned}
 <\/script>
 <script>
 try {
-  // Get the code
   var __code = document.getElementById('__app_code').textContent;
-
-  // Transform with Babel (TypeScript + React JSX)
-  var __result = Babel.transform(__code, {
-    presets: [
-      ['typescript', { isTSX: true, allExtensions: true }],
-      ['react', { runtime: 'classic' }]
-    ],
-    filename: 'component.tsx'
-  });
-  
-  // Execute the transformed code
-  // Find component names in the original code to build auto-export fallback
-  var __componentNames = (__code.match(/(?:^|\\n)(?:function|const|class)\\s+([A-Z][A-Za-z0-9]*)/g) || [])
-    .map(function(m) { return m.replace(/^[\\n]?(?:function|const|class)\\s+/, ''); });
-  var __autoExport = __componentNames.length > 0
-    ? '\\nif (!exports.default) { try { exports.default = ' + __componentNames[__componentNames.length - 1] + '; } catch(e) {} }'
-    : '';
-  var __cn = function() { return Array.from(arguments).filter(Boolean).join(' '); };
-  var __imgStub = function Image(props) { return React.createElement('img', Object.assign({}, props, {src: props.src || ''})); };
-  var __linkStub = function Link(props) { return React.createElement('a', Object.assign({}, props, {href: props.href || '#'}), props.children); };
+  var __result = Babel.transform(__code, { presets: [['typescript', { isTSX: true, allExtensions: true }], ['react', { runtime: 'classic' }]], filename: 'component.tsx' });
+  var __componentNames = (__code.match(/(?:^|\\n)(?:function|const|class)\\s+([A-Z][A-Za-z0-9]*)/g) || []).map(function(m) { return m.replace(/^[\\n]?(?:function|const|class)\\s+/, ''); });
+  var __autoExport = __componentNames.length > 0 ? '\\nif (!exports.default) { try { exports.default = ' + __componentNames[__componentNames.length - 1] + '; } catch(e) {} }' : '';
   var __fn = new Function('React', 'ReactDOM', 'useState', 'useEffect', 'useRef', 'useMemo', 'useCallback', 'Fragment', 'Image', 'Link', 'cn', 'clsx', '__iconProxy', '__motionProxy', 'motion', 'AnimatePresence', 'useAnimation', 'useInView', 'useScroll', 'useTransform', 'useMotionValue', 'useSpring', 'var exports = {};\\n' + __result.code + __autoExport + ';\\nreturn exports;');
-  var __exports = __fn(React, ReactDOM, React.useState, React.useEffect, React.useRef, React.useMemo, React.useCallback, React.Fragment,
-    __imgStub, __linkStub, __cn, __cn, __iconProxy,
-    __motionProxy, __motionProxy.motion, __motionProxy.AnimatePresence,
-    __motionProxy.useAnimation, __motionProxy.useInView, __motionProxy.useScroll,
-    __motionProxy.useTransform, __motionProxy.useMotionValue, __motionProxy.useSpring
-  );
-  
-  // Find the component to render — check exports.default or find last capitalized function
+  var __exports = __fn(React, ReactDOM, React.useState, React.useEffect, React.useRef, React.useMemo, React.useCallback, React.Fragment, Image, Link, cn, cn, __iconProxy, __motionProxy, __motionProxy.motion, __motionProxy.AnimatePresence, __motionProxy.useAnimation, __motionProxy.useInView, __motionProxy.useScroll, __motionProxy.useTransform, __motionProxy.useMotionValue, __motionProxy.useSpring);
   var __App = __exports.default || __exports[Object.keys(__exports).filter(function(k){return /^[A-Z]/.test(k)}).pop()];
-  
-  // If not found in exports, try to find it in the global scope via the code
-  if (!__App) {
-    var __matches = __code.match(/(?:function|const)\\s+([A-Z]\\w*)/g);
-    if (__matches) {
-      var __names = __matches.map(function(m){ return m.replace(/^(?:function|const)\\s+/, ''); });
-      // Try each name
-      for (var i = __names.length - 1; i >= 0; i--) {
-        try { __App = eval(__names[i]); if (__App) break; } catch(e) {}
-      }
-    }
-  }
-  
-  if (__App) {
-    ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(__App));
-  } else {
-    document.getElementById('root').innerHTML = '<div style="padding:40px;color:#f87171;font-family:monospace;">Could not find component to render. Check the Code tab.</div>';
-  }
+  if (!__App) { var __matches = __code.match(/(?:function|const)\\s+([A-Z]\\w*)/g); if (__matches) { var __names = __matches.map(function(m){ return m.replace(/^(?:function|const)\\s+/, ''); }); for (var i = __names.length - 1; i >= 0; i--) { try { __App = eval(__names[i]); if (__App) break; } catch(e) {} } } }
+  if (__App) { ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(__App)); }
+  else { document.getElementById('root').innerHTML = '<div style="padding:40px;color:#f87171;font-family:monospace;">Could not find component to render.</div>'; }
 } catch(err) {
-  document.getElementById('root').innerHTML = '<div style="padding:40px;font-family:monospace;"><div style="color:#f87171;font-size:14px;font-weight:600;margin-bottom:8px;">Preview Error</div><pre style="color:#888;font-size:12px;white-space:pre-wrap;">' + err.message + '</pre></div>';
-  console.error('Preview render error:', err);
+  var loc = '';
+  if (err.loc) loc = ' (line ' + err.loc.line + ', col ' + err.loc.column + ')';
+  else if (err.lineNumber) loc = ' (line ' + err.lineNumber + ')';
+  else { var lineMatch = err.message && err.message.match(/\\((\\d+):(\\d+)\\)/); if (lineMatch) loc = ' (line ' + lineMatch[1] + ', col ' + lineMatch[2] + ')'; }
+  var errType = err.name === 'SyntaxError' ? 'Babel Transform Error' : 'Render Error';
+  document.getElementById('root').innerHTML = '<div style="padding:40px;font-family:monospace;"><div style="color:#f87171;font-size:14px;font-weight:600;margin-bottom:8px;">' + errType + loc + '</div><pre style="color:#888;font-size:12px;white-space:pre-wrap;max-height:300px;overflow:auto;">' + (err.message || String(err)).replace(/</g,'&lt;') + '</pre>' + (err.stack ? '<details style="margin-top:12px"><summary style="color:#666;cursor:pointer;font-size:11px">Stack trace</summary><pre style="color:#555;font-size:10px;white-space:pre-wrap;margin-top:4px">' + err.stack.replace(/</g,'&lt;') + '</pre></details>' : '') + '</div>';
+  console.error(err);
 }
 <\/script>
 </body></html>`;
   }
 
   function buildVuePreview(code) {
-    // Extract template, script, and style from SFC
     const templateMatch = code.match(/<template>([\s\S]*?)<\/template>/);
     const styleMatch = code.match(/<style[^>]*>([\s\S]*?)<\/style>/);
     const scriptMatch = code.match(/<script[^>]*>([\s\S]*?)<\/script>/);
-
     const template = templateMatch ? templateMatch[1] : '<div>Could not extract template</div>';
     const style = styleMatch ? styleMatch[1] : '';
-    const script = scriptMatch ? scriptMatch[1]
-      .replace(/^import\s+.*$/gm, '')
-      .replace(/export\s+default\s*/, 'const __component = ')
-      : 'const __component = {}';
-
+    const script = scriptMatch ? scriptMatch[1].replace(/^import\s+.*$/gm, '').replace(/export\s+default\s*/, 'const __component = ') : 'const __component = {}';
     return `<!DOCTYPE html>
-<html><head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"><\/script>
 <script src="https://cdn.tailwindcss.com"><\/script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<style>
-  body { font-family: 'Inter', sans-serif; margin: 0; }
-  ${style}
-</style>
-</head><body>
-<div id="app">${template}</div>
+<style>body { font-family: 'Inter', sans-serif; margin: 0; } ${style}</style>
+</head><body><div id="app">${template}</div>
 <script>
+try {
   ${script}
   const app = Vue.createApp(__component || {});
+  app.config.errorHandler = function(err, vm, info) {
+    document.getElementById('app').innerHTML = '<div style="padding:40px;font-family:monospace;"><div style="color:#f87171;font-size:14px;font-weight:600;margin-bottom:8px;">Vue Runtime Error</div><pre style="color:#888;font-size:12px;white-space:pre-wrap;max-height:300px;overflow:auto;">' + (err.message || String(err)).replace(/</g,'&lt;') + '</pre>' + (err.stack ? '<details style="margin-top:12px"><summary style="color:#666;cursor:pointer;font-size:11px">Stack trace</summary><pre style="color:#555;font-size:10px;white-space:pre-wrap;margin-top:4px">' + err.stack.replace(/</g,'&lt;') + '</pre></details>' : '') + '</div>';
+    console.error(err);
+  };
   app.mount('#app');
+} catch(err) {
+  document.getElementById('app').innerHTML = '<div style="padding:40px;font-family:monospace;"><div style="color:#f87171;font-size:14px;font-weight:600;margin-bottom:8px;">Vue Initialization Error</div><pre style="color:#888;font-size:12px;white-space:pre-wrap;max-height:300px;overflow:auto;">' + (err.message || String(err)).replace(/</g,'&lt;') + '</pre>' + (err.stack ? '<details style="margin-top:12px"><summary style="color:#666;cursor:pointer;font-size:11px">Stack trace</summary><pre style="color:#555;font-size:10px;white-space:pre-wrap;margin-top:4px">' + err.stack.replace(/</g,'&lt;') + '</pre></details>' : '') + '</div>';
+  console.error(err);
+}
 <\/script>
 </body></html>`;
-  }
-
-  const loadingSteps = [
-    'Extracting layout patterns',
-    'Analyzing color palette',
-    'Identifying typography',
-    'Mapping component hierarchy',
-    'Evaluating spacing & alignment',
-    'Generating production code',
-    'Polishing details'
-  ];
-
-  let _generateRateLimited = false;
-  async function generate() {
-    if (images.length === 0 || !getApiKey()) return;
-    if (_generateRateLimited) return;
-    _generateRateLimited = true;
-    setTimeout(() => { _generateRateLimited = false; }, 3000);
-
-    const btn = document.getElementById('generateBtn');
-    const loading = document.getElementById('loading');
-    btn.disabled = true;
-    btn.textContent = '⏳ Generating...';
-    loading.classList.add('active');
-
-    // Animate loading steps
-    let stepIdx = 0;
-    const stepInterval = setInterval(() => {
-      stepIdx = (stepIdx + 1) % loadingSteps.length;
-      document.getElementById('loadingStep').textContent = loadingSteps[stepIdx];
-    }, 2000);
-
-    const prompt = document.getElementById('promptInput').value.trim();
-    const audience = document.getElementById('audienceInput').value.trim();
-
-    const formatInstructions = {
-      html: 'Output a single self-contained HTML file with embedded CSS and JS. Use modern CSS (grid, flexbox, custom properties). Include Google Fonts if appropriate.',
-      react: 'Output a single React component file using Tailwind CSS classes. Use TypeScript. Export default the component. Include all subcomponents in the same file.',
-      nextjs: 'Output a Next.js page component (App Router) using Tailwind CSS and TypeScript. Use server components where appropriate.',
-      vue: 'Output a single Vue 3 SFC (.vue file) with <script setup> and scoped styles.'
-    };
-
-    const styleInstructions = {
-      faithful: 'Recreate the design as faithfully as possible. Match colors, spacing, typography, and layout exactly.',
-      improved: 'Use the design as a starting point but improve it — better spacing, more consistent typography, smoother animations, accessibility improvements. Make it feel more polished.',
-      reimagined: 'Take the core concept and reimagine it with a fresh, modern aesthetic. Keep the same functionality but make it dramatically more beautiful and creative.'
-    };
-
-    const iconInstructions = {
-      lucide: 'ICONS: Use Lucide icons via the lucide-react package. Import icons like: import { Search, ArrowRight, Check, X, Menu, Star, Heart, Settings, User, Plus, ChevronDown } from "lucide-react". Use them as React components: <Search size={20} strokeWidth={1.5} />. Lucide has 1400+ icons — pick semantically correct ones. Browse: https://lucide.dev/icons. NEVER use emoji, unicode symbols, or ASCII art as icons. Every icon must be a Lucide component.',
-      phosphor: 'ICONS: Use Phosphor icons via the @phosphor-icons/react package. Import icons like: import { MagnifyingGlass, ArrowRight, Check, X, List, Star, Heart, Gear, User, Plus, CaretDown } from "@phosphor-icons/react". Use them as React components: <MagnifyingGlass size={20} weight="regular" />. Phosphor supports 6 weights: thin, light, regular, bold, fill, duotone. Use weight="duotone" for rich two-tone icons. Browse: https://phosphoricons.com. NEVER use emoji or unicode as icons.',
-      hugeicons: 'ICONS: Use Hugeicons via the hugeicons-react package. Import icons like: import { Search01Icon, ArrowRight01Icon, Tick01Icon, Cancel01Icon, Menu01Icon, Star01Icon, FavouriteIcon, Settings01Icon, User01Icon, Add01Icon } from "hugeicons-react". Use them as React components: <Search01Icon size={20} />. Hugeicons has 4000+ icons with a premium, modern aesthetic. Browse: https://hugeicons.com. NEVER use emoji or unicode as icons.',
-      none: 'ICONS: Use inline SVG icons ONLY — draw clean, minimal SVG paths directly in the code. Do NOT use emoji, unicode symbols, or ASCII art as icons. Do NOT import from icon libraries since they wont load in preview. Every icon must be a proper <svg> element with viewBox, stroke/fill, and clean paths. Geometric, consistent stroke width (1.5-2px), rounded joins, 24x24 viewBox. Icons should feel intentional and premium, never generic.'
-    };
-
-    const uiFrameworkInstructions = {
-      none: '',
-      shadcn: `\nUI FRAMEWORK: Use shadcn/ui component patterns and conventions. Build components following shadcn/ui's design system:
-- Use Tailwind CSS with shadcn's design tokens: bg-background, text-foreground, bg-card, bg-muted, text-muted-foreground, bg-primary, text-primary-foreground, bg-secondary, bg-accent, border, ring, bg-destructive
-- Use CSS variables for theming: --background, --foreground, --card, --primary, --secondary, --muted, --accent, --destructive, --border, --input, --ring with HSL values
-- Component patterns: Card (with CardHeader, CardTitle, CardDescription, CardContent, CardFooter), Button (variants: default, destructive, outline, secondary, ghost, link; sizes: default, sm, lg, icon), Badge, Input, Separator, Avatar, Dialog, Sheet, Dropdown, Tabs, Tooltip
-- Use cn() utility pattern for conditional classes: cn("base-classes", variant && "variant-classes")
-- Rounded corners: rounded-lg for cards, rounded-md for buttons/inputs
-- Shadows: shadow-sm for subtle depth
-- Focus rings: focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring
-- Animations: animate-in, fade-in, slide-in from Tailwind
-- Typography: tracking-tight for headings, text-sm text-muted-foreground for descriptions, leading-none for tight text
-- Spacing conventions: space-y-1.5 for form groups, p-6 for card padding, gap-4 for grid gaps
-- Build it as if you're composing real shadcn/ui primitives. The code should look like it belongs in a shadcn/ui project.
-Reference: https://ui.shadcn.com`
-    };
-
-    const audienceContext = audience ? `\n\nTARGET AUDIENCE: ${audience}\nDesign decisions must be appropriate for this audience. Consider their tech literacy, aesthetic preferences, device usage patterns, and what builds trust with them.` : '';
-    const productContext = prompt ? `\n\nPRODUCT CONTEXT: ${prompt}\nThis is what's being built. The design must serve this product's goals. Every UI decision should make this product more compelling and usable.` : '';
-
-    const enhanceMap = {
-      motion: 'Add tasteful CSS animations and transitions — entrance animations (fade-in, slide-up), hover transforms, smooth state transitions. Use @keyframes for hero sections. Keep it elegant, not flashy.',
-      glassmorphism: 'Use glassmorphism effects — backdrop-filter: blur(), semi-transparent backgrounds with subtle borders, frosted glass cards. Layer depth with overlapping translucent panels.',
-      gradients: 'Use rich gradient backgrounds, gradient text (background-clip: text), gradient borders, and mesh-gradient-style sections. Make colors flow and feel alive.',
-      '3d': 'Add 3D depth with CSS transforms — perspective, rotateX/Y on cards, parallax-style layering, subtle translateZ for hover states, box-shadows that create depth illusion.',
-      particles: 'Add a subtle animated particle/dot background using pure CSS or minimal JS canvas. Keep it performant — no heavy libraries. Stars, dots, or floating shapes.',
-      darkmode: 'Design in dark mode with proper contrast. Rich dark backgrounds (#0a0a0b to #1a1a2e range), light text, accent colors that pop against dark. Include a dark/light toggle if appropriate.',
-      scroll: 'Add scroll-driven animations using Intersection Observer — elements fade in, slide up, or scale as they enter viewport. Parallax on hero sections. Sticky headers with blur on scroll.',
-      microinteractions: 'Add detailed micro-interactions — button press animations (scale down then up), input focus glow effects, checkbox/toggle animations, ripple effects on click, loading skeleton states, tooltip animations, cursor effects.',
-      shaders: 'Add WebGL/shader-inspired visual effects using pure CSS and canvas. Include: animated gradient mesh backgrounds (use CSS conic-gradient + hue-rotate animation), liquid/wave distortion effects on hero sections (CSS filter + SVG feTurbulence), aurora/northern lights glow effects (layered gradients with mix-blend-mode), iridescent/holographic shimmer on cards (background with moving linear-gradient), noise texture overlays (SVG feTurbulence filter), chromatic aberration on hover (offset text-shadow in RGB), frosted glass with animated color shifts. Make it feel like shaders.com — creative, premium, alive. Use CSS animations and SVG filters only (no WebGL libraries). These effects should enhance, not overwhelm.'
-    };
-
-    const activeEnhancements = [...enhancements].map(e => enhanceMap[e]).filter(Boolean);
-    const enhanceInstructions = activeEnhancements.length > 0
-      ? `\n\nENHANCEMENTS TO APPLY:\n${activeEnhancements.map((e, i) => `${i+1}. ${e}`).join('\n')}\n\nThese are NOT optional — implement each one. They should feel cohesive together, not bolted on.`
-      : '';
-
-    const multiImageContext = images.length > 1
-      ? `\n\nMULTIPLE REFERENCE IMAGES: You're receiving ${images.length} design references. Treat them as a MOODBOARD — synthesize the best elements from each into one cohesive design. Extract the layout from one, the color palette from another, typography choices, component styles, etc. Call out which elements you pulled from which image in your analysis.`
-      : '';
-
-    const systemPrompt = `You are an elite UI designer and frontend engineer with 15 years of experience shipping products at companies like Linear, Vercel, Stripe, and Apple. You analyze design screenshots and produce production-quality code that's better than what most agencies deliver.
-
-Your response MUST be in this exact JSON format:
-{
-  "analysis": {
-    "quote": "A brief, opinionated designer's take on this UI — what works, what doesn't, what you'd change. Reference specific elements. Be the designer they hired, not a chatbot. 2-3 sentences max.",
-    "tags": [
-      {"label": "tag text", "type": "good|warn|info"}
-    ],
-    "palette": "Brief description of the color palette with hex values",
-    "typography": "Font families, weights, and scale observed"
-  },
-  "code": "The complete code here as a string"
-}
-${audienceContext}${productContext}
-
-Rules:
-- The code must be COMPLETE and RUNNABLE — no placeholders, no "add your content here"
-- Use real, thoughtful placeholder content that makes the demo look alive and believable for the target audience
-- Every pixel matters. Spacing, alignment, shadows, transitions — get them right.
-- ${formatInstructions[outputFormat]}
-- ${styleInstructions[styleMode]}
-- Responsive by default — test at 375px, 768px, and 1440px mentally
-- Smooth micro-interactions: hover states, focus rings, transitions on state changes
-- Accessibility: proper contrast ratios, focus management, semantic HTML, aria labels
-- ${iconInstructions[iconLibrary]}
-- If the audience is specified, tailor the visual language to what resonates with them
-- Make it feel like a REAL product, not a demo. This should impress investors.
-- IMPORTANT: Return ONLY valid JSON. No markdown, no code fences, no explanation outside the JSON.${uiFrameworkInstructions[uiFramework]}${enhanceInstructions}${multiImageContext}`;
-
-    let userPrompt = 'Analyze this design and build it as a real product UI.';
-    if (audience && prompt) {
-      userPrompt = `Build this from the attached design inspiration. This is for: ${audience}. What I'm building: ${prompt}. Make every design decision serve this audience and product.`;
-    } else if (prompt) {
-      userPrompt = `Build this from the attached design inspiration. What I'm building: ${prompt}`;
-    } else if (audience) {
-      userPrompt = `Analyze this design and build it. Target audience: ${audience}. Tailor the design for them.`;
-    }
-
-    try {
-      // Build content array with all images
-      const content = [];
-      images.forEach((img, i) => {
-        const [header, base64] = img.data.split(',');
-        const mediaType = header.match(/:(.*?);/)[1];
-        if (images.length > 1) {
-          content.push({ type: 'text', text: `[Reference image ${i + 1}: ${img.name}]` });
-        }
-        content.push({ type: 'image', source: { type: 'base64', media_type: mediaType, data: base64 } });
-      });
-      content.push({ type: 'text', text: userPrompt });
-
-      const response = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-api-key': getApiKey(),
-          'anthropic-version': '2023-06-01',
-          'anthropic-dangerous-direct-browser-access': 'true'
-        },
-        body: JSON.stringify({
-          model: 'claude-opus-4-6',
-          max_tokens: 16000,
-          system: systemPrompt,
-          messages: [{
-            role: 'user',
-            content
-          }]
-        })
-      });
-
-      if (!response.ok) {
-        const err = await response.json();
-        throw new Error(err.error?.message || `API error: ${response.status}`);
-      }
-
-      const data = await response.json();
-      const text = data.content[0].text;
-
-      // Parse JSON response
-      let result;
-      try {
-        // Try to find JSON in the response
-        const jsonMatch = text.match(/\{[\s\S]*\}/);
-        result = JSON.parse(jsonMatch ? jsonMatch[0] : text);
-      } catch (parseErr) {
-        // If JSON parse fails, treat entire response as code
-        result = {
-          analysis: { quote: "Couldn't parse structured response, but here's your code.", tags: [], palette: '', typography: '' },
-          code: text
-        };
-      }
-
-      // Strip markdown code fences from generated code if Claude wrapped it
-      if (result.code) {
-        result.code = result.code.replace(/^```(?:html|tsx|jsx|vue|typescript|javascript)?\s*\n?/i, '').replace(/\n?```\s*$/i, '');
-      }
-
-      // Save analysis for exports
-      lastAnalysis = result.analysis;
-
-      // Show analysis
-      const quoteSection = document.getElementById('quoteSection');
-      document.getElementById('quoteText').textContent = `"${result.analysis.quote}"`;
-      document.getElementById('quoteMeta').innerHTML = `<strong>Palette:</strong> ${escapeHtml(result.analysis.palette || 'Analyzed')} · <strong>Type:</strong> ${escapeHtml(result.analysis.typography || 'Detected')}`;
-
-      const tagsEl = document.getElementById('analysisTags');
-      tagsEl.innerHTML = '';
-      (result.analysis.tags || []).forEach(t => {
-        const span = document.createElement('span');
-        const safeType = ['good','warn','info'].includes(t.type) ? t.type : 'info';
-        span.className = `tag ${safeType}`;
-        span.textContent = t.label;
-        tagsEl.appendChild(span);
-      });
-      quoteSection.style.display = 'block';
-
-      // Show code
-      generatedCode = result.code;
-      document.getElementById('codeOutput').textContent = generatedCode;
-
-      // Show preview
-      const frame = document.getElementById('previewFrame');
-      const emptyPreview = document.getElementById('emptyPreview');
-      emptyPreview.style.display = 'none';
-      frame.style.display = 'block';
-
-      // Render preview based on output format
-      // Ensure sandbox allows same-origin for srcdoc rendering of CDN scripts
-      frame.setAttribute('sandbox', 'allow-scripts allow-same-origin');
-      if (outputFormat === 'html') {
-        frame.srcdoc = generatedCode;
-      } else if (outputFormat === 'react' || outputFormat === 'nextjs') {
-        const reactPreview = buildReactPreview(generatedCode);
-        frame.srcdoc = reactPreview;
-      } else if (outputFormat === 'vue') {
-        const vuePreview = buildVuePreview(generatedCode);
-        frame.srcdoc = vuePreview;
-      }
-
-      // Switch to preview tab
-      document.querySelector('.output-tab[data-tab="preview"]').click();
-
-    } catch (err) {
-      alert(`Error: ${err.message}`);
-      console.error(err);
-    } finally {
-      clearInterval(stepInterval);
-      loading.classList.remove('active');
-      btn.disabled = false;
-      btn.textContent = '✨ Generate Code';
-    }
   }
 </script>
 </body>
