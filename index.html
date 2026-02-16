@@ -3,219 +3,303 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
-<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"></noscript>
+<link rel="preload" href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&display=swap"></noscript>
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap"></noscript>
 <title>Design → Code</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
   :root {
-    --bg: #0a0a0b;
-    --surface: #141416;
-    --surface2: #1c1c1f;
-    --border: #2a2a2e;
-    --text: #e4e4e7;
-    --muted: #a1a1aa;
-    --accent: #a78bfa;
-    --accent2: #818cf8;
-    --green: #34d399;
-    --amber: #fbbf24;
-    --red: #f87171;
+    --bg: #fafaf8;
+    --surface: #ffffff;
+    --surface2: #f2f1ee;
+    --border: #e2e0db;
+    --border-light: #ece9e4;
+    --text: #1a1a18;
+    --muted: #7c7b76;
+    --accent: #0057ff;
+    --accent-subtle: rgba(0, 87, 255, 0.07);
+    --accent-hover: rgba(0, 87, 255, 0.12);
+    --green: #1a8c5a;
+    --green-bg: rgba(26, 140, 90, 0.08);
+    --amber: #b5880a;
+    --amber-bg: rgba(181, 136, 10, 0.08);
+    --red: #c4342d;
+    --red-bg: rgba(196, 52, 45, 0.08);
+    --radius: 6px;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'Satoshi', -apple-system, sans-serif;
   }
 
   body {
-    font-family: 'Inter', sans-serif;
+    font-family: var(--sans);
     background: var(--bg);
     color: var(--text);
     min-height: 100vh;
     overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
   }
 
+  /* ── Header ── */
   .header {
-    padding: 20px 32px;
+    padding: 0 32px;
+    height: 52px;
     border-bottom: 1px solid var(--border);
     display: flex;
     align-items: center;
     justify-content: space-between;
+    background: var(--surface);
   }
-  .logo { font-size: 18px; font-weight: 700; letter-spacing: -0.5px; }
-  .logo span { color: var(--accent); }
-  .header-sub { font-size: 12px; color: var(--muted); font-weight: 400; }
+  .logo {
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+    color: var(--text);
+  }
+  .logo span {
+    color: var(--accent);
+    margin: 0 1px;
+  }
+  .header-sub {
+    font-size: 11px;
+    color: var(--muted);
+    font-weight: 400;
+    margin-left: 12px;
+    padding-left: 12px;
+    border-left: 1px solid var(--border);
+  }
 
-  .app { display: flex; height: calc(100vh - 65px); }
+  /* ── Layout ── */
+  .app { display: flex; height: calc(100vh - 53px); }
 
   .left-panel {
-    width: 420px;
-    min-width: 420px;
+    width: 400px;
+    min-width: 400px;
     border-right: 1px solid var(--border);
     display: flex;
     flex-direction: column;
     overflow-y: auto;
+    background: var(--bg);
   }
+  .left-panel::-webkit-scrollbar { width: 4px; }
+  .left-panel::-webkit-scrollbar-track { background: transparent; }
+  .left-panel::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
 
+  /* ── Drop Zone ── */
   .drop-zone {
-    margin: 16px;
-    border: 2px dashed var(--border);
-    border-radius: 12px;
-    padding: 48px 24px;
+    margin: 20px 20px 0;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 40px 24px;
     text-align: center;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: border-color 0.2s, background 0.2s;
     position: relative;
-    min-height: 240px;
+    min-height: 200px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    background: var(--surface);
   }
   .drop-zone:hover, .drop-zone.dragover {
     border-color: var(--accent);
-    background: rgba(167, 139, 250, 0.04);
+    background: var(--accent-subtle);
   }
   .drop-zone.has-images {
-    padding: 8px;
-    border-style: solid;
-    border-color: var(--border);
+    padding: 10px;
     min-height: auto;
   }
   .drop-zone.has-images:hover { border-color: var(--accent); }
+
   .image-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
     gap: 6px;
     width: 100%;
   }
   .image-thumb {
     position: relative;
-    border-radius: 6px;
+    border-radius: 4px;
     overflow: hidden;
     aspect-ratio: 4/3;
     cursor: pointer;
   }
-  .image-thumb img { width: 100%; height: 100%; object-fit: cover; border-radius: 6px; }
+  .image-thumb img { width: 100%; height: 100%; object-fit: cover; }
   .image-thumb .remove-img {
-    position: absolute; top: 4px; right: 4px; width: 20px; height: 20px;
-    border-radius: 50%; background: rgba(0,0,0,0.7); color: white; border: none;
-    font-size: 11px; cursor: pointer; display: none; align-items: center;
+    position: absolute; top: 4px; right: 4px; width: 18px; height: 18px;
+    border-radius: 50%; background: rgba(0,0,0,0.6); color: white; border: none;
+    font-size: 10px; cursor: pointer; display: none; align-items: center;
     justify-content: center; line-height: 1;
   }
   .image-thumb:hover .remove-img { display: flex; }
   .image-thumb .img-label {
     position: absolute; bottom: 0; left: 0; right: 0; padding: 2px 6px;
-    background: rgba(0,0,0,0.6); font-size: 9px; color: var(--muted);
+    background: rgba(0,0,0,0.5); font-size: 9px; color: rgba(255,255,255,0.8);
     text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    font-family: var(--mono);
   }
   .add-more-btn {
-    border: 1px dashed var(--border); border-radius: 6px; aspect-ratio: 4/3;
-    display: flex; align-items: center; justify-content: center; font-size: 24px;
+    border: 1.5px solid var(--border); border-radius: 4px; aspect-ratio: 4/3;
+    display: flex; align-items: center; justify-content: center; font-size: 20px;
     color: var(--muted); cursor: pointer; transition: all 0.15s;
     background: none; padding: 0; font-family: inherit;
   }
   .add-more-btn:hover { border-color: var(--accent); color: var(--accent); }
+
   .drop-icon {
-    width: 48px; height: 48px; border-radius: 12px; background: var(--surface2);
-    display: flex; align-items: center; justify-content: center; margin-bottom: 16px; font-size: 24px;
+    width: 40px; height: 40px; border-radius: var(--radius);
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 14px; font-size: 20px;
+    background: var(--surface2);
+    border: 1px solid var(--border-light);
   }
-  .drop-title { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
-  .drop-sub { font-size: 12px; color: var(--muted); }
+  .drop-title { font-size: 14px; font-weight: 700; margin-bottom: 4px; letter-spacing: -0.2px; }
+  .drop-sub { font-size: 12px; color: var(--muted); line-height: 1.5; }
   .drop-zone input { display: none; }
 
-  .prompt-section { padding: 0 16px 16px; }
+  /* ── Sections ── */
+  .prompt-section { padding: 16px 20px 0; }
   .prompt-label {
-    font-size: 11px; font-weight: 600; text-transform: uppercase;
-    letter-spacing: 0.5px; color: var(--muted); margin-bottom: 8px;
+    font-size: 10px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.8px; color: var(--muted); margin-bottom: 6px;
+    font-family: var(--mono);
   }
   .prompt-input {
-    width: 100%; background: var(--surface); border: 1px solid var(--border);
-    border-radius: 10px; padding: 12px 14px; color: var(--text);
-    font-family: 'Inter', sans-serif; font-size: 13px; resize: vertical;
-    min-height: 80px; outline: none; transition: border-color 0.2s;
+    width: 100%; background: var(--surface); border: 1.5px solid var(--border);
+    border-radius: var(--radius); padding: 10px 12px; color: var(--text);
+    font-family: var(--sans); font-size: 13px; resize: vertical;
+    min-height: 72px; outline: none; transition: border-color 0.15s;
+    line-height: 1.5;
   }
   .prompt-input:focus { border-color: var(--accent); }
   .prompt-input::placeholder { color: var(--muted); }
 
-  .settings { padding: 0 16px 16px; display: flex; gap: 8px; flex-wrap: wrap; }
+  /* ── Setting Chips ── */
+  .settings { padding: 12px 20px 0; display: flex; gap: 6px; flex-wrap: wrap; }
   .setting-chip {
-    font-size: 11px; padding: 6px 12px; border-radius: 20px;
-    border: 1px solid var(--border); background: var(--surface); color: var(--muted);
-    cursor: pointer; transition: all 0.15s; user-select: none;
-    font-family: 'Inter', sans-serif;
+    font-size: 11px; padding: 5px 10px; border-radius: 4px;
+    border: 1.5px solid var(--border); background: var(--surface); color: var(--muted);
+    cursor: pointer; transition: all 0.12s; user-select: none;
+    font-family: var(--sans); font-weight: 500;
   }
-  .setting-chip:hover { border-color: var(--accent); color: var(--text); }
+  .setting-chip:hover { border-color: var(--text); color: var(--text); }
   .setting-chip.active {
-    border-color: var(--accent); background: rgba(167, 139, 250, 0.1); color: var(--accent);
+    border-color: var(--accent); background: var(--accent-subtle); color: var(--accent);
+    font-weight: 700;
   }
 
-  /* Pipeline Steps */
+  /* ── Pipeline ── */
   .pipeline-section {
-    margin: 0 16px 16px;
+    margin: 16px 20px 0;
     background: var(--surface);
-    border-radius: 10px;
+    border-radius: var(--radius);
     padding: 14px;
-    border: 1px solid var(--border);
+    border: 1.5px solid var(--border);
   }
   .pipeline-header {
     display: flex; align-items: center; justify-content: space-between;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
   }
   .pipeline-title {
-    font-size: 11px; font-weight: 600; text-transform: uppercase;
-    letter-spacing: 0.5px; color: var(--muted);
+    font-size: 10px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.8px; color: var(--muted); font-family: var(--mono);
   }
+
   .pipeline-step {
-    display: flex; align-items: center; gap: 10px; padding: 8px 10px;
-    border-radius: 8px; margin-bottom: 4px; transition: all 0.3s;
-    font-size: 12px; color: var(--muted);
+    display: flex; align-items: center; gap: 10px; padding: 7px 8px;
+    border-radius: 4px; margin-bottom: 2px; transition: all 0.2s;
+    font-size: 12px; color: var(--muted); position: relative;
   }
-  .pipeline-step .step-icon { font-size: 16px; width: 24px; text-align: center; flex-shrink: 0; }
-  .pipeline-step .step-label { flex: 1; }
+  .pipeline-step::before {
+    content: '';
+    position: absolute;
+    left: 19px;
+    top: 28px;
+    width: 1.5px;
+    height: calc(100% - 8px);
+    background: var(--border);
+  }
+  .pipeline-step:last-child::before { display: none; }
+
+  .pipeline-step .step-icon {
+    width: 24px; height: 24px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; flex-shrink: 0;
+    background: var(--surface2); border: 1.5px solid var(--border);
+    position: relative; z-index: 1;
+    font-family: var(--mono); font-weight: 500; color: var(--muted);
+  }
+  .pipeline-step .step-label { flex: 1; font-weight: 500; }
   .pipeline-step .step-status {
-    font-size: 10px; font-family: 'JetBrains Mono', monospace;
-    padding: 2px 8px; border-radius: 10px; background: var(--surface2);
+    font-size: 10px; font-family: var(--mono);
+    padding: 2px 8px; border-radius: 3px; background: var(--surface2);
+    font-weight: 500;
   }
-  .pipeline-step.pending { opacity: 0.5; }
+  .pipeline-step.pending { opacity: 0.45; }
   .pipeline-step.active {
-    background: rgba(167, 139, 250, 0.08); color: var(--text);
-    opacity: 1;
+    background: var(--accent-subtle); color: var(--text); opacity: 1;
+  }
+  .pipeline-step.active .step-icon {
+    background: var(--accent); border-color: var(--accent); color: white;
   }
   .pipeline-step.active .step-status {
-    background: rgba(167, 139, 250, 0.15); color: var(--accent);
+    background: var(--accent-subtle); color: var(--accent);
     animation: pulse-status 1.5s ease-in-out infinite;
   }
   .pipeline-step.done { opacity: 1; color: var(--text); }
+  .pipeline-step.done .step-icon {
+    background: var(--green-bg); border-color: var(--green); color: var(--green);
+  }
   .pipeline-step.done .step-status {
-    background: rgba(52, 211, 153, 0.15); color: var(--green);
+    background: var(--green-bg); color: var(--green);
+  }
+  .pipeline-step.error .step-icon {
+    background: var(--red-bg); border-color: var(--red); color: var(--red);
   }
   .pipeline-step.error .step-status {
-    background: rgba(248, 113, 113, 0.15); color: var(--red);
+    background: var(--red-bg); color: var(--red);
   }
   @keyframes pulse-status {
     0%, 100% { opacity: 1; }
-    50% { opacity: 0.5; }
+    50% { opacity: 0.4; }
   }
 
-  /* Design Tokens Panel */
+  /* ── Generate Button ── */
+  .generate-btn {
+    margin: 16px 20px 20px; padding: 11px 16px; border-radius: var(--radius); border: none;
+    background: var(--text); color: var(--bg);
+    font-family: var(--sans); font-size: 13px;
+    font-weight: 700; cursor: pointer; transition: all 0.15s;
+    letter-spacing: -0.2px;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+  }
+  .generate-btn:hover { background: #000; }
+  .generate-btn:active { transform: scale(0.98); }
+  .generate-btn:disabled { opacity: 0.25; cursor: not-allowed; transform: none; }
+
+  /* ── Design Tokens ── */
   .tokens-section {
-    margin: 0 16px 16px;
+    margin: 0 20px 16px;
     background: var(--surface);
-    border-radius: 10px;
-    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    border: 1.5px solid var(--border);
     overflow: hidden;
   }
   .tokens-header {
     display: flex; align-items: center; justify-content: space-between;
-    padding: 12px 14px; cursor: pointer; transition: background 0.15s;
+    padding: 10px 14px; cursor: pointer; transition: background 0.12s;
   }
   .tokens-header:hover { background: var(--surface2); }
-  .tokens-header-left {
-    display: flex; align-items: center; gap: 8px;
-  }
+  .tokens-header-left { display: flex; align-items: center; gap: 8px; }
   .tokens-header .tokens-title {
-    font-size: 11px; font-weight: 600; text-transform: uppercase;
-    letter-spacing: 0.5px; color: var(--muted);
+    font-size: 10px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.8px; color: var(--muted); font-family: var(--mono);
   }
   .tokens-header .tokens-chevron {
-    font-size: 12px; color: var(--muted); transition: transform 0.2s;
+    font-size: 10px; color: var(--muted); transition: transform 0.2s;
   }
   .tokens-header .tokens-chevron.open { transform: rotate(180deg); }
   .tokens-body { padding: 0 14px 14px; display: none; }
@@ -224,114 +308,102 @@
   .token-group { margin-bottom: 14px; }
   .token-group:last-child { margin-bottom: 0; }
   .token-group-label {
-    font-size: 10px; font-weight: 600; text-transform: uppercase;
-    letter-spacing: 0.5px; color: var(--muted); margin-bottom: 8px;
+    font-size: 9px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 1px; color: var(--muted); margin-bottom: 8px;
+    font-family: var(--mono);
   }
-  .token-colors {
-    display: flex; flex-wrap: wrap; gap: 6px;
-  }
+  .token-colors { display: flex; flex-wrap: wrap; gap: 5px; }
   .token-color {
-    display: flex; align-items: center; gap: 6px; padding: 4px 8px;
-    background: var(--surface2); border-radius: 6px; border: 1px solid var(--border);
-    cursor: pointer; transition: border-color 0.15s;
+    display: flex; align-items: center; gap: 6px; padding: 4px 8px 4px 4px;
+    background: var(--surface2); border-radius: 4px; border: 1px solid var(--border-light);
+    cursor: pointer; transition: border-color 0.12s;
   }
   .token-color:hover { border-color: var(--accent); }
   .token-swatch {
-    width: 16px; height: 16px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.1);
+    width: 16px; height: 16px; border-radius: 3px; border: 1px solid rgba(0,0,0,0.08);
     flex-shrink: 0;
   }
-  .token-color-info {
-    display: flex; flex-direction: column;
-  }
-  .token-color-name { font-size: 9px; color: var(--muted); }
+  .token-color-info { display: flex; flex-direction: column; }
+  .token-color-name { font-size: 9px; color: var(--muted); font-family: var(--mono); }
   .token-color-value {
-    font-size: 10px; font-family: 'JetBrains Mono', monospace; color: var(--text);
+    font-size: 10px; font-family: var(--mono); color: var(--text);
     background: none; border: none; padding: 0; width: 70px; outline: none;
   }
   .token-color-value:focus { color: var(--accent); }
 
-  .token-list { display: flex; flex-direction: column; gap: 4px; }
+  .token-list { display: flex; flex-direction: column; gap: 3px; }
   .token-item {
     display: flex; align-items: center; justify-content: space-between;
-    padding: 4px 8px; background: var(--surface2); border-radius: 6px;
-    font-size: 11px; border: 1px solid var(--border);
+    padding: 4px 8px; background: var(--surface2); border-radius: 4px;
+    font-size: 11px; border: 1px solid var(--border-light);
   }
-  .token-item-name { color: var(--muted); font-size: 9px; }
+  .token-item-name { color: var(--muted); font-size: 9px; font-family: var(--mono); }
   .token-item-value {
-    font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--text);
+    font-family: var(--mono); font-size: 10px; color: var(--text);
     background: none; border: none; text-align: right; width: 80px; outline: none; padding: 0;
   }
   .token-item-value:focus { color: var(--accent); }
-  .token-item-preview {
-    font-size: 10px; color: var(--muted); margin-left: 4px;
-  }
+  .token-item-preview { font-size: 10px; color: var(--muted); margin-left: 4px; }
 
-  .generate-btn {
-    margin: 0 16px 16px; padding: 12px; border-radius: 10px; border: none;
-    background: linear-gradient(135deg, var(--accent), var(--accent2));
-    color: white; font-family: 'Inter', sans-serif; font-size: 14px;
-    font-weight: 600; cursor: pointer; transition: opacity 0.2s, transform 0.1s;
-  }
-  .generate-btn:hover { opacity: 0.9; }
-  .generate-btn:active { transform: scale(0.98); }
-  .generate-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
-
-  /* Agent Analysis Quotes */
+  /* ── Agent Quotes ── */
   .quote-section {
-    margin: 0 16px 16px; padding: 16px; background: var(--surface);
-    border-radius: 10px; border-left: 3px solid var(--accent);
+    margin: 0 20px 16px; padding: 14px; background: var(--surface);
+    border-radius: var(--radius); border: 1.5px solid var(--border);
+    border-left: 3px solid var(--accent);
   }
   .quote-label {
-    font-size: 10px; font-weight: 600; text-transform: uppercase;
-    letter-spacing: 0.8px; color: var(--accent); margin-bottom: 8px;
+    font-size: 9px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 1px; color: var(--accent); margin-bottom: 8px;
+    font-family: var(--mono);
   }
   .quote-text { font-size: 13px; line-height: 1.6; color: var(--text); font-style: italic; }
-  .quote-meta { margin-top: 10px; font-size: 11px; color: var(--muted); }
-  .quote-meta strong { color: var(--text); font-weight: 500; }
+  .quote-meta { margin-top: 10px; font-size: 11px; color: var(--muted); line-height: 1.5; }
+  .quote-meta strong { color: var(--text); font-weight: 600; }
 
-  .agent-summaries { margin-top: 12px; display: flex; flex-direction: column; gap: 8px; }
+  .agent-summaries { margin-top: 12px; display: flex; flex-direction: column; gap: 6px; }
   .agent-summary {
-    padding: 10px 12px; background: var(--surface2); border-radius: 8px;
+    padding: 10px 12px; background: var(--surface2); border-radius: 4px;
     border-left: 2px solid var(--border);
   }
   .agent-summary-header {
-    font-size: 10px; font-weight: 600; text-transform: uppercase;
-    letter-spacing: 0.5px; color: var(--accent); margin-bottom: 4px;
+    font-size: 9px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.8px; color: var(--accent); margin-bottom: 4px;
     display: flex; align-items: center; gap: 6px;
+    font-family: var(--mono);
   }
-  .agent-summary-text {
-    font-size: 11px; line-height: 1.5; color: var(--muted);
-  }
+  .agent-summary-text { font-size: 11px; line-height: 1.5; color: var(--muted); }
 
-  .analysis-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+  .analysis-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 12px; }
   .tag {
-    font-size: 10px; padding: 3px 8px; border-radius: 4px;
-    font-weight: 500; font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; padding: 2px 8px; border-radius: 3px;
+    font-weight: 500; font-family: var(--mono);
   }
-  .tag.good { background: rgba(52, 211, 153, 0.1); color: var(--green); }
-  .tag.warn { background: rgba(251, 191, 36, 0.1); color: var(--amber); }
-  .tag.info { background: rgba(167, 139, 250, 0.1); color: var(--accent); }
+  .tag.good { background: var(--green-bg); color: var(--green); }
+  .tag.warn { background: var(--amber-bg); color: var(--amber); }
+  .tag.info { background: var(--accent-subtle); color: var(--accent); }
 
-  .right-panel { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+  /* ── Right Panel ── */
+  .right-panel { flex: 1; display: flex; flex-direction: column; overflow: hidden; background: var(--surface); }
 
   .output-tabs {
-    display: flex; border-bottom: 1px solid var(--border); padding: 0 16px;
+    display: flex; border-bottom: 1px solid var(--border); padding: 0 20px;
+    background: var(--bg);
   }
   .output-tab {
-    padding: 12px 16px; font-size: 12px; font-weight: 500; color: var(--muted);
-    cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.15s;
+    padding: 10px 14px; font-size: 12px; font-weight: 500; color: var(--muted);
+    cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.12s;
     background: none; border-top: none; border-left: none; border-right: none;
-    font-family: 'Inter', sans-serif;
+    font-family: var(--sans);
   }
   .output-tab:hover { color: var(--text); }
-  .output-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+  .output-tab.active { color: var(--text); border-bottom-color: var(--text); font-weight: 700; }
 
   .output-content { flex: 1; overflow: hidden; position: relative; }
 
-  .code-view { height: 100%; overflow: auto; padding: 16px; display: none; }
+  .code-view { height: 100%; overflow: auto; padding: 20px; display: none; background: #1b1b1f; }
   .code-view.active { display: block; }
   .code-view pre {
-    font-family: 'JetBrains Mono', monospace; font-size: 12px; line-height: 1.7;
+    font-family: var(--mono); font-size: 12px; line-height: 1.7;
     color: #c9d1d9; white-space: pre-wrap; word-break: break-word;
   }
 
@@ -341,139 +413,145 @@
 
   .empty-state {
     height: 100%; display: flex; flex-direction: column; align-items: center;
-    justify-content: center; color: var(--muted); gap: 12px;
+    justify-content: center; color: var(--muted); gap: 10px;
+    background: var(--bg);
   }
-  .empty-state .icon { font-size: 40px; opacity: 0.3; }
+  .empty-state .icon {
+    font-size: 32px; opacity: 0.15; font-weight: 300;
+    font-family: var(--mono);
+  }
   .empty-state p { font-size: 13px; }
 
   .loading-overlay {
-    position: absolute; inset: 0; background: rgba(10, 10, 11, 0.85);
+    position: absolute; inset: 0; background: rgba(250, 250, 248, 0.92);
     display: none; flex-direction: column; align-items: center;
-    justify-content: center; gap: 16px; z-index: 10;
+    justify-content: center; gap: 14px; z-index: 10;
+    backdrop-filter: blur(4px);
   }
   .loading-overlay.active { display: flex; }
   .spinner {
-    width: 32px; height: 32px; border: 3px solid var(--border);
+    width: 24px; height: 24px; border: 2px solid var(--border);
     border-top-color: var(--accent); border-radius: 50%;
-    animation: spin 0.8s linear infinite;
+    animation: spin 0.7s linear infinite;
   }
   @keyframes spin { to { transform: rotate(360deg); } }
-  .loading-text { font-size: 13px; color: var(--muted); }
-  .loading-step {
-    font-size: 11px; color: var(--accent); font-family: 'JetBrains Mono', monospace;
-  }
+  .loading-text { font-size: 13px; color: var(--text); font-weight: 500; }
+  .loading-step { font-size: 11px; color: var(--muted); font-family: var(--mono); }
 
   .code-actions {
     position: absolute; top: 12px; right: 12px; display: flex; gap: 6px; z-index: 5;
   }
   .action-btn {
-    padding: 6px 12px; border-radius: 6px; border: 1px solid var(--border);
-    background: var(--surface); color: var(--muted); font-size: 11px;
-    font-family: 'Inter', sans-serif; cursor: pointer; transition: all 0.15s;
-    white-space: nowrap;
+    padding: 5px 10px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.15);
+    background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.6); font-size: 11px;
+    font-family: var(--mono); cursor: pointer; transition: all 0.12s;
+    white-space: nowrap; font-weight: 500;
   }
-  .action-btn:hover { color: var(--text); border-color: var(--accent); }
+  .action-btn:hover { color: white; border-color: rgba(255,255,255,0.3); background: rgba(255,255,255,0.12); }
   .action-btn.primary {
-    background: rgba(167, 139, 250, 0.1); border-color: var(--accent); color: var(--accent);
+    background: var(--accent); border-color: var(--accent); color: white;
   }
-  .action-btn.primary:hover { background: rgba(167, 139, 250, 0.2); }
+  .action-btn.primary:hover { background: #0048d4; }
 
   .export-menu {
     position: absolute; top: 42px; right: 12px; background: var(--surface);
-    border: 1px solid var(--border); border-radius: 10px; padding: 8px;
+    border: 1.5px solid var(--border); border-radius: var(--radius); padding: 6px;
     z-index: 20; min-width: 260px; display: none;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.12);
   }
   .export-menu.active { display: block; }
   .export-item {
-    display: flex; align-items: flex-start; gap: 10px; padding: 10px 12px;
-    border-radius: 6px; cursor: pointer; transition: background 0.1s;
+    display: flex; align-items: flex-start; gap: 10px; padding: 8px 10px;
+    border-radius: 4px; cursor: pointer; transition: background 0.1s;
     border: none; background: none; width: 100%; text-align: left;
-    font-family: 'Inter', sans-serif;
+    font-family: var(--sans);
   }
   .export-item:hover { background: var(--surface2); }
-  .export-item .icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+  .export-item .icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
   .export-item .label { font-size: 12px; font-weight: 600; color: var(--text); }
   .export-item .desc { font-size: 10px; color: var(--muted); margin-top: 2px; line-height: 1.4; }
 
+  /* ── Modals ── */
   .modal-overlay {
-    position: fixed; inset: 0; background: rgba(0,0,0,0.7);
+    position: fixed; inset: 0; background: rgba(0,0,0,0.4);
     display: none; align-items: center; justify-content: center; z-index: 100;
+    backdrop-filter: blur(4px);
   }
   .modal-overlay.active { display: flex; }
   .modal {
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: 16px; padding: 32px; width: 400px; max-width: 90vw;
+    background: var(--surface); border: 1.5px solid var(--border);
+    border-radius: 8px; padding: 28px; width: 380px; max-width: 90vw;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.12);
   }
-  .modal h3 { font-size: 16px; font-weight: 600; margin-bottom: 8px; }
-  .modal p { font-size: 12px; color: var(--muted); margin-bottom: 16px; line-height: 1.5; }
+  .modal h3 { font-size: 16px; font-weight: 700; margin-bottom: 6px; letter-spacing: -0.3px; }
+  .modal p { font-size: 12px; color: var(--muted); margin-bottom: 16px; line-height: 1.6; }
   .modal input {
-    width: 100%; padding: 10px 12px; border-radius: 8px; border: 1px solid var(--border);
-    background: var(--bg); color: var(--text); font-family: 'JetBrains Mono', monospace;
+    width: 100%; padding: 9px 12px; border-radius: var(--radius); border: 1.5px solid var(--border);
+    background: var(--bg); color: var(--text); font-family: var(--mono);
     font-size: 12px; margin-bottom: 12px; outline: none;
   }
   .modal input:focus { border-color: var(--accent); }
   .modal button {
-    width: 100%; padding: 10px; border-radius: 8px; border: none;
-    background: var(--accent); color: white; font-weight: 600; cursor: pointer;
+    width: 100%; padding: 9px; border-radius: var(--radius); border: none;
+    background: var(--text); color: var(--bg); font-weight: 700; cursor: pointer;
+    font-family: var(--sans); font-size: 13px;
   }
+  .modal button:hover { background: #000; }
 
+  /* ── Mobile ── */
   @media (max-width: 800px) {
     .app { flex-direction: column; }
     .left-panel { width: 100%; min-width: auto; border-right: none; border-bottom: 1px solid var(--border); max-height: 50vh; }
+    .header { padding: 0 16px; }
+    .header-sub { display: none; }
   }
 </style>
 </head>
 <body>
 
 <div class="header">
-  <div>
+  <div style="display:flex;align-items:center;">
     <div class="logo">Design <span>→</span> Code</div>
-    <div class="header-sub">Design Director — Multi-agent analysis pipeline</div>
+    <div class="header-sub">Multi-agent analysis pipeline</div>
   </div>
-  <div style="display:flex;gap:8px;align-items:center;">
-    <button class="setting-chip" onclick="showHelpModal()">❓ How to Use</button>
-    <button class="setting-chip" onclick="showApiModal()" id="apiStatus">⚙️ API Key</button>
+  <div style="display:flex;gap:6px;align-items:center;">
+    <button class="setting-chip" onclick="showHelpModal()">? Help</button>
+    <button class="setting-chip" onclick="showApiModal()" id="apiStatus">API Key</button>
   </div>
 </div>
 
 <!-- Help Modal -->
-<div id="helpModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:100;align-items:center;justify-content:center;padding:20px" onclick="if(event.target===this)this.style.display='none'">
-  <div style="background:#1a1a2e;border:1px solid #333;border-radius:16px;max-width:640px;width:100%;max-height:85vh;overflow-y:auto;padding:32px">
+<div id="helpModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:100;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(4px)" onclick="if(event.target===this)this.style.display='none'">
+  <div style="background:var(--surface);border:1.5px solid var(--border);border-radius:8px;max-width:600px;width:100%;max-height:85vh;overflow-y:auto;padding:28px;box-shadow:0 20px 60px rgba(0,0,0,0.12)">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
-      <h2 style="font-size:20px;font-weight:700">How to Use Design → Code</h2>
-      <button onclick="document.getElementById('helpModal').style.display='none'" style="background:none;border:none;color:#888;font-size:24px;cursor:pointer">&times;</button>
+      <h2 style="font-size:18px;font-weight:700;letter-spacing:-0.3px">How to Use</h2>
+      <button onclick="document.getElementById('helpModal').style.display='none'" style="background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer">&times;</button>
     </div>
-    <div style="font-size:14px;line-height:1.7;color:#ccc">
-      <h3 style="color:#fff;font-size:15px;margin:16px 0 8px">📸 Step 1: Get Your Inspiration</h3>
+    <div style="font-size:13px;line-height:1.7;color:var(--muted)">
+      <h3 style="color:var(--text);font-size:13px;margin:16px 0 6px;font-family:var(--mono);text-transform:uppercase;letter-spacing:0.5px;font-weight:700">01 — Get Your Inspiration</h3>
       <p>Screenshot any UI you like — a website, app, Dribbble shot, even a napkin sketch.</p>
-      <div style="background:#12121a;border:1px solid #333;border-radius:8px;padding:12px;margin:8px 0;font-size:13px">
-        <strong style="color:#00e87b">How to screenshot:</strong><br>
-        • <strong>Mac:</strong> Cmd + Shift + 4 → drag to select area<br>
-        • <strong>Windows:</strong> Win + Shift + S → drag to select area<br>
-        • <strong>Chrome:</strong> Right-click → Inspect → Cmd+Shift+P → "Capture screenshot"<br>
-        • <strong>iPhone:</strong> Side button + Volume up<br>
-        • <strong>Android:</strong> Power + Volume down
+      <div style="background:var(--surface2);border:1px solid var(--border-light);border-radius:4px;padding:12px;margin:8px 0;font-size:12px;font-family:var(--mono)">
+        <strong style="color:var(--green)">How to screenshot:</strong><br>
+        Mac: Cmd + Shift + 4<br>
+        Windows: Win + Shift + S<br>
+        Chrome: Cmd+Shift+P → "Capture screenshot"
       </div>
-      <p style="font-size:12px;color:#888">💡 Tip: Drop multiple images as a moodboard — the agents will synthesize the best elements from each.</p>
+      <p style="font-size:11px;color:var(--muted);font-style:italic">Tip: Drop multiple images as a moodboard — the agents will synthesize the best elements.</p>
 
-      <h3 style="color:#fff;font-size:15px;margin:16px 0 8px">🤖 Step 2: Multi-Agent Pipeline</h3>
-      <p>When you hit Generate, 4 specialized agents analyze your design in sequence:</p>
-      <div style="background:#12121a;border:1px solid #333;border-radius:8px;padding:12px;margin:8px 0;font-size:13px">
-        • <strong>Layout Agent:</strong> Grid structure, spacing, alignment, responsive patterns<br>
-        • <strong>Typography Agent:</strong> Font families, sizes, weights, hierarchy<br>
-        • <strong>Color Agent:</strong> Full palette with semantic roles<br>
-        • <strong>Motion Agent:</strong> Animations, transitions, hover states
+      <h3 style="color:var(--text);font-size:13px;margin:16px 0 6px;font-family:var(--mono);text-transform:uppercase;letter-spacing:0.5px;font-weight:700">02 — Multi-Agent Pipeline</h3>
+      <p>When you hit Generate, 4 specialized agents analyze your design:</p>
+      <div style="background:var(--surface2);border:1px solid var(--border-light);border-radius:4px;padding:12px;margin:8px 0;font-size:12px;font-family:var(--mono);line-height:1.8">
+        Layout → Grid, spacing, alignment<br>
+        Typography → Fonts, scale, hierarchy<br>
+        Color → Full palette, semantic roles<br>
+        Motion → Animations, transitions, hover
       </div>
 
-      <h3 style="color:#fff;font-size:15px;margin:16px 0 8px">🎨 Step 3: Design Tokens</h3>
-      <p>After analysis, extracted tokens appear in the sidebar. Edit colors, typography, spacing before generating code — the code will use your exact tokens as CSS variables.</p>
+      <h3 style="color:var(--text);font-size:13px;margin:16px 0 6px;font-family:var(--mono);text-transform:uppercase;letter-spacing:0.5px;font-weight:700">03 — Design Tokens</h3>
+      <p>Extracted tokens appear in the sidebar. Edit before generating — the code uses your exact values as CSS variables.</p>
 
-      <h3 style="color:#fff;font-size:15px;margin:16px 0 8px">🚀 Step 4: Generate & Export</h3>
-      <p>All agent analyses + your tokens feed into the final code generation for dramatically better output.</p>
-
-      <h3 style="color:#fff;font-size:15px;margin:16px 0 8px">🔑 API Key</h3>
-      <p>You need a Claude API key from <a href="https://console.anthropic.com" target="_blank" style="color:#00e87b">console.anthropic.com</a>. It stays in your browser's localStorage.</p>
+      <h3 style="color:var(--text);font-size:13px;margin:16px 0 6px;font-family:var(--mono);text-transform:uppercase;letter-spacing:0.5px;font-weight:700">04 — API Key</h3>
+      <p>You need a Claude API key from <a href="https://console.anthropic.com" target="_blank" style="color:var(--accent);text-decoration:none;border-bottom:1px solid var(--accent)">console.anthropic.com</a>. Stored in localStorage only.</p>
     </div>
   </div>
 </div>
@@ -482,90 +560,90 @@
   <div class="left-panel">
     <div class="drop-zone" id="dropZone" aria-label="Drop zone for design images. Click or drag and drop images here." role="button" tabindex="0" onclick="if(!this.classList.contains('has-images'))document.getElementById('fileInput').click()">
       <input type="file" id="fileInput" accept="image/*" multiple onchange="Array.from(this.files).forEach(handleFile)">
-      <div class="drop-icon">🎨</div>
-      <div class="drop-title">Drop your design inspiration</div>
-      <div class="drop-sub">Screenshot, mockup, Dribbble shot, napkin sketch — anything</div>
+      <div class="drop-icon">↑</div>
+      <div class="drop-title">Drop your design</div>
+      <div class="drop-sub">Screenshot, mockup, sketch — anything visual</div>
     </div>
 
     <div class="prompt-section">
-      <div class="prompt-label">Who is this for?</div>
-      <textarea class="prompt-input" id="audienceInput" style="min-height:50px" placeholder="e.g. 'Law firm partners, 40-60 yrs old, not tech savvy' or 'Gen Z podcast creators'"></textarea>
+      <div class="prompt-label">Audience</div>
+      <textarea class="prompt-input" id="audienceInput" style="min-height:44px" placeholder="e.g. 'Law firm partners, 40-60 yrs old' or 'Gen Z podcast creators'"></textarea>
     </div>
 
     <div class="prompt-section">
-      <div class="prompt-label">What are you building?</div>
-      <textarea class="prompt-input" id="promptInput" placeholder="e.g. 'A shoppable podcast page' or 'A CRM dashboard for legal assistants' — be specific"></textarea>
+      <div class="prompt-label">Product</div>
+      <textarea class="prompt-input" id="promptInput" placeholder="e.g. 'A shoppable podcast page' or 'CRM dashboard for legal assistants'"></textarea>
     </div>
 
     <div class="settings">
-      <div class="prompt-label" style="width:100%;margin-bottom:4px">Output</div>
+      <div class="prompt-label" style="width:100%;margin-bottom:2px">Output</div>
       <button class="setting-chip active" data-output="html" aria-label="Output: HTML/CSS" onclick="setOutput(this)">HTML/CSS</button>
-      <button class="setting-chip" data-output="react" aria-label="Output: React + Tailwind" onclick="setOutput(this)">React + Tailwind</button>
+      <button class="setting-chip" data-output="react" aria-label="Output: React + Tailwind" onclick="setOutput(this)">React</button>
       <button class="setting-chip" data-output="nextjs" aria-label="Output: Next.js" onclick="setOutput(this)">Next.js</button>
       <button class="setting-chip" data-output="vue" aria-label="Output: Vue" onclick="setOutput(this)">Vue</button>
     </div>
     <div class="settings">
-      <div class="prompt-label" style="width:100%;margin-bottom:4px">Style</div>
+      <div class="prompt-label" style="width:100%;margin-bottom:2px">Fidelity</div>
       <button class="setting-chip active" data-style="faithful" aria-label="Style: Faithful" onclick="setStyle(this)">Faithful</button>
       <button class="setting-chip" data-style="improved" aria-label="Style: Improved" onclick="setStyle(this)">Improved</button>
       <button class="setting-chip" data-style="reimagined" aria-label="Style: Reimagined" onclick="setStyle(this)">Reimagined</button>
     </div>
 
     <div class="settings" id="uiFrameworkSettings">
-      <div class="prompt-label" style="width:100%;margin-bottom:4px">UI Framework</div>
+      <div class="prompt-label" style="width:100%;margin-bottom:2px">UI Framework</div>
       <button class="setting-chip" data-uifw="none" aria-label="UI Framework: None" onclick="setUiFramework(this)">None</button>
       <button class="setting-chip active" data-uifw="shadcn" aria-label="UI Framework: shadcn/ui" onclick="setUiFramework(this)">shadcn/ui</button>
     </div>
 
     <div class="settings" id="iconSettings">
-      <div class="prompt-label" style="width:100%;margin-bottom:4px">Icon Library</div>
+      <div class="prompt-label" style="width:100%;margin-bottom:2px">Icons</div>
       <button class="setting-chip active" data-icons="lucide" aria-label="Icon Library: Lucide" onclick="setIcons(this)">Lucide</button>
       <button class="setting-chip" data-icons="phosphor" aria-label="Icon Library: Phosphor" onclick="setIcons(this)">Phosphor</button>
       <button class="setting-chip" data-icons="hugeicons" aria-label="Icon Library: Hugeicons" onclick="setIcons(this)">Hugeicons</button>
-      <button class="setting-chip" data-icons="none" aria-label="Icon Library: Inline SVG" onclick="setIcons(this)">Inline SVG</button>
+      <button class="setting-chip" data-icons="none" aria-label="Icon Library: Inline SVG" onclick="setIcons(this)">SVG</button>
     </div>
 
     <div class="settings" id="enhancementSettings">
-      <div class="prompt-label" style="width:100%;margin-bottom:4px">Enhancements</div>
-      <button class="setting-chip" data-enhance="motion" aria-label="Enhancement: Motion" onclick="toggleEnhance(this)">🎬 Motion</button>
-      <button class="setting-chip" data-enhance="glassmorphism" aria-label="Enhancement: Glass" onclick="toggleEnhance(this)">🪟 Glass</button>
-      <button class="setting-chip" data-enhance="gradients" aria-label="Enhancement: Gradients" onclick="toggleEnhance(this)">🌈 Gradients</button>
-      <button class="setting-chip" data-enhance="3d" aria-label="Enhancement: 3D Depth" onclick="toggleEnhance(this)">🧊 3D Depth</button>
-      <button class="setting-chip" data-enhance="particles" aria-label="Enhancement: Particles" onclick="toggleEnhance(this)">✨ Particles</button>
-      <button class="setting-chip" data-enhance="darkmode" aria-label="Enhancement: Dark Mode" onclick="toggleEnhance(this)">🌙 Dark Mode</button>
-      <button class="setting-chip" data-enhance="scroll" aria-label="Enhancement: Scroll FX" onclick="toggleEnhance(this)">📜 Scroll FX</button>
-      <button class="setting-chip" data-enhance="microinteractions" aria-label="Enhancement: Micro-interactions" onclick="toggleEnhance(this)">👆 Micro-interactions</button>
-      <button class="setting-chip" data-enhance="shaders" aria-label="Enhancement: Shaders" onclick="toggleEnhance(this)">🌊 Shaders</button>
+      <div class="prompt-label" style="width:100%;margin-bottom:2px">Enhance</div>
+      <button class="setting-chip" data-enhance="motion" aria-label="Enhancement: Motion" onclick="toggleEnhance(this)">Motion</button>
+      <button class="setting-chip" data-enhance="glassmorphism" aria-label="Enhancement: Glass" onclick="toggleEnhance(this)">Glass</button>
+      <button class="setting-chip" data-enhance="gradients" aria-label="Enhancement: Gradients" onclick="toggleEnhance(this)">Gradients</button>
+      <button class="setting-chip" data-enhance="3d" aria-label="Enhancement: 3D Depth" onclick="toggleEnhance(this)">3D Depth</button>
+      <button class="setting-chip" data-enhance="particles" aria-label="Enhancement: Particles" onclick="toggleEnhance(this)">Particles</button>
+      <button class="setting-chip" data-enhance="darkmode" aria-label="Enhancement: Dark Mode" onclick="toggleEnhance(this)">Dark Mode</button>
+      <button class="setting-chip" data-enhance="scroll" aria-label="Enhancement: Scroll FX" onclick="toggleEnhance(this)">Scroll FX</button>
+      <button class="setting-chip" data-enhance="microinteractions" aria-label="Enhancement: Micro-interactions" onclick="toggleEnhance(this)">Micro-int.</button>
+      <button class="setting-chip" data-enhance="shaders" aria-label="Enhancement: Shaders" onclick="toggleEnhance(this)">Shaders</button>
     </div>
 
     <!-- Pipeline Section -->
     <div class="pipeline-section" id="pipelineSection">
       <div class="pipeline-header">
-        <div class="pipeline-title">🤖 Analysis Pipeline</div>
+        <div class="pipeline-title">Pipeline</div>
       </div>
       <div id="pipelineSteps">
         <div class="pipeline-step pending" id="step-layout">
-          <div class="step-icon">🔍</div>
+          <div class="step-icon">01</div>
           <div class="step-label">Layout Agent</div>
           <div class="step-status">waiting</div>
         </div>
         <div class="pipeline-step pending" id="step-typography">
-          <div class="step-icon">✏️</div>
+          <div class="step-icon">02</div>
           <div class="step-label">Typography Agent</div>
           <div class="step-status">waiting</div>
         </div>
         <div class="pipeline-step pending" id="step-color">
-          <div class="step-icon">🎨</div>
+          <div class="step-icon">03</div>
           <div class="step-label">Color Agent</div>
           <div class="step-status">waiting</div>
         </div>
         <div class="pipeline-step pending" id="step-motion">
-          <div class="step-icon">✨</div>
+          <div class="step-icon">04</div>
           <div class="step-label">Motion Agent</div>
           <div class="step-status">waiting</div>
         </div>
         <div class="pipeline-step pending" id="step-codegen">
-          <div class="step-icon">🏗️</div>
+          <div class="step-icon">05</div>
           <div class="step-label">Code Generation</div>
           <div class="step-status">waiting</div>
         </div>
@@ -573,12 +651,12 @@
     </div>
 
     <button class="generate-btn" id="generateBtn" onclick="generate()" disabled>
-      ✨ Generate Code
+      Generate Code
     </button>
 
     <!-- Agent Analysis Summaries -->
     <div class="quote-section" id="quoteSection" style="display:none">
-      <div class="quote-label">🎨 Design Director Analysis</div>
+      <div class="quote-label">Design Director</div>
       <div class="quote-text" id="quoteText"></div>
       <div class="quote-meta" id="quoteMeta"></div>
       <div class="agent-summaries" id="agentSummaries"></div>
@@ -589,7 +667,7 @@
     <div class="tokens-section" id="tokensSection" style="display:none">
       <div class="tokens-header" role="button" tabindex="0" aria-label="Toggle design tokens panel" onclick="toggleTokens()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleTokens();}">
         <div class="tokens-header-left">
-          <div class="tokens-title">🎯 Design Tokens</div>
+          <div class="tokens-title">Design Tokens</div>
         </div>
         <div class="tokens-chevron" id="tokensChevron">▼</div>
       </div>
@@ -622,35 +700,35 @@
 
       <div class="code-view" id="codeView" role="tabpanel" aria-labelledby="tab-code">
         <div class="code-actions">
-          <button class="action-btn" onclick="copyCode()">📋 Copy Code</button>
-          <button class="action-btn primary" id="exportToggleBtn" aria-expanded="false" onclick="toggleExportMenu()">🚀 Export ▾</button>
+          <button class="action-btn" onclick="copyCode()">Copy</button>
+          <button class="action-btn primary" id="exportToggleBtn" aria-expanded="false" onclick="toggleExportMenu()">Export ▾</button>
         </div>
         <div class="export-menu" id="exportMenu">
           <button class="export-item" type="button" onclick="exportCursorPrompt()">
             <div class="icon">⚡</div>
             <div>
-              <div class="label">Copy as Cursor Prompt</div>
+              <div class="label">Cursor Prompt</div>
               <div class="desc">Code + context as a prompt for Cursor's chat.</div>
             </div>
           </button>
           <button class="export-item" type="button" onclick="exportClaudePrompt()">
-            <div class="icon">🤖</div>
+            <div class="icon">→</div>
             <div>
-              <div class="label">Copy as Claude/ChatGPT Prompt</div>
+              <div class="label">Claude / ChatGPT Prompt</div>
               <div class="desc">Full context prompt with design specs and code.</div>
             </div>
           </button>
           <button class="export-item" type="button" onclick="downloadFile()">
-            <div class="icon">💾</div>
+            <div class="icon">↓</div>
             <div>
               <div class="label">Download File</div>
               <div class="desc">Save as .html, .tsx, .vue — ready to use.</div>
             </div>
           </button>
           <button class="export-item" type="button" onclick="exportComponentSpec()">
-            <div class="icon">📐</div>
+            <div class="icon">◫</div>
             <div>
-              <div class="label">Copy Component Spec</div>
+              <div class="label">Component Spec</div>
               <div class="desc">Design tokens + spec doc for your team.</div>
             </div>
           </button>
@@ -664,10 +742,10 @@
 <!-- API Key Modal -->
 <div class="modal-overlay" id="apiModal">
   <div class="modal">
-    <h3>Anthropic API Key</h3>
-    <p>Enter your Claude API key for vision analysis. Stored locally in your browser only — never sent anywhere except Anthropic's API.</p>
+    <h3>API Key</h3>
+    <p>Enter your Claude API key. Stored in localStorage only — never sent anywhere except Anthropic's API.</p>
     <input type="password" id="apiKeyInput" placeholder="sk-ant-api03-..." />
-    <button onclick="saveApiKey()">Save Key</button>
+    <button onclick="saveApiKey()">Save</button>
   </div>
 </div>
 
@@ -699,12 +777,12 @@
     const key = document.getElementById('apiKeyInput').value.trim();
     if (key) {
       localStorage.setItem('anthropic_api_key', key);
-      document.getElementById('apiStatus').textContent = '✅ API Key';
+      document.getElementById('apiStatus').textContent = '✓ API Key';
       document.getElementById('apiModal').classList.remove('active');
       updateGenerateBtn();
     }
   }
-  if (getApiKey()) document.getElementById('apiStatus').textContent = '✅ API Key';
+  if (getApiKey()) document.getElementById('apiStatus').textContent = '✓ API Key';
 
   // Drag & Drop
   const dropZone = document.getElementById('dropZone');
@@ -745,9 +823,9 @@
     if (images.length === 0) {
       dropZone.classList.remove('has-images');
       dropZone.innerHTML = `<input type="file" id="fileInput" accept="image/*" multiple onchange="Array.from(this.files).forEach(handleFile)">
-        <div class="drop-icon">🎨</div>
-        <div class="drop-title">Drop your design inspiration</div>
-        <div class="drop-sub">Screenshots, mockups, Dribbble shots — drop multiple for a moodboard</div>`;
+        <div class="drop-icon">↑</div>
+        <div class="drop-title">Drop your design</div>
+        <div class="drop-sub">Screenshot, mockup, sketch — anything visual</div>`;
       return;
     }
     dropZone.classList.add('has-images');
@@ -890,14 +968,11 @@
   }
 
   function parseJSON(text) {
-    // 1. Try direct parse
     try { return JSON.parse(text); } catch (_) {}
-    // 2. Try extracting from markdown code blocks
     const codeBlockMatch = text.match(/```(?:json)?\s*\n([\s\S]*?)\n```/);
     if (codeBlockMatch) {
       try { return JSON.parse(codeBlockMatch[1]); } catch (_) {}
     }
-    // 3. Fall back to greedy regex for first { ... }
     const braceMatch = text.match(/\{[\s\S]*\}/);
     if (braceMatch) {
       try { return JSON.parse(braceMatch[0]); } catch (_) {}
@@ -990,7 +1065,6 @@ Respond ONLY with valid JSON, no markdown fences:
     const container = document.getElementById('tokensContent');
     let html = '';
 
-    // Colors
     if (colorData?.palette) {
       html += `<div class="token-group"><div class="token-group-label">Colors</div><div class="token-colors">`;
       for (const [name, hex] of Object.entries(colorData.palette)) {
@@ -1006,7 +1080,6 @@ Respond ONLY with valid JSON, no markdown fences:
       html += `</div></div>`;
     }
 
-    // Typography
     if (typographyData?.scale) {
       html += `<div class="token-group"><div class="token-group-label">Typography Scale</div><div class="token-list">`;
       typographyData.scale.forEach(item => {
@@ -1033,7 +1106,6 @@ Respond ONLY with valid JSON, no markdown fences:
       }
     }
 
-    // Spacing (derived from layout)
     const spacingScale = ['4px', '8px', '12px', '16px', '24px', '32px', '48px', '64px'];
     html += `<div class="token-group"><div class="token-group-label">Spacing Scale</div><div class="token-list">`;
     spacingScale.forEach((val, i) => {
@@ -1044,7 +1116,6 @@ Respond ONLY with valid JSON, no markdown fences:
     });
     html += `</div></div>`;
 
-    // Border Radii
     html += `<div class="token-group"><div class="token-group-label">Border Radii</div><div class="token-list">`;
     ['2px', '4px', '8px', '12px', '16px', '9999px'].forEach((val, i) => {
       const names = ['sm', 'md', 'lg', 'xl', '2xl', 'full'];
@@ -1055,7 +1126,6 @@ Respond ONLY with valid JSON, no markdown fences:
     });
     html += `</div></div>`;
 
-    // Shadows
     html += `<div class="token-group"><div class="token-group-label">Shadows</div><div class="token-list">`;
     const shadows = {
       sm: '0 1px 2px rgba(0,0,0,0.05)',
@@ -1077,19 +1147,16 @@ Respond ONLY with valid JSON, no markdown fences:
   function updateToken(inputEl) {
     const tokenPath = inputEl.dataset.token;
     const value = inputEl.value;
-    // Update swatch if it's a color token
     if (tokenPath.startsWith('color.')) {
       const name = tokenPath.replace('color.', '');
       const swatch = document.querySelector(`[data-token-color="${name}"]`);
       if (swatch) swatch.style.background = value;
     }
-    // Store in designTokens
     if (!designTokens) designTokens = {};
     designTokens[tokenPath] = value;
   }
 
   function getTokensForPrompt() {
-    // Collect current values from all token inputs
     const tokens = {};
     document.querySelectorAll('[data-token]').forEach(input => {
       tokens[input.dataset.token] = input.value;
@@ -1114,21 +1181,20 @@ Respond ONLY with valid JSON, no markdown fences:
     return result;
   }
 
-  // Render agent summaries in quote section
   function renderAgentSummaries() {
     const container = document.getElementById('agentSummaries');
     let html = '';
     const agents = [
-      { key: 'layout', icon: '🔍', label: 'Layout' },
-      { key: 'typography', icon: '✏️', label: 'Typography' },
-      { key: 'color', icon: '🎨', label: 'Color' },
-      { key: 'motion', icon: '✨', label: 'Motion' }
+      { key: 'layout', icon: '01', label: 'Layout' },
+      { key: 'typography', icon: '02', label: 'Typography' },
+      { key: 'color', icon: '03', label: 'Color' },
+      { key: 'motion', icon: '04', label: 'Motion' }
     ];
     agents.forEach(({ key, icon, label }) => {
       const result = agentResults[key];
       if (result?.summary) {
         html += `<div class="agent-summary">
-          <div class="agent-summary-header">${icon} ${escapeHtml(label)} Agent</div>
+          <div class="agent-summary-header">${escapeHtml(icon)} ${escapeHtml(label)} Agent</div>
           <div class="agent-summary-text">${escapeHtml(result.summary)}</div>
         </div>`;
       }
@@ -1148,7 +1214,7 @@ Respond ONLY with valid JSON, no markdown fences:
     const btn = document.getElementById('generateBtn');
     const loading = document.getElementById('loading');
     btn.disabled = true;
-    btn.textContent = '⏳ Running Pipeline...';
+    btn.textContent = 'Running Pipeline...';
     loading.classList.add('active');
     resetPipeline();
     agentResults = {};
@@ -1159,7 +1225,7 @@ Respond ONLY with valid JSON, no markdown fences:
     try {
       // ---- STEP 1: Layout Agent ----
       setPipelineStep('layout', 'active', 'analyzing...');
-      document.getElementById('loadingText').textContent = '🔍 Layout Agent analyzing...';
+      document.getElementById('loadingText').textContent = 'Layout Agent analyzing...';
       document.getElementById('loadingStep').textContent = 'Extracting grid structure, spacing, alignment';
       try {
         agentResults.layout = await runLayoutAgent();
@@ -1172,7 +1238,7 @@ Respond ONLY with valid JSON, no markdown fences:
 
       // ---- STEP 2: Typography Agent ----
       setPipelineStep('typography', 'active', 'analyzing...');
-      document.getElementById('loadingText').textContent = '✏️ Typography Agent mapping hierarchy...';
+      document.getElementById('loadingText').textContent = 'Typography Agent mapping hierarchy...';
       document.getElementById('loadingStep').textContent = 'Identifying fonts, sizes, weights, scale';
       try {
         agentResults.typography = await runTypographyAgent();
@@ -1185,7 +1251,7 @@ Respond ONLY with valid JSON, no markdown fences:
 
       // ---- STEP 3: Color Agent ----
       setPipelineStep('color', 'active', 'extracting...');
-      document.getElementById('loadingText').textContent = '🎨 Color Agent extracting palette...';
+      document.getElementById('loadingText').textContent = 'Color Agent extracting palette...';
       document.getElementById('loadingStep').textContent = 'Mapping semantic color roles';
       try {
         agentResults.color = await runColorAgent();
@@ -1198,7 +1264,7 @@ Respond ONLY with valid JSON, no markdown fences:
 
       // ---- STEP 4: Motion Agent ----
       setPipelineStep('motion', 'active', 'detecting...');
-      document.getElementById('loadingText').textContent = '✨ Motion Agent detecting interactions...';
+      document.getElementById('loadingText').textContent = 'Motion Agent detecting interactions...';
       document.getElementById('loadingStep').textContent = 'Identifying animations, transitions, hover states';
       try {
         agentResults.motion = await runMotionAgent();
@@ -1222,7 +1288,7 @@ Respond ONLY with valid JSON, no markdown fences:
 
       // ---- STEP 5: Code Generation ----
       setPipelineStep('codegen', 'active', 'generating...');
-      document.getElementById('loadingText').textContent = '🏗️ Generating production code...';
+      document.getElementById('loadingText').textContent = 'Generating production code...';
       document.getElementById('loadingStep').textContent = 'Synthesizing all agent analyses into code';
 
       const tokenPromptSection = getTokensForPrompt();
@@ -1334,7 +1400,6 @@ Rules:
       lastAnalysis = result.analysis;
       setPipelineStep('codegen', 'done', 'done ✓');
 
-      // Update quote section
       document.getElementById('quoteText').textContent = `"${result.analysis.quote}"`;
       document.getElementById('quoteMeta').innerHTML = `<strong>Palette:</strong> ${escapeHtml(result.analysis.palette || 'Analyzed')} · <strong>Type:</strong> ${escapeHtml(result.analysis.typography || 'Detected')}`;
       const tagsEl = document.getElementById('analysisTags');
@@ -1346,11 +1411,9 @@ Rules:
         tagsEl.appendChild(span);
       });
 
-      // Show code
       generatedCode = result.code;
       document.getElementById('codeOutput').textContent = generatedCode;
 
-      // Show preview
       const frame = document.getElementById('previewFrame');
       document.getElementById('emptyPreview').style.display = 'none';
       frame.style.display = 'block';
@@ -1371,7 +1434,7 @@ Rules:
     } finally {
       loading.classList.remove('active');
       btn.disabled = false;
-      btn.textContent = '✨ Generate Code';
+      btn.textContent = 'Generate Code';
     }
   }
 
@@ -1515,7 +1578,7 @@ ${generatedCode}
     if (!toast) {
       toast = document.createElement('div');
       toast.id = 'toast';
-      toast.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);padding:10px 20px;background:var(--accent);color:white;border-radius:8px;font-size:13px;font-weight:500;z-index:200;opacity:0;transition:opacity 0.2s;pointer-events:none;';
+      toast.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);padding:8px 18px;background:var(--text);color:var(--bg);border-radius:4px;font-size:12px;font-weight:500;z-index:200;opacity:0;transition:opacity 0.2s;pointer-events:none;font-family:var(--sans);';
       document.body.appendChild(toast);
     }
     toast.textContent = msg;
