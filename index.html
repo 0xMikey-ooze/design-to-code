@@ -3,9 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"></noscript>
 <title>Design → Code</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+  /* fonts loaded via <link> in <head> */
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -15,7 +17,7 @@
     --surface2: #1c1c1f;
     --border: #2a2a2e;
     --text: #e4e4e7;
-    --muted: #71717a;
+    --muted: #a1a1aa;
     --accent: #a78bfa;
     --accent2: #818cf8;
     --green: #34d399;
@@ -231,6 +233,7 @@
     transition: all 0.15s;
     user-select: none;
   }
+  .setting-chip { font-family: 'Inter', sans-serif; }
   .setting-chip:hover { border-color: var(--accent); color: var(--text); }
   .setting-chip.active {
     border-color: var(--accent);
@@ -549,7 +552,7 @@
 </div>
 
 <!-- Help Modal -->
-<div id="helpModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:100;display:none;align-items:center;justify-content:center;padding:20px" onclick="if(event.target===this)this.style.display='none'">
+<div id="helpModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:100;align-items:center;justify-content:center;padding:20px" onclick="if(event.target===this)this.style.display='none'">
   <div style="background:#1a1a2e;border:1px solid #333;border-radius:16px;max-width:640px;width:100%;max-height:85vh;overflow-y:auto;padding:32px">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
       <h2 style="font-size:20px;font-weight:700">How to Use Design → Code</h2>
@@ -597,7 +600,7 @@
 <div class="app">
   <!-- Left: Input -->
   <div class="left-panel">
-    <div class="drop-zone" id="dropZone" onclick="if(!this.classList.contains('has-images'))document.getElementById('fileInput').click()">
+    <div class="drop-zone" id="dropZone" aria-label="Drop zone for design images. Click or drag and drop images here." role="button" tabindex="0" onclick="if(!this.classList.contains('has-images'))document.getElementById('fileInput').click()">
       <input type="file" id="fileInput" accept="image/*" multiple onchange="Array.from(this.files).forEach(handleFile)">
       <div class="drop-icon">🎨</div>
       <div class="drop-title">Drop your design inspiration</div>
@@ -616,43 +619,43 @@
 
     <div class="settings">
       <div class="prompt-label" style="width:100%;margin-bottom:4px">Output</div>
-      <div class="setting-chip active" data-output="html" onclick="setOutput(this)">HTML/CSS</div>
-      <div class="setting-chip" data-output="react" onclick="setOutput(this)">React + Tailwind</div>
-      <div class="setting-chip" data-output="nextjs" onclick="setOutput(this)">Next.js</div>
-      <div class="setting-chip" data-output="vue" onclick="setOutput(this)">Vue</div>
+      <button class="setting-chip active" data-output="html" aria-label="Output: HTML/CSS" onclick="setOutput(this)">HTML/CSS</button>
+      <button class="setting-chip" data-output="react" aria-label="Output: React + Tailwind" onclick="setOutput(this)">React + Tailwind</button>
+      <button class="setting-chip" data-output="nextjs" aria-label="Output: Next.js" onclick="setOutput(this)">Next.js</button>
+      <button class="setting-chip" data-output="vue" aria-label="Output: Vue" onclick="setOutput(this)">Vue</button>
     </div>
     <div class="settings">
       <div class="prompt-label" style="width:100%;margin-bottom:4px">Style</div>
-      <div class="setting-chip active" data-style="faithful" onclick="setStyle(this)">Faithful</div>
-      <div class="setting-chip" data-style="improved" onclick="setStyle(this)">Improved</div>
-      <div class="setting-chip" data-style="reimagined" onclick="setStyle(this)">Reimagined</div>
+      <button class="setting-chip active" data-style="faithful" aria-label="Style: Faithful" onclick="setStyle(this)">Faithful</button>
+      <button class="setting-chip" data-style="improved" aria-label="Style: Improved" onclick="setStyle(this)">Improved</button>
+      <button class="setting-chip" data-style="reimagined" aria-label="Style: Reimagined" onclick="setStyle(this)">Reimagined</button>
     </div>
 
     <div class="settings" id="uiFrameworkSettings">
       <div class="prompt-label" style="width:100%;margin-bottom:4px">UI Framework</div>
-      <div class="setting-chip" data-uifw="none" onclick="setUiFramework(this)">None</div>
-      <div class="setting-chip active" data-uifw="shadcn" onclick="setUiFramework(this)">shadcn/ui</div>
+      <button class="setting-chip" data-uifw="none" aria-label="UI Framework: None" onclick="setUiFramework(this)">None</button>
+      <button class="setting-chip active" data-uifw="shadcn" aria-label="UI Framework: shadcn/ui" onclick="setUiFramework(this)">shadcn/ui</button>
     </div>
 
     <div class="settings" id="iconSettings">
       <div class="prompt-label" style="width:100%;margin-bottom:4px">Icon Library</div>
-      <div class="setting-chip active" data-icons="lucide" onclick="setIcons(this)">Lucide</div>
-      <div class="setting-chip" data-icons="phosphor" onclick="setIcons(this)">Phosphor</div>
-      <div class="setting-chip" data-icons="hugeicons" onclick="setIcons(this)">Hugeicons</div>
-      <div class="setting-chip" data-icons="none" onclick="setIcons(this)">Inline SVG</div>
+      <button class="setting-chip active" data-icons="lucide" aria-label="Icon Library: Lucide" onclick="setIcons(this)">Lucide</button>
+      <button class="setting-chip" data-icons="phosphor" aria-label="Icon Library: Phosphor" onclick="setIcons(this)">Phosphor</button>
+      <button class="setting-chip" data-icons="hugeicons" aria-label="Icon Library: Hugeicons" onclick="setIcons(this)">Hugeicons</button>
+      <button class="setting-chip" data-icons="none" aria-label="Icon Library: Inline SVG" onclick="setIcons(this)">Inline SVG</button>
     </div>
 
     <div class="settings" id="enhancementSettings">
       <div class="prompt-label" style="width:100%;margin-bottom:4px">Enhancements</div>
-      <div class="setting-chip" data-enhance="motion" onclick="toggleEnhance(this)">🎬 Motion</div>
-      <div class="setting-chip" data-enhance="glassmorphism" onclick="toggleEnhance(this)">🪟 Glass</div>
-      <div class="setting-chip" data-enhance="gradients" onclick="toggleEnhance(this)">🌈 Gradients</div>
-      <div class="setting-chip" data-enhance="3d" onclick="toggleEnhance(this)">🧊 3D Depth</div>
-      <div class="setting-chip" data-enhance="particles" onclick="toggleEnhance(this)">✨ Particles</div>
-      <div class="setting-chip" data-enhance="darkmode" onclick="toggleEnhance(this)">🌙 Dark Mode</div>
-      <div class="setting-chip" data-enhance="scroll" onclick="toggleEnhance(this)">📜 Scroll FX</div>
-      <div class="setting-chip" data-enhance="microinteractions" onclick="toggleEnhance(this)">👆 Micro-interactions</div>
-      <div class="setting-chip" data-enhance="shaders" onclick="toggleEnhance(this)">🌊 Shaders</div>
+      <button class="setting-chip" data-enhance="motion" aria-label="Enhancement: Motion" onclick="toggleEnhance(this)">🎬 Motion</button>
+      <button class="setting-chip" data-enhance="glassmorphism" aria-label="Enhancement: Glass" onclick="toggleEnhance(this)">🪟 Glass</button>
+      <button class="setting-chip" data-enhance="gradients" aria-label="Enhancement: Gradients" onclick="toggleEnhance(this)">🌈 Gradients</button>
+      <button class="setting-chip" data-enhance="3d" aria-label="Enhancement: 3D Depth" onclick="toggleEnhance(this)">🧊 3D Depth</button>
+      <button class="setting-chip" data-enhance="particles" aria-label="Enhancement: Particles" onclick="toggleEnhance(this)">✨ Particles</button>
+      <button class="setting-chip" data-enhance="darkmode" aria-label="Enhancement: Dark Mode" onclick="toggleEnhance(this)">🌙 Dark Mode</button>
+      <button class="setting-chip" data-enhance="scroll" aria-label="Enhancement: Scroll FX" onclick="toggleEnhance(this)">📜 Scroll FX</button>
+      <button class="setting-chip" data-enhance="microinteractions" aria-label="Enhancement: Micro-interactions" onclick="toggleEnhance(this)">👆 Micro-interactions</button>
+      <button class="setting-chip" data-enhance="shaders" aria-label="Enhancement: Shaders" onclick="toggleEnhance(this)">🌊 Shaders</button>
     </div>
 
     <button class="generate-btn" id="generateBtn" onclick="generate()" disabled>
@@ -669,12 +672,12 @@
 
   <!-- Right: Output -->
   <div class="right-panel">
-    <div class="output-tabs">
-      <div class="output-tab active" data-tab="preview" onclick="switchTab(this)">Preview</div>
-      <div class="output-tab" data-tab="code" onclick="switchTab(this)">Code</div>
+    <div class="output-tabs" role="tablist">
+      <div class="output-tab active" data-tab="preview" role="tab" aria-selected="true" tabindex="0" onclick="switchTab(this)">Preview</div>
+      <div class="output-tab" data-tab="code" role="tab" aria-selected="false" tabindex="0" onclick="switchTab(this)">Code</div>
     </div>
     <div class="output-content">
-      <div class="loading-overlay" id="loading">
+      <div class="loading-overlay" id="loading" aria-live="polite">
         <div class="spinner"></div>
         <div class="loading-text">Analyzing your design...</div>
         <div class="loading-step" id="loadingStep">Extracting layout patterns</div>
@@ -685,13 +688,13 @@
           <div class="icon">◇</div>
           <p>Drop a design and hit generate</p>
         </div>
-        <iframe id="previewFrame" style="display:none"></iframe>
+        <iframe id="previewFrame" sandbox="allow-scripts" style="display:none"></iframe>
       </div>
 
       <div class="code-view" id="codeView">
         <div class="code-actions">
           <button class="action-btn" onclick="copyCode()">📋 Copy Code</button>
-          <button class="action-btn primary" onclick="toggleExportMenu()">🚀 Export ▾</button>
+          <button class="action-btn primary" id="exportToggleBtn" aria-expanded="false" onclick="toggleExportMenu()">🚀 Export ▾</button>
         </div>
         <div class="export-menu" id="exportMenu">
           <div class="export-item" onclick="exportCursorPrompt()">
@@ -740,6 +743,13 @@
 </div>
 
 <script>
+  // Utility: escape HTML to prevent XSS
+  function escapeHtml(str) {
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
   let images = []; // {data, name}
   let outputFormat = 'html';
   let styleMode = 'faithful';
@@ -835,10 +845,13 @@
     let html = `<input type="file" id="fileInput" accept="image/*" multiple onchange="Array.from(this.files).forEach(handleFile)">
       <div class="image-grid">`;
     images.forEach((img, i) => {
+      const safeName = escapeHtml(img.name);
+      const safeData = escapeHtml(img.data);
+      const truncName = img.name.length > 15 ? escapeHtml(img.name.slice(0,12)) + '...' : safeName;
       html += `<div class="image-thumb">
-        <img src="${img.data}" alt="${img.name}">
+        <img src="${safeData}" alt="${safeName}">
         <button class="remove-img" onclick="event.stopPropagation();removeImage(${i})">✕</button>
-        <div class="img-label">${img.name.length > 15 ? img.name.slice(0,12)+'...' : img.name}</div>
+        <div class="img-label">${truncName}</div>
       </div>`;
     });
     if (images.length < 8) {
@@ -881,8 +894,9 @@
   }
 
   function switchTab(el) {
-    document.querySelectorAll('.output-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.output-tab').forEach(t => { t.classList.remove('active'); t.setAttribute('aria-selected', 'false'); });
     el.classList.add('active');
+    el.setAttribute('aria-selected', 'true');
     const tab = el.dataset.tab;
     document.getElementById('previewView').classList.toggle('active', tab === 'preview');
     document.getElementById('codeView').classList.toggle('active', tab === 'code');
@@ -895,18 +909,36 @@
   let lastAnalysis = null;
 
   function copyCode() {
-    navigator.clipboard.writeText(generatedCode);
-    showToast('Code copied!');
+    navigator.clipboard.writeText(generatedCode).then(() => {
+      showToast('Code copied!');
+    }).catch(err => {
+      console.error('Clipboard write failed:', err);
+      showToast('Failed to copy — try manually.');
+    });
   }
 
   function toggleExportMenu() {
-    document.getElementById('exportMenu').classList.toggle('active');
+    const menu = document.getElementById('exportMenu');
+    menu.classList.toggle('active');
+    const isOpen = menu.classList.contains('active');
+    document.getElementById('exportToggleBtn').setAttribute('aria-expanded', isOpen);
   }
   // Close export menu on outside click
   document.addEventListener('click', e => {
     const menu = document.getElementById('exportMenu');
     if (menu.classList.contains('active') && !e.target.closest('.export-menu') && !e.target.closest('.action-btn.primary')) {
       menu.classList.remove('active');
+      document.getElementById('exportToggleBtn').setAttribute('aria-expanded', 'false');
+    }
+  });
+  // Escape to close export menu (#12)
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      const menu = document.getElementById('exportMenu');
+      if (menu.classList.contains('active')) {
+        menu.classList.remove('active');
+        document.getElementById('exportToggleBtn').setAttribute('aria-expanded', 'false');
+      }
     }
   });
 
@@ -940,8 +972,9 @@ ${generatedCode}
 6. Add any missing TypeScript types
 7. Test responsiveness at 375px, 768px, 1440px`;
 
-    navigator.clipboard.writeText(prompt);
-    showToast('Cursor prompt copied! Paste into Cursor chat.');
+    navigator.clipboard.writeText(prompt).then(() => {
+      showToast('Cursor prompt copied! Paste into Cursor chat.');
+    }).catch(err => { console.error('Clipboard write failed:', err); showToast('Failed to copy.'); });
     toggleExportMenu();
   }
 
@@ -974,8 +1007,9 @@ ${generatedCode}
 
 Keep the same visual language and quality level. Make it production-ready.`;
 
-    navigator.clipboard.writeText(prompt);
-    showToast('LLM prompt copied! Paste into Claude, ChatGPT, etc.');
+    navigator.clipboard.writeText(prompt).then(() => {
+      showToast('LLM prompt copied! Paste into Claude, ChatGPT, etc.');
+    }).catch(err => { console.error('Clipboard write failed:', err); showToast('Failed to copy.'); });
     toggleExportMenu();
   }
 
@@ -987,7 +1021,7 @@ Keep the same visual language and quality level. Make it production-ready.`;
     a.href = url;
     a.download = `design-output.${ext}`;
     a.click();
-    URL.revokeObjectURL(url);
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
     showToast(`Downloaded design-output.${ext}`);
     toggleExportMenu();
   }
@@ -1028,8 +1062,9 @@ ${generatedCode}
 \`\`\`
 `;
 
-    navigator.clipboard.writeText(spec);
-    showToast('Component spec copied!');
+    navigator.clipboard.writeText(spec).then(() => {
+      showToast('Component spec copied!');
+    }).catch(err => { console.error('Clipboard write failed:', err); showToast('Failed to copy.'); });
     toggleExportMenu();
   }
 
@@ -1277,8 +1312,12 @@ try {
     'Polishing details'
   ];
 
+  let _generateRateLimited = false;
   async function generate() {
     if (images.length === 0 || !getApiKey()) return;
+    if (_generateRateLimited) return;
+    _generateRateLimited = true;
+    setTimeout(() => { _generateRateLimited = false; }, 3000);
 
     const btn = document.getElementById('generateBtn');
     const loading = document.getElementById('loading');
@@ -1461,12 +1500,17 @@ Rules:
       // Show analysis
       const quoteSection = document.getElementById('quoteSection');
       document.getElementById('quoteText').textContent = `"${result.analysis.quote}"`;
-      document.getElementById('quoteMeta').innerHTML = `<strong>Palette:</strong> ${result.analysis.palette || 'Analyzed'} · <strong>Type:</strong> ${result.analysis.typography || 'Detected'}`;
+      document.getElementById('quoteMeta').innerHTML = `<strong>Palette:</strong> ${escapeHtml(result.analysis.palette || 'Analyzed')} · <strong>Type:</strong> ${escapeHtml(result.analysis.typography || 'Detected')}`;
 
       const tagsEl = document.getElementById('analysisTags');
-      tagsEl.innerHTML = (result.analysis.tags || []).map(t =>
-        `<span class="tag ${t.type}">${t.label}</span>`
-      ).join('');
+      tagsEl.innerHTML = '';
+      (result.analysis.tags || []).forEach(t => {
+        const span = document.createElement('span');
+        const safeType = ['good','warn','info'].includes(t.type) ? t.type : 'info';
+        span.className = `tag ${safeType}`;
+        span.textContent = t.label;
+        tagsEl.appendChild(span);
+      });
       quoteSection.style.display = 'block';
 
       // Show code
@@ -1480,10 +1524,11 @@ Rules:
       frame.style.display = 'block';
 
       // Render preview based on output format
+      // Ensure sandbox allows same-origin for srcdoc rendering of CDN scripts
+      frame.setAttribute('sandbox', 'allow-scripts allow-same-origin');
       if (outputFormat === 'html') {
         frame.srcdoc = generatedCode;
       } else if (outputFormat === 'react' || outputFormat === 'nextjs') {
-        // Transform React/Next.js TSX → renderable HTML using Babel standalone + React CDN
         const reactPreview = buildReactPreview(generatedCode);
         frame.srcdoc = reactPreview;
       } else if (outputFormat === 'vue') {
