@@ -1608,7 +1608,8 @@ ${generatedCode}
     cleaned = cleaned.replace(/^export\s+default\s+(\w+)\s*;?\s*$/gm, 'exports.default = $1;');
     cleaned = cleaned.replace(/^export\s+default\s+(function|const|class)/gm, '$1');
     cleaned = cleaned.replace(/^export\s+(function|const|class|interface|type)/gm, '$1');
-    cleaned = cleaned.replace(/^(?:const|let|var|function)\s+(?:Link|Image|cn|clsx)\s*[=(:].*/gm, '// (provided by preview)');
+    cleaned = cleaned.replace(/^(?:const|let|var|function)\s+(?:Link|Image|cn|clsx)\b.*/gm, '// (provided by preview)');
+    cleaned = cleaned.replace(/^(?:const|let|var)\s+\{[^}]*\b(?:Link|Image)\b[^}]*\}\s*=.*/gm, '// (provided by preview)');
     cleaned = cleaned.replace(/(?:const|let|var)\s+.*=\s*require\s*\(.*\)\s*;?/g, '');
     cleaned = cleaned.trim();
 
